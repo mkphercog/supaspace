@@ -3,6 +3,7 @@ import { FC } from "react";
 import { PostType } from "./PostList";
 import { supabaseClient } from "../supabase-client";
 import { LikeButton } from "./LikeButton";
+import { CommentSection } from "./CommentSection";
 
 type PostDetailsProps = {
   postId: number;
@@ -50,11 +51,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
       )}
       <p className="text-gray-400">{data?.content}</p>
       <p className="text-gray-500 text-sm">
-        Posted on: {new Date(data!.created_at).toLocaleDateString()}
+        Posted on: {new Date(data!.created_at).toLocaleString()}
       </p>
 
       <LikeButton postId={postId} />
-      {/* <CommentSection postId={postId} /> */}
+      <CommentSection postId={postId} />
     </div>
   );
 };

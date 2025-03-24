@@ -14,10 +14,7 @@ export type PostType = {
 };
 
 const fetchPosts = async (): Promise<PostType[]> => {
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
 
   if (error) {
     throw new Error(error.message);

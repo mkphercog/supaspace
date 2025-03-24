@@ -3,6 +3,7 @@ import { HomePage } from "./pages/HomePage";
 import { Navbar } from "./components/Navbar";
 import { CreatePostPage } from "./pages/CreatePostPage";
 import { PostDetailsPage } from "./pages/PostDetailsPage";
+import { CreateCommunityPage } from "./pages/CreateCommunityPage";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreatePostPage />} />
           <Route path="/post/:id" element={<PostDetailsPage />} />
+          <Route path="/community/create" element={<CreateCommunityPage />} />
         </Routes>
       </div>
     </div>

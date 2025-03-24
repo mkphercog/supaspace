@@ -1,7 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { supabaseClient } from "../supabase-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 type PostInput = {
   title: string;
@@ -34,11 +35,17 @@ export const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (data: { post: PostInput; imageFile: File }) =>
       createPost(data.post, data.imageFile),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      navigate("/");
+    },
   });
 
   const handleSubmit = async (event: FormEvent) => {

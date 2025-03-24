@@ -2,16 +2,15 @@ import { FC } from "react";
 import { PostType } from "./PostList";
 import { Link } from "react-router";
 
-export const PostItem: FC<PostType> = ({
-  id,
-  title,
-  image_url,
-  avatar_url,
-  comment_count,
-  like_count,
+type PostItemProps = {
+  post: PostType;
+};
+
+export const PostItem: FC<PostItemProps> = ({
+  post: { id, title, image_url, avatar_url, comment_count, like_count },
 }) => {
   return (
-    <li className="relative group">
+    <div className="relative group">
       <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"></div>
       <Link to={`/post/${id}`} className="block relative z-10">
         <div className="w-80 h-76 bg-[rgb(24,27,32)] border border-[rgb(84,90,106)] rounded-[20px] text-white flex flex-col p-5 overflow-hidden transition-colors duration-300 group-hover:bg-gray-800">
@@ -52,6 +51,6 @@ export const PostItem: FC<PostType> = ({
           </div>
         </div>
       </Link>
-    </li>
+    </div>
   );
 };

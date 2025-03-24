@@ -4,6 +4,8 @@ import { Navbar } from "./components/Navbar";
 import { CreatePostPage } from "./pages/CreatePostPage";
 import { PostDetailsPage } from "./pages/PostDetailsPage";
 import { CreateCommunityPage } from "./pages/CreateCommunityPage";
+import { CommunitiesPage } from "./pages/CommunitiesPage";
+import { CommunityPage } from "./pages/CommunityPage";
 
 const App = () => {
   return (
@@ -15,6 +17,8 @@ const App = () => {
           <Route path="/create" element={<CreatePostPage />} />
           <Route path="/post/:id" element={<PostDetailsPage />} />
           <Route path="/community/create" element={<CreateCommunityPage />} />
+          <Route path="/communities" element={<CommunitiesPage />} />
+          <Route path="/community/:id" element={<CommunityPage />} />
         </Routes>
       </div>
     </div>

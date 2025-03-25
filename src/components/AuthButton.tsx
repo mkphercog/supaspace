@@ -8,13 +8,15 @@ export const AuthButton = () => {
 
   if (!user) {
     return (
-      <button
-        onClick={signInWithGoogle}
-        className="flex items-center gap-2 bg-purple-600 px-3 py-1 rounded transition-colors hover:cursor-pointer hover:bg-purple-700"
-      >
-        Sign in
-        <GoogleLogoIcon />
-      </button>
+      <div className="w-full flex justify-end">
+        <button
+          onClick={signInWithGoogle}
+          className="flex items-center gap-2 bg-purple-600 px-3 py-1 rounded transition-colors hover:cursor-pointer hover:bg-purple-700"
+        >
+          Sign in
+          <GoogleLogoIcon />
+        </button>
+      </div>
     );
   }
 

@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { CommunityFromDbType } from "../types/community.type";
 import { fetchCommunities } from "../api/community";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { Loader } from "./Loader";
 
 export const CommunityList = () => {
   const { data, isLoading, error } = useQuery<CommunityFromDbType[], Error>({
@@ -11,7 +12,7 @@ export const CommunityList = () => {
   });
 
   if (isLoading) {
-    return <div>Loading communities...</div>;
+    return <Loader />;
   }
 
   if (error) {

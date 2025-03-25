@@ -27,12 +27,12 @@ export const CreateCommunity = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        Create New Community
+      <h2 className="text-6xl leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Create new community
       </h2>
       <div>
         <label htmlFor="name" className="block mb-2 font-medium">
-          Community Name
+          Community name
         </label>
         <input
           type="text"
@@ -57,7 +57,7 @@ export const CreateCommunity = () => {
       </div>
       <button
         type="submit"
-        disabled={isPending || !user}
+        disabled={isPending || !user || !name || !description}
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
         {isPending ? "Creating..." : "Create Community"}

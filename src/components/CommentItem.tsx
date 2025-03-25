@@ -4,6 +4,8 @@ import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { useAuth } from "../context/AuthContext.hook";
 import { createReplyComment } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
+import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
@@ -49,7 +51,6 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     <div className="pl-4 border-l border-white/10">
       <div className="mb-2">
         <div className="flex items-center space-x-2">
-          {/* Display the commenter's username */}
           <span className="text-sm font-bold text-blue-400">
             {comment.author}
           </span>
@@ -61,7 +62,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         {user && (
           <button
             onClick={() => setShowReply((prev) => !prev)}
-            className="text-blue-500 text-sm mt-1"
+            className="text-blue-500 text-sm mt-1 transition-all hover:cursor-pointer hover:text-blue-300"
           >
             {showReply ? "Cancel" : "Reply"}
           </button>
@@ -79,9 +80,9 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <button
             type="submit"
             className="mt-1 bg-blue-500 text-white px-3 py-1 rounded transition-colors hover:bg-blue-600 hover:cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
-            disabled={isPending || !user}
+            disabled={isPending || !user || !replyText}
           >
-            {isPending ? "Posting..." : "Post Reply"}
+            {isPending ? "Posting..." : "Post peply"}
           </button>
           {isError && <p className="text-red-500">Error posting reply.</p>}
         </form>
@@ -91,39 +92,9 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         <div>
           <button
             onClick={() => setIsCollapsed((prev) => !prev)}
-            title={isCollapsed ? "Hide Replies" : "Show Replies"}
+            title={isCollapsed ? "Hide replies" : "Show replies"}
           >
-            {isCollapsed ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 15l7-7 7 7"
-                />
-              </svg>
-            )}
+            {!isCollapsed ? <ChevronDownIcon /> : <ChevronUpIcon />}
           </button>
 
           {!isCollapsed && (

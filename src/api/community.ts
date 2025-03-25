@@ -4,6 +4,7 @@ import {
   NewCommunityType,
   PostWithCommunityType,
 } from "../types/community.type";
+import { PostFromDbType } from "../types/post.type";
 
 export const createNewCommunity = async (community: NewCommunityType) => {
   const { error } = await supabaseClient.from("communities").insert(community);
@@ -24,16 +25,15 @@ export const fetchCommunities = async (): Promise<CommunityFromDbType[]> => {
 
 type FetchCommunityPostsType = (
   community_id: CommunityFromDbType["id"]
-) => Promise<PostWithCommunityType[]>;
+) => Promise<PostFromDbType[]>;
 
 export const fetchCommunityPosts: FetchCommunityPostsType = async (
   community_id
 ) => {
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .select("*, communities(name)")
-    .eq("community_id", community_id)
-    .order("created_at", { ascending: false });
+  const { data, error } = await supabaseClient.rpc(
+    "get_community_posts_with_counts",
+    { comm_id: community_id }
+  );
 
   if (error) throw new Error(error.message);
 

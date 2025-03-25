@@ -1,24 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { PostItem } from "./PostItem";
-import {
-  CommunityFromDbType,
-  PostWithCommunityType,
-} from "../types/community.type";
+import { CommunityFromDbType } from "../types/community.type";
 import { fetchCommunityPosts } from "../api/community";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { PostFromDbType } from "../types/post.type";
+import { Loader } from "./Loader";
 
 type Props = {
   community_id: CommunityFromDbType["id"];
 };
 
 export const CommunityDisplay = ({ community_id }: Props) => {
-  const { data, error, isLoading } = useQuery<PostWithCommunityType[], Error>({
+  const { data, error, isLoading } = useQuery<PostFromDbType[], Error>({
     queryKey: [QUERY_KEYS.communityPost, community_id],
     queryFn: () => fetchCommunityPosts(community_id),
   });
 
-  if (isLoading)
-    return <div className="text-center py-4">Loading communities...</div>;
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (error)
     return (
@@ -29,11 +29,14 @@ export const CommunityDisplay = ({ community_id }: Props) => {
 
   return (
     <div>
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        {data && data[0]?.communities.name} Community Posts
+      <h2 className="text-6xl leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Community
       </h2>
+      <h3 className="text-4xl leading-15 font-bold mb-6 text-center bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent">
+        {data?.[0].community_name}
+      </h3>
 
-      {data && data.length > 0 ? (
+      {data?.[0].id ? (
         <div className="flex flex-wrap gap-6 justify-center">
           {data.map((post) => (
             <PostItem key={post.id} post={post} />

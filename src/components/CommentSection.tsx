@@ -9,6 +9,7 @@ import {
 } from "../types/comment.type";
 import { createNewComment, fetchComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { Loader } from "./Loader";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 
@@ -77,7 +78,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
   };
 
   if (isLoading) {
-    return <div>Loading comments...</div>;
+    return <Loader />;
   }
 
   if (error) {
@@ -102,7 +103,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
             disabled={!newCommentText || isPending}
             type="submit"
           >
-            {isPending ? "Posting..." : "Post Comment"}
+            {isPending ? "Posting..." : "Post comment"}
           </button>
           {isError && (
             <p className="text-red-500 mt-2">Error posting comment.</p>

@@ -96,7 +96,12 @@ export const CreatePost = () => {
           Select community
         </label>
         <select
-          className="text-sm rounded block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+          className={`
+            text-sm rounded block w-full p-2.5
+            bg-gray-700 border-gray-600 text-white
+            focus:ring-blue-500 focus:border-blue-500
+            transition-all hover:cursor-pointer hover:bg-gray-800
+            `}
           id="community"
           onChange={handleCommunityChange}
         >
@@ -117,7 +122,12 @@ export const CreatePost = () => {
           id="imageUrl"
           type="file"
           accept="image/*"
-          className="w-full text-gray-200"
+          className={`
+            block w-full text-sm border rounded-lg cursor-pointer
+            text-gray-200 focus:outline-none bg-gray-700 border-gray-600 placeholder-gray-400
+            transition-all hover:cursor-pointer hover:bg-gray-800
+            file:bg-gray-600 file:font-semibold file:px-4 file:mr-4 file:border-0 file:py-2.5 file:pointer-events-none
+            `}
           onChange={handleFileChange}
           required
         />
@@ -126,12 +136,12 @@ export const CreatePost = () => {
       <button
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
         type="submit"
-        disabled={isPending || !user}
+        disabled={isPending || !user || !title || !content || !selectedFile}
       >
         {isPending ? "Creating..." : "Create Post"}
       </button>
 
-      {isError && <p className="text-red-500"> Error creating post.</p>}
+      {isError && <p className="text-red-500">Error creating post.</p>}
     </form>
   );
 };

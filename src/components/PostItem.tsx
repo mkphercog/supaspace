@@ -14,7 +14,6 @@ export const PostItem: FC<PostItemProps> = ({
       <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"></div>
       <Link to={`/post/${id}`} className="block relative z-10">
         <div className="w-80 h-76 bg-[rgb(24,27,32)] border border-[rgb(84,90,106)] rounded-[20px] text-white flex flex-col p-5 overflow-hidden transition-colors duration-300 group-hover:bg-gray-800">
-          {/* Header: Avatar and Title */}
           <div className="flex items-center space-x-2">
             {avatar_url ? (
               <img
@@ -33,7 +32,6 @@ export const PostItem: FC<PostItemProps> = ({
             </div>
           </div>
 
-          {/* Image Banner */}
           <div className="mt-2 flex-1">
             <img
               src={image_url}

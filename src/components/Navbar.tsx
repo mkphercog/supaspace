@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, NavLinkRenderProps } from "react-router";
-import { useAuth } from "../context/AuthContext.hook";
+import { AuthButton } from "./AuthButton";
+import { NavMenuIcon } from "../assets/icons/NavMenuIcon";
 
 const getNavLinkDesktopClassNames = ({ isActive }: NavLinkRenderProps) => {
   return `text-gray-300 hover:text-white transition-colors ${
@@ -15,25 +16,41 @@ const getNavLinkMobileClassNames = ({ isActive }: NavLinkRenderProps) => {
 };
 
 export const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { signInWithGoogle, signOut, user } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const displayName = user?.user_metadata.name || user?.email;
+  const toggleMenu = () => {
+    setIsMenuOpen((prevState) => !prevState);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="font-mono text-xl font-bold text-white">
-            Supa<span className="text-purple-500">{`.space()`}</span>
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="flex items-center gap-2 text-lg md:text-xl font-mono font-bold text-white"
+          >
+            <img
+              src="/favicon.ico"
+              alt="supa.space() logo"
+              className="w-[35px] h-[35px] rounded-full object-cover"
+            />
+            <p>
+              Supa<span className="text-purple-500">{`.space()`}</span>
+            </p>
           </Link>
 
-          {/* Desktop Links */}
           <div className="hidden md:flex items-center space-x-8">
             <NavLink to="/" className={getNavLinkDesktopClassNames}>
               Home
             </NavLink>
             <NavLink to="/create" className={getNavLinkDesktopClassNames}>
-              Create Post
+              New post
             </NavLink>
             <NavLink to="/communities" className={getNavLinkDesktopClassNames}>
               Communities
@@ -42,118 +59,58 @@ export const Navbar = () => {
               to="/community/create"
               className={getNavLinkDesktopClassNames}
             >
-              Create Community
+              New community
             </NavLink>
           </div>
 
-          {/* Desktop Auth */}
           <div className="hidden md:flex items-center">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                {user.user_metadata?.avatar_url && (
-                  <img
-                    src={user.user_metadata.avatar_url}
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                )}
-                <span className="text-gray-300">{displayName}</span>
-                <button
-                  onClick={signOut}
-                  className="bg-red-500 px-3 py-1 rounded cursor-pointer hover:bg-red-700 "
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={signInWithGoogle}
-                className="bg-blue-500 px-3 py-1 rounded transition-all hover:cursor-pointer hover:bg-blue-600"
-              >
-                Sign in with Google
-              </button>
-            )}
+            <AuthButton />
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
-              onClick={() => setMenuOpen((prev) => !prev)}
+              onClick={toggleMenu}
               className="text-gray-300 focus:outline-none"
               aria-label="Toggle menu"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {menuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
+              <NavMenuIcon isOpen={isMenuOpen} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
+      {isMenuOpen && (
         <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <NavLink to="/" className={getNavLinkMobileClassNames}>
+            <AuthButton />
+            <NavLink
+              to="/"
+              onClick={closeMenu}
+              className={getNavLinkMobileClassNames}
+            >
               Home
             </NavLink>
-            <NavLink to="/create" className={getNavLinkMobileClassNames}>
-              Create Post
+            <NavLink
+              to="/create"
+              onClick={closeMenu}
+              className={getNavLinkMobileClassNames}
+            >
+              New post
             </NavLink>
-            <NavLink to="/communities" className={getNavLinkMobileClassNames}>
+            <NavLink
+              to="/communities"
+              onClick={closeMenu}
+              className={getNavLinkMobileClassNames}
+            >
               Communities
             </NavLink>
             <NavLink
               to="/community/create"
+              onClick={closeMenu}
               className={getNavLinkMobileClassNames}
             >
-              Create Community
+              New community
             </NavLink>
-            {user ? (
-              <div className="flex items-center space-x-4">
-                {user.user_metadata?.avatar_url && (
-                  <img
-                    src={user.user_metadata.avatar_url}
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                )}
-                <span className="text-gray-300">{displayName}</span>
-                <button
-                  onClick={signOut}
-                  className="bg-red-500 px-3 py-1 rounded cursor-pointer hover:bg-red-700 "
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={signInWithGoogle}
-                className="bg-blue-500 px-3 py-1 rounded transition-all hover:cursor-pointer hover:bg-blue-600"
-              >
-                Sign in with Google
-              </button>
-            )}
           </div>
         </div>
       )}

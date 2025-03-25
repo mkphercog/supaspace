@@ -8,9 +8,19 @@ export type PostFromDbType = {
   like_count: number;
   comment_count: number;
   community_id?: number | null;
+  community_name: string;
 };
 
 export type NewPostType = Pick<
   PostFromDbType,
   "title" | "content" | "avatar_url" | "community_id"
 >;
+
+export type PostDetailsFromDbType = Omit<
+  PostFromDbType,
+  "like_count" | "comment_count" | "community_name"
+> & {
+  communities: {
+    name: string;
+  };
+};

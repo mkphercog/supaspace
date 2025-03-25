@@ -5,6 +5,7 @@ import { VoteFromDbType } from "../types/vote.type";
 import { PostFromDbType } from "../types/post.type";
 import { fetchVotes, createVote } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { Loader } from "./Loader";
 
 type Props = {
   post_id: PostFromDbType["id"];
@@ -35,7 +36,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
   });
 
   if (isLoading) {
-    return <div>Loading votes...</div>;
+    return <Loader />;
   }
 
   if (error) {

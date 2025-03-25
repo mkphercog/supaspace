@@ -1,5 +1,9 @@
 import { supabaseClient } from "../supabase-client";
-import { NewPostType, PostFromDbType } from "../types/post.type";
+import {
+  NewPostType,
+  PostDetailsFromDbType,
+  PostFromDbType,
+} from "../types/post.type";
 
 export const createNewPost = async (post: NewPostType, imageFile: File) => {
   const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
@@ -21,12 +25,14 @@ export const createNewPost = async (post: NewPostType, imageFile: File) => {
   if (error) throw new Error(error.message);
 };
 
-type FetchPostById = (post_id: PostFromDbType["id"]) => Promise<PostFromDbType>;
+type FetchPostById = (
+  post_id: PostFromDbType["id"]
+) => Promise<PostDetailsFromDbType>;
 
 export const fetchPostById: FetchPostById = async (post_id) => {
   const { data, error } = await supabaseClient
     .from("posts")
-    .select("*")
+    .select("*, communities(name)")
     .eq("id", post_id)
     .single();
 
@@ -34,7 +40,7 @@ export const fetchPostById: FetchPostById = async (post_id) => {
     throw new Error(error.message);
   }
 
-  return data as PostFromDbType;
+  return data as PostDetailsFromDbType;
 };
 
 export const fetchPosts = async (): Promise<PostFromDbType[]> => {

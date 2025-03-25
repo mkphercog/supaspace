@@ -1,21 +1,7 @@
-import { User } from "@supabase/supabase-js";
-import {
-  FC,
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { supabaseClient } from "../supabase-client";
-
-type AuthContextType = {
-  user: User | null;
-  signInWithGitHub: () => void;
-  signOut: () => void;
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { User } from "@supabase/supabase-js";
+import { AuthContext } from "./AuthContext";
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -36,8 +22,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, []);
 
-  const signInWithGitHub = () => {
-    supabaseClient.auth.signInWithOAuth({ provider: "github" });
+  const signInWithGoogle = () => {
+    supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+    });
   };
 
   const signOut = () => {
@@ -46,19 +34,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value = {
     user,
-    signInWithGitHub,
+    signInWithGoogle,
     signOut,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-
-  if (context === undefined) {
-    throw new Error("useAuth mush be used within the AuthProvider");
-  }
-
-  return context;
 };

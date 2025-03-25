@@ -6,6 +6,7 @@ import { PostDetailsPage } from "./pages/PostDetailsPage";
 import { CreateCommunityPage } from "./pages/CreateCommunityPage";
 import { CommunitiesPage } from "./pages/CommunitiesPage";
 import { CommunityPage } from "./pages/CommunityPage";
+import { NotFound } from "./components/NotFound";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/community/create" element={<CreateCommunityPage />} />
           <Route path="/communities" element={<CommunitiesPage />} />
           <Route path="/community/:id" element={<CommunityPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>

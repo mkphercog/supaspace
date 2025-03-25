@@ -1,6 +1,6 @@
 import { FC, FormEvent, useState } from "react";
 import { CommentTreeType } from "./CommentSection";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.hook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 
@@ -44,7 +44,7 @@ export const CommentItem: FC<CommentItemProps> = ({ postId, comment }) => {
         postId,
         comment.id,
         user?.id,
-        user?.user_metadata.user_name
+        user?.user_metadata.name
       );
     },
     onSuccess: () => {
@@ -75,12 +75,14 @@ export const CommentItem: FC<CommentItemProps> = ({ postId, comment }) => {
           </span>
         </div>
         <p className="text-gray-300">{comment.content}</p>
-        <button
-          onClick={() => setShowReply((prev) => !prev)}
-          className="text-blue-500 text-sm mt-1"
-        >
-          {showReply ? "Cancel" : "Reply"}
-        </button>
+        {user && (
+          <button
+            onClick={() => setShowReply((prev) => !prev)}
+            className="text-blue-500 text-sm mt-1"
+          >
+            {showReply ? "Cancel" : "Reply"}
+          </button>
+        )}
       </div>
       {showReply && user && (
         <form onSubmit={handleReplySubmit} className="mb-2">

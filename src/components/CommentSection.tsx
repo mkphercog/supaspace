@@ -1,5 +1,5 @@
 import { FC, FormEvent, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.hook";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
@@ -76,7 +76,7 @@ export const CommentSection: FC<CommentSectionProps> = ({ postId }) => {
         newComment,
         postId,
         user?.id,
-        user?.user_metadata.user_name
+        user?.user_metadata.name
       );
     },
     onSuccess: () => {

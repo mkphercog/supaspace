@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { supabaseClient } from "../supabase-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.hook";
 import { useNavigate } from "react-router";
 import { CommunityType, fetchCommunities } from "./CommunityList";
 

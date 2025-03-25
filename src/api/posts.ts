@@ -6,7 +6,7 @@ import {
 } from "../types/post.type";
 
 export const createNewPost = async (post: NewPostType, imageFile: File) => {
-  const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
+  const filePath = `${Date.now()}-${imageFile.name}`;
 
   const { error: uploadError } = await supabaseClient.storage
     .from("post-images")

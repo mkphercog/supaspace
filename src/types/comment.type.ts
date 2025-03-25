@@ -16,3 +16,17 @@ export type NewCommentType = Pick<
 export type CommentTreeType = CommentFromDbType & {
   children?: CommentFromDbType[];
 };
+
+export type ReplyCommentType = Omit<
+  CommentFromDbType,
+  "id" | "parent_comment_id" | "created_at"
+> & {
+  parent_comment_id: number;
+};
+
+export type CreateNewCommentType = {
+  newComment: NewCommentType;
+  post_id: number;
+  user_id?: string;
+  author?: string;
+};

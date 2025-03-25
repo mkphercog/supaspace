@@ -1,32 +1,12 @@
 import { FC, FormEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
-import { supabaseClient } from "../supabase-client";
 import { useAuth } from "../context/AuthContext.hook";
+import { createReplyComment } from "../api/comments";
+import { QUERY_KEYS } from "../api/queryKeys";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
-};
-
-const createReplyComment = async (
-  content: string,
-  post_id: number,
-  parent_comment_id: number,
-  userId?: string,
-  author?: string
-) => {
-  if (!userId || !author)
-    throw new Error("You must be logged in to reply comment");
-
-  const { error } = await supabaseClient.from("comments").insert({
-    post_id,
-    content,
-    parent_comment_id,
-    user_id: userId,
-    author,
-  });
-
-  if (error) throw new Error(error.message);
 };
 
 export const CommentItem: FC<Props> = ({ post_id, comment }) => {
@@ -38,16 +18,20 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (replyContent: string) => {
-      return createReplyComment(
-        replyContent,
+      if (!user) throw new Error("You must be logged in to reply comment");
+
+      return createReplyComment({
+        content: replyContent,
         post_id,
-        comment.id,
-        user?.id,
-        user?.user_metadata.name
-      );
+        parent_comment_id: comment.id,
+        user_id: user.id,
+        author: user.user_metadata.name,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", post_id] });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.comments, post_id],
+      });
       setReplyText("");
       setShowReply(false);
     },
@@ -94,7 +78,8 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           />
           <button
             type="submit"
-            className="mt-1 bg-blue-500 text-white px-3 py-1 rounded"
+            className="mt-1 bg-blue-500 text-white px-3 py-1 rounded transition-colors hover:bg-blue-600 hover:cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
+            disabled={isPending || !user}
           >
             {isPending ? "Posting..." : "Post Reply"}
           </button>

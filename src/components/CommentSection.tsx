@@ -1,46 +1,16 @@
 import { FC, FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabaseClient } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
 import {
   NewCommentType,
   CommentFromDbType,
   CommentTreeType,
 } from "../types/comment.type";
+import { createNewComment, fetchComments } from "../api/comments";
+import { QUERY_KEYS } from "../api/queryKeys";
 
 type Props = Pick<CommentFromDbType, "post_id">;
-
-const createComment = async (
-  newComment: NewCommentType,
-  postId: number,
-  userId?: string,
-  author?: string
-) => {
-  if (!userId || !author) throw new Error("You must be logged in to comment");
-
-  const { error } = await supabaseClient.from("comments").insert({
-    post_id: postId,
-    content: newComment.content,
-    parent_comment_id: newComment.parent_comment_id || null,
-    user_id: userId,
-    author,
-  });
-
-  if (error) throw new Error(error.message);
-};
-
-const fetchComments = async (postId: number): Promise<CommentFromDbType[]> => {
-  const { data, error } = await supabaseClient
-    .from("comments")
-    .select("*")
-    .eq("post_id", postId)
-    .order("created_at", { ascending: true });
-
-  if (error) throw new Error(error.message);
-
-  return data as CommentFromDbType[];
-};
 
 export const CommentSection: FC<Props> = ({ post_id }) => {
   const [newCommentText, setNewCommentText] = useState("");
@@ -52,21 +22,24 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
     isLoading,
     error,
   } = useQuery<CommentFromDbType[], Error>({
-    queryKey: ["comments", post_id],
+    queryKey: [QUERY_KEYS.comments, post_id],
     queryFn: () => fetchComments(post_id),
-    // refetchInterval: 5000
   });
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (newComment: NewCommentType) => {
-      return createComment(
+      if (!user) throw new Error("You must be logged in to add comment");
+
+      return createNewComment({
         newComment,
         post_id,
-        user?.id,
-        user?.user_metadata.name
-      );
+        user_id: user.id,
+        author: user.user_metadata.name,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", post_id] });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.comments, post_id],
+      });
     },
   });
 
@@ -136,7 +109,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
           )}
         </form>
       ) : (
-        <p className="mb-4 text-gray-600">
+        <p className="mb-4 text-purple-400">
           You must be logged in to post a comment.
         </p>
       )}

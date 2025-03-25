@@ -1,32 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { supabaseClient } from "../supabase-client";
+import { useNavigate } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext.hook";
-import { useNavigate } from "react-router";
-import { fetchCommunities } from "./CommunityList";
 import { NewPostType } from "../types/post.type";
 import { CommunityFromDbType } from "../types/community.type";
-
-const createPost = async (post: NewPostType, imageFile: File) => {
-  const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
-
-  const { error: uploadError } = await supabaseClient.storage
-    .from("post-images")
-    .upload(filePath, imageFile);
-
-  if (uploadError) throw new Error(uploadError.message);
-
-  const {
-    data: { publicUrl },
-  } = supabaseClient.storage.from("post-images").getPublicUrl(filePath);
-
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .insert({ ...post, image_url: publicUrl });
-  if (error) throw new Error(error.message);
-
-  return data;
-};
+import { createNewPost } from "../api/posts";
+import { fetchCommunities } from "../api/community";
+import { QUERY_KEYS } from "../api/queryKeys";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -38,15 +18,18 @@ export const CreatePost = () => {
   const { user } = useAuth();
 
   const { data: communities } = useQuery<CommunityFromDbType[], Error>({
-    queryKey: ["communities"],
+    queryKey: [QUERY_KEYS.communities],
     queryFn: fetchCommunities,
   });
 
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: { post: NewPostType; imageFile: File }) =>
-      createPost(data.post, data.imageFile),
+    mutationFn: (data: { post: NewPostType; imageFile: File }) => {
+      if (!user) throw new Error("You must be logged in to add new post");
+
+      return createNewPost(data.post, data.imageFile);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
       navigate("/");
     },
   });
@@ -109,8 +92,14 @@ export const CreatePost = () => {
       </div>
 
       <div>
-        <label htmlFor="community">Select community</label>
-        <select id="community" onChange={handleCommunityChange}>
+        <label className="block mb-2 font-medium" htmlFor="community">
+          Select community
+        </label>
+        <select
+          className="text-sm rounded block w-full p-2.5 bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+          id="community"
+          onChange={handleCommunityChange}
+        >
           <option value=""> -- Choose a community -- </option>
           {communities?.map((community) => (
             <option key={community.id} value={community.id}>
@@ -135,9 +124,9 @@ export const CreatePost = () => {
       </div>
 
       <button
-        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-purple-950 disabled:cursor-not-allowed"
+        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
         type="submit"
-        disabled={isPending}
+        disabled={isPending || !user}
       >
         {isPending ? "Creating..." : "Create Post"}
       </button>

@@ -1,29 +1,21 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
-import { supabaseClient } from "../supabase-client";
-import { NewCommunityType } from "../types/community.type";
-
-const createCommunity = async (community: NewCommunityType) => {
-  const { data, error } = await supabaseClient
-    .from("communities")
-    .insert(community);
-
-  if (error) throw new Error(error.message);
-
-  return data;
-};
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext.hook";
+import { createNewCommunity } from "../api/community";
+import { QUERY_KEYS } from "../api/queryKeys";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: createCommunity,
+    mutationFn: createNewCommunity,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["communities"] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.communities] });
       navigate("/communities");
     },
   });
@@ -65,7 +57,7 @@ export const CreateCommunity = () => {
       </div>
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || !user}
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
         {isPending ? "Creating..." : "Create Community"}

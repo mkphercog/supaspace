@@ -43,7 +43,7 @@ export const PostItem: FC<PostItemProps> = ({
           </div>
           <div className="flex justify-around items-center">
             <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
-              ❤️ <span className="ml-2">{like_count ?? 0}</span>
+              📊 <span className="ml-2">{like_count ?? 0}</span>
             </span>
             <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
               💬 <span className="ml-2">{comment_count ?? 0}</span>

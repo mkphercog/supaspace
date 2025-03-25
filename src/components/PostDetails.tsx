@@ -1,32 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-
-import { supabaseClient } from "../supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import { PostFromDbType } from "../types/post.type";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
-import { PostFromDbType } from "../types/post.type";
+import { fetchPostById } from "../api/posts";
+import { QUERY_KEYS } from "../api/queryKeys";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];
 };
 
-const fetchPostById = async (postId: number): Promise<PostFromDbType> => {
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .select("*")
-    .eq("id", postId)
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data as PostFromDbType;
-};
-
 export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
   const { data, error, isLoading } = useQuery<PostFromDbType, Error>({
-    queryKey: ["post", post_id],
+    queryKey: [QUERY_KEYS.post, post_id],
     queryFn: () => fetchPostById(post_id),
   });
 

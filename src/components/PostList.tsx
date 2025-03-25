@@ -1,30 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import { PostItem } from "./PostItem";
+import { PostFromDbType } from "../types/post.type";
 
-export type PostType = {
-  id: number;
-  created_at: string;
-  title: string;
-  content: string;
-  image_url: string;
-  avatar_url: string;
-  like_count: number;
-  comment_count: number;
-};
-
-const fetchPosts = async (): Promise<PostType[]> => {
+const fetchPosts = async (): Promise<PostFromDbType[]> => {
   const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
 
   if (error) {
     throw new Error(error.message);
   }
 
-  return data as PostType[];
+  return data as PostFromDbType[];
 };
 
 export const PostList = () => {
-  const { data, error, isLoading } = useQuery<PostType[], Error>({
+  const { data, error, isLoading } = useQuery<PostFromDbType[], Error>({
     queryKey: ["posts"],
     queryFn: fetchPosts,
   });

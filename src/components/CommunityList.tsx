@@ -1,15 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import { Link } from "react-router";
+import { CommunityFromDbType } from "../types/community.type";
 
-export type CommunityType = {
-  id: number;
-  created_at: string;
-  name: string;
-  description: string;
-};
-
-export const fetchCommunities = async (): Promise<CommunityType[]> => {
+export const fetchCommunities = async (): Promise<CommunityFromDbType[]> => {
   const { data, error } = await supabaseClient
     .from("communities")
     .select("*")
@@ -17,11 +11,11 @@ export const fetchCommunities = async (): Promise<CommunityType[]> => {
 
   if (error) throw new Error(error.message);
 
-  return data as CommunityType[];
+  return data as CommunityFromDbType[];
 };
 
 export const CommunityList = () => {
-  const { data, isLoading, error } = useQuery<CommunityType[], Error>({
+  const { data, isLoading, error } = useQuery<CommunityFromDbType[], Error>({
     queryKey: ["communities"],
     queryFn: fetchCommunities,
   });

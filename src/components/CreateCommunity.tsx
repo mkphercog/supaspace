@@ -2,12 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { supabaseClient } from "../supabase-client";
+import { NewCommunityType } from "../types/community.type";
 
-type CommunityInputType = {
-  name: string;
-  description: string;
-};
-const createCommunity = async (community: CommunityInputType) => {
+const createCommunity = async (community: NewCommunityType) => {
   const { data, error } = await supabaseClient
     .from("communities")
     .insert(community);

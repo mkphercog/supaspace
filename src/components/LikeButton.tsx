@@ -2,16 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
 import { supabaseClient } from "../supabase-client";
 import { useAuth } from "../context/AuthContext.hook";
+import { VoteFromDbType } from "../types/vote.type";
+import { PostFromDbType } from "../types/post.type";
 
-type LikeButtonProps = {
-  postId: number;
-};
-
-type VoteType = {
-  id: number;
-  post_id: number;
-  user_id: string;
-  vote: number;
+type Props = {
+  post_id: PostFromDbType["id"];
 };
 
 const vote = async (voteValue: number, postId: number, userId: string) => {
@@ -20,7 +15,7 @@ const vote = async (voteValue: number, postId: number, userId: string) => {
     .select("*")
     .eq("post_id", postId)
     .eq("user_id", userId)
-    .maybeSingle<VoteType>();
+    .maybeSingle<VoteFromDbType>();
 
   if (existingVote) {
     if (existingVote.vote === voteValue) {
@@ -47,7 +42,7 @@ const vote = async (voteValue: number, postId: number, userId: string) => {
   }
 };
 
-const fetchVotes = async (postId: number): Promise<VoteType[]> => {
+const fetchVotes = async (postId: number): Promise<VoteFromDbType[]> => {
   const { data, error } = await supabaseClient
     .from("votes")
     .select("*")
@@ -55,10 +50,10 @@ const fetchVotes = async (postId: number): Promise<VoteType[]> => {
 
   if (error) throw new Error(error.message);
 
-  return data as VoteType[];
+  return data as VoteFromDbType[];
 };
 
-export const LikeButton: FC<LikeButtonProps> = ({ postId }) => {
+export const LikeButton: FC<Props> = ({ post_id }) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -66,9 +61,9 @@ export const LikeButton: FC<LikeButtonProps> = ({ postId }) => {
     data: votes,
     isLoading,
     error,
-  } = useQuery<VoteType[], Error>({
-    queryKey: ["votes", postId],
-    queryFn: () => fetchVotes(postId),
+  } = useQuery<VoteFromDbType[], Error>({
+    queryKey: ["votes", post_id],
+    queryFn: () => fetchVotes(post_id),
     // refetchInterval: 5000
   });
 
@@ -76,10 +71,10 @@ export const LikeButton: FC<LikeButtonProps> = ({ postId }) => {
     mutationFn: (voteValue: number) => {
       if (!user) throw new Error("Not logged in user");
 
-      return vote(voteValue, postId, user.id);
+      return vote(voteValue, post_id, user.id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["votes", postId] });
+      queryClient.invalidateQueries({ queryKey: ["votes", post_id] });
     },
   });
 

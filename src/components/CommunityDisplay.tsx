@@ -1,35 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
-import { PostType } from "./PostList";
 import { supabaseClient } from "../supabase-client";
 import { PostItem } from "./PostItem";
+import {
+  CommunityFromDbType,
+  PostWithCommunityType,
+} from "../types/community.type";
 
-interface Props {
-  communityId: number;
-}
-
-interface PostWithCommunity extends PostType {
-  communities: {
-    name: string;
-  };
-}
+type CommunityDisplayProps = {
+  community_id: CommunityFromDbType["id"];
+};
 
 export const fetchCommunityPost = async (
-  communityId: number
-): Promise<PostWithCommunity[]> => {
+  community_id: CommunityFromDbType["id"]
+): Promise<PostWithCommunityType[]> => {
   const { data, error } = await supabaseClient
     .from("posts")
     .select("*, communities(name)")
-    .eq("community_id", communityId)
+    .eq("community_id", community_id)
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
-  return data as PostWithCommunity[];
+  return data as PostWithCommunityType[];
 };
 
-export const CommunityDisplay = ({ communityId }: Props) => {
-  const { data, error, isLoading } = useQuery<PostWithCommunity[], Error>({
-    queryKey: ["communityPost", communityId],
-    queryFn: () => fetchCommunityPost(communityId),
+export const CommunityDisplay = ({ community_id }: CommunityDisplayProps) => {
+  const { data, error, isLoading } = useQuery<PostWithCommunityType[], Error>({
+    queryKey: ["communityPost", community_id],
+    queryFn: () => fetchCommunityPost(community_id),
   });
 
   if (isLoading)

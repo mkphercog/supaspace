@@ -6,7 +6,7 @@ export const CommunityPage = () => {
 
   return (
     <div className="pt-20">
-      <CommunityDisplay communityId={Number(id)} />
+      <CommunityDisplay community_id={Number(id)} />
     </div>
   );
 };

@@ -1,18 +1,17 @@
 import { FC, FormEvent, useState } from "react";
-import { CommentTreeType } from "./CommentSection";
-import { useAuth } from "../context/AuthContext.hook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { supabaseClient } from "../supabase-client";
+import { useAuth } from "../context/AuthContext.hook";
 
-type CommentItemProps = {
-  postId: number;
+type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
 };
 
 const createReplyComment = async (
-  replyContent: string,
-  postId: number,
-  parentCommentId: number,
+  content: string,
+  post_id: number,
+  parent_comment_id: number,
   userId?: string,
   author?: string
 ) => {
@@ -20,9 +19,9 @@ const createReplyComment = async (
     throw new Error("You must be logged in to reply comment");
 
   const { error } = await supabaseClient.from("comments").insert({
-    post_id: postId,
-    content: replyContent,
-    parent_comment_id: parentCommentId,
+    post_id,
+    content,
+    parent_comment_id,
     user_id: userId,
     author,
   });
@@ -30,7 +29,7 @@ const createReplyComment = async (
   if (error) throw new Error(error.message);
 };
 
-export const CommentItem: FC<CommentItemProps> = ({ postId, comment }) => {
+export const CommentItem: FC<Props> = ({ post_id, comment }) => {
   const [showReply, setShowReply] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [replyText, setReplyText] = useState("");
@@ -41,14 +40,14 @@ export const CommentItem: FC<CommentItemProps> = ({ postId, comment }) => {
     mutationFn: (replyContent: string) => {
       return createReplyComment(
         replyContent,
-        postId,
+        post_id,
         comment.id,
         user?.id,
         user?.user_metadata.name
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", post_id] });
       setReplyText("");
       setShowReply(false);
     },
@@ -145,7 +144,7 @@ export const CommentItem: FC<CommentItemProps> = ({ postId, comment }) => {
           {!isCollapsed && (
             <div className="space-y-2">
               {comment.children.map((child, key) => (
-                <CommentItem key={key} comment={child} postId={postId} />
+                <CommentItem key={key} comment={child} post_id={post_id} />
               ))}
             </div>
           )}

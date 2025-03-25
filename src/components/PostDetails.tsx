@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import { PostType } from "./PostList";
+
 import { supabaseClient } from "../supabase-client";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
+import { PostFromDbType } from "../types/post.type";
 
 type PostDetailsProps = {
-  postId: number;
+  post_id: PostFromDbType["id"];
 };
 
-const fetchPostById = async (postId: number): Promise<PostType> => {
+const fetchPostById = async (postId: number): Promise<PostFromDbType> => {
   const { data, error } = await supabaseClient
     .from("posts")
     .select("*")
@@ -20,13 +21,13 @@ const fetchPostById = async (postId: number): Promise<PostType> => {
     throw new Error(error.message);
   }
 
-  return data as PostType;
+  return data as PostFromDbType;
 };
 
-export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
-  const { data, error, isLoading } = useQuery<PostType, Error>({
-    queryKey: ["post", postId],
-    queryFn: () => fetchPostById(postId),
+export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
+  const { data, error, isLoading } = useQuery<PostFromDbType, Error>({
+    queryKey: ["post", post_id],
+    queryFn: () => fetchPostById(post_id),
   });
 
   if (isLoading) {
@@ -54,8 +55,8 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
         Posted on: {new Date(data!.created_at).toLocaleString()}
       </p>
 
-      <LikeButton postId={postId} />
-      <CommentSection postId={postId} />
+      <LikeButton post_id={post_id} />
+      <CommentSection post_id={post_id} />
     </div>
   );
 };

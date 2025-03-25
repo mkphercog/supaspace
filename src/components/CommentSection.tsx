@@ -3,27 +3,13 @@ import { useAuth } from "../context/AuthContext.hook";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
+import {
+  NewCommentType,
+  CommentFromDbType,
+  CommentTreeType,
+} from "../types/comment.type";
 
-type CommentSectionProps = {
-  postId: number;
-};
-
-type NewCommentType = {
-  content: string;
-  parent_comment_id: number | null;
-};
-
-export type CommentType = {
-  id: number;
-  post_id: number;
-  parent_comment_id: number | null;
-  content: string;
-  user_id: string;
-  author: string;
-  created_at: string;
-};
-
-export type CommentTreeType = CommentType & { children?: CommentType[] };
+type Props = Pick<CommentFromDbType, "post_id">;
 
 const createComment = async (
   newComment: NewCommentType,
@@ -44,7 +30,7 @@ const createComment = async (
   if (error) throw new Error(error.message);
 };
 
-const fetchComments = async (postId: number): Promise<CommentType[]> => {
+const fetchComments = async (postId: number): Promise<CommentFromDbType[]> => {
   const { data, error } = await supabaseClient
     .from("comments")
     .select("*")
@@ -53,10 +39,10 @@ const fetchComments = async (postId: number): Promise<CommentType[]> => {
 
   if (error) throw new Error(error.message);
 
-  return data as CommentType[];
+  return data as CommentFromDbType[];
 };
 
-export const CommentSection: FC<CommentSectionProps> = ({ postId }) => {
+export const CommentSection: FC<Props> = ({ post_id }) => {
   const [newCommentText, setNewCommentText] = useState("");
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -65,22 +51,22 @@ export const CommentSection: FC<CommentSectionProps> = ({ postId }) => {
     data: comments,
     isLoading,
     error,
-  } = useQuery<CommentType[], Error>({
-    queryKey: ["comments", postId],
-    queryFn: () => fetchComments(postId),
+  } = useQuery<CommentFromDbType[], Error>({
+    queryKey: ["comments", post_id],
+    queryFn: () => fetchComments(post_id),
     // refetchInterval: 5000
   });
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (newComment: NewCommentType) => {
       return createComment(
         newComment,
-        postId,
+        post_id,
         user?.id,
         user?.user_metadata.name
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", post_id] });
     },
   });
 
@@ -93,7 +79,9 @@ export const CommentSection: FC<CommentSectionProps> = ({ postId }) => {
     setNewCommentText("");
   };
 
-  const buildCommentTree = (flatComments: CommentType[]): CommentTreeType[] => {
+  const buildCommentTree = (
+    flatComments: CommentFromDbType[]
+  ): CommentTreeType[] => {
     const map = new Map<number, CommentTreeType>();
     const roots: CommentTreeType[] = [];
 
@@ -155,7 +143,7 @@ export const CommentSection: FC<CommentSectionProps> = ({ postId }) => {
 
       <div className="space-y-4">
         {commentTree?.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} postId={postId} />
+          <CommentItem key={comment.id} comment={comment} post_id={post_id} />
         ))}
       </div>
     </div>

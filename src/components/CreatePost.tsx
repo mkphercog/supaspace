@@ -3,16 +3,11 @@ import { supabaseClient } from "../supabase-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext.hook";
 import { useNavigate } from "react-router";
-import { CommunityType, fetchCommunities } from "./CommunityList";
+import { fetchCommunities } from "./CommunityList";
+import { NewPostType } from "../types/post.type";
+import { CommunityFromDbType } from "../types/community.type";
 
-type PostInput = {
-  title: string;
-  content: string;
-  avatar_url: string | null;
-  community_id?: number | null;
-};
-
-const createPost = async (post: PostInput, imageFile: File) => {
+const createPost = async (post: NewPostType, imageFile: File) => {
   const filePath = `${post.title}-${Date.now()}-${imageFile.name}`;
 
   const { error: uploadError } = await supabaseClient.storage
@@ -42,13 +37,13 @@ export const CreatePost = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const { data: communities } = useQuery<CommunityType[], Error>({
+  const { data: communities } = useQuery<CommunityFromDbType[], Error>({
     queryKey: ["communities"],
     queryFn: fetchCommunities,
   });
 
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: { post: PostInput; imageFile: File }) =>
+    mutationFn: (data: { post: NewPostType; imageFile: File }) =>
       createPost(data.post, data.imageFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });

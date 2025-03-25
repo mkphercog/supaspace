@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { PostType } from "./PostList";
 import { Link } from "react-router";
+import { PostFromDbType } from "../types/post.type";
 
 type PostItemProps = {
-  post: PostType;
+  post: PostFromDbType;
 };
 
 export const PostItem: FC<PostItemProps> = ({

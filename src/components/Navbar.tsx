@@ -27,7 +27,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg">
+    <nav className="fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm border-b border-white/10 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link
@@ -80,37 +80,39 @@ export const Navbar = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <AuthButton />
-            <NavLink
-              to="/"
-              onClick={closeMenu}
-              className={getNavLinkMobileClassNames}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/create"
-              onClick={closeMenu}
-              className={getNavLinkMobileClassNames}
-            >
-              New post
-            </NavLink>
-            <NavLink
-              to="/communities"
-              onClick={closeMenu}
-              className={getNavLinkMobileClassNames}
-            >
-              Communities
-            </NavLink>
-            <NavLink
-              to="/community/create"
-              onClick={closeMenu}
-              className={getNavLinkMobileClassNames}
-            >
-              New community
-            </NavLink>
+        <div className="w-full h-screen" onClick={closeMenu}>
+          <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <AuthButton />
+              <NavLink
+                to="/"
+                onClick={closeMenu}
+                className={getNavLinkMobileClassNames}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/create"
+                onClick={closeMenu}
+                className={getNavLinkMobileClassNames}
+              >
+                New post
+              </NavLink>
+              <NavLink
+                to="/communities"
+                onClick={closeMenu}
+                className={getNavLinkMobileClassNames}
+              >
+                Communities
+              </NavLink>
+              <NavLink
+                to="/community/create"
+                onClick={closeMenu}
+                className={getNavLinkMobileClassNames}
+              >
+                New community
+              </NavLink>
+            </div>
           </div>
         </div>
       )}

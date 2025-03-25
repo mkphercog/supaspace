@@ -19,6 +19,12 @@ export const PostList = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  if (!data?.length) {
+    return (
+      <p className="text-md text-center text-gray-300 mt-2">No posts found</p>
+    );
+  }
+
   return (
     <ul className="flex flex-wrap gap-6 justify-center">
       {data?.map((post) => (

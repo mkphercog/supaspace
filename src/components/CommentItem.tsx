@@ -6,6 +6,7 @@ import { createReplyComment } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
+import { FaceIcon } from "../assets/icons/FaceIcon";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
@@ -28,6 +29,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         parent_comment_id: comment.id,
         user_id: user.id,
         author: user.user_metadata.name,
+        avatar_url: user?.user_metadata.avatar_url || null,
       });
     },
     onSuccess: () => {
@@ -51,14 +53,27 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     <div className="pl-4 border-l border-white/10">
       <div className="mb-2">
         <div className="flex items-center space-x-2">
+          {comment?.avatar_url ? (
+            <img
+              src={comment.avatar_url}
+              alt="User Avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex justify-center items-center w-8 h-8 rounded-full bg-gradient-to-tl from-[#8A2BE2] to-[#491F70]">
+              <FaceIcon />
+            </div>
+          )}
+
           <span className="text-sm font-bold text-blue-400">
             {comment.author}
           </span>
-          <span className="text-xs text-gray-500">
-            {new Date(comment.created_at).toLocaleString()}
-          </span>
         </div>
-        <p className="text-gray-300">{comment.content}</p>
+        <span className="text-xs text-gray-500">
+          {new Date(comment.created_at).toLocaleString()}
+        </span>
+
+        <p className="pt-2 text-gray-300">{comment.content}</p>
         {user && (
           <button
             onClick={() => setShowReply((prev) => !prev)}

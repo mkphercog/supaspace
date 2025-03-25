@@ -28,6 +28,7 @@ export const createReplyComment = async ({
   parent_comment_id,
   user_id,
   author,
+  avatar_url,
 }: ReplyCommentType) => {
   const { error } = await supabaseClient.from("comments").insert({
     post_id,
@@ -35,6 +36,7 @@ export const createReplyComment = async ({
     parent_comment_id,
     user_id,
     author,
+    avatar_url,
   });
 
   if (error) throw new Error(error.message);

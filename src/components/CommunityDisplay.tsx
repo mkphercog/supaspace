@@ -29,11 +29,11 @@ export const CommunityDisplay = ({ community_id }: Props) => {
 
   return (
     <div>
-      <h2 className="text-6xl leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         Community
       </h2>
-      <h3 className="text-4xl leading-15 font-bold mb-6 text-center bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent">
-        {data?.[0].community_name}
+      <h3 className="text-3xl md:text-4xl leading-15 font-bold mb-6 text-center text-blue-500">
+        #{data?.[0].community_name}
       </h3>
 
       {data?.[0].id ? (

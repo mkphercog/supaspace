@@ -28,7 +28,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-6xl leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         {data?.title}
       </h2>
       {data?.image_url && (
@@ -53,7 +53,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         )}
 
         <p className="text-gray-500 text-sm">
-          {`posted on: ${new Date(data!.created_at).toLocaleString()}`}
+          {`posted ${new Date(data!.created_at).toLocaleString()}`}
         </p>
       </div>
 

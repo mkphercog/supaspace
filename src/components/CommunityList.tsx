@@ -19,6 +19,14 @@ export const CommunityList = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  if (!data?.length) {
+    return (
+      <p className="text-md text-center text-gray-300 mt-2">
+        No communities found
+      </p>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto space-y-4">
       {data?.map((community) => (
@@ -33,6 +41,9 @@ export const CommunityList = () => {
             {community.name}
           </Link>
           <p className="text-gray-400 mt-2">{community.description}</p>
+          <p className="text-xs text-gray-300 mt-2">
+            Created: {new Date(community.created_at).toLocaleString()}
+          </p>
         </div>
       ))}
     </div>

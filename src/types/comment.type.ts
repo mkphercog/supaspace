@@ -6,6 +6,7 @@ export type CommentFromDbType = {
   user_id: string;
   author: string;
   created_at: string;
+  avatar_url: string;
 };
 
 export type NewCommentType = Pick<

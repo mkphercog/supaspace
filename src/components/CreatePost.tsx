@@ -12,6 +12,9 @@ export const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFileError, setSelectedFileError] = useState<string | null>(
+    null
+  );
   const [communityId, setCommunityId] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -52,7 +55,12 @@ export const CreatePost = () => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setSelectedFile(event.target.files[0]);
+      setSelectedFileError(null);
+      if (event.target.files[0].size > 1000000) {
+        setSelectedFileError("Your file is too big, max size: 1MB.");
+      } else {
+        setSelectedFile(event.target.files[0]);
+      }
     }
   };
 
@@ -131,6 +139,9 @@ export const CreatePost = () => {
           onChange={handleFileChange}
           required
         />
+        {selectedFileError && (
+          <p className="text-red-400">{selectedFileError}</p>
+        )}
       </div>
 
       <button

@@ -8,6 +8,7 @@ import { QUERY_KEYS } from "../api/queryKeys";
 import { Link } from "react-router";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];
@@ -32,13 +33,16 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
       <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         {data?.title}
       </h2>
-      {data?.image_url && (
-        <img
-          src={data.image_url}
-          alt={data?.title}
-          className="mt-4 rounded object-cover w-full h-64"
-        />
-      )}
+
+      <PhotoProvider>
+        <PhotoView src={data?.image_url}>
+          <img
+            src={data?.image_url}
+            alt={data?.title}
+            className="mt-4 rounded object-cover w-full h-64"
+          />
+        </PhotoView>
+      </PhotoProvider>
 
       <p className="text-gray-400">{data?.content}</p>
 

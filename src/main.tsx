@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext.provider.tsx";
 import App from "./App.tsx";
 
+import "react-photo-view/dist/react-photo-view.css";
 import "./index.css";
 
 const queryClient = new QueryClient();

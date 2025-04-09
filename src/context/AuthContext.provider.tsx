@@ -16,7 +16,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      if (!session) return;
+      supabaseClient.auth
+        .refreshSession(session)
+        .then(({ data: { session } }) => {
+          setUser(session?.user ?? null);
+        });
     });
 
     const { data: listener } = supabaseClient.auth.onAuthStateChange(

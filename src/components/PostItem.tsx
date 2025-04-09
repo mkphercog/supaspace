@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router";
 import { PostFromDbType } from "../types/post.type";
+import { UserAvatar } from "./UserAvatar";
 
 type PostItemProps = {
   post: PostFromDbType;
@@ -26,15 +27,7 @@ export const PostItem: FC<PostItemProps> = ({
             {new Date(created_at).toLocaleString()}
           </p>
           <div className="flex items-center space-x-2">
-            {avatar_url ? (
-              <img
-                src={avatar_url}
-                alt="User Avatar"
-                className="w-[35px] h-[35px] rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-[35px] h-[35px] rounded-full bg-gradient-to-tl from-[#8A2BE2] to-[#491F70]" />
-            )}
+            <UserAvatar avatarUrl={avatar_url} />
 
             <div className="flex flex-col flex-1">
               <div className="text-[20px] leading-[22px] font-semibold">

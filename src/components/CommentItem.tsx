@@ -6,7 +6,7 @@ import { createReplyComment } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
-import { FaceIcon } from "../assets/icons/FaceIcon";
+import { UserAvatar } from "./UserAvatar";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
@@ -53,18 +53,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     <div className="pl-4 border-l border-white/10">
       <div className="mb-2">
         <div className="flex items-center space-x-2">
-          {comment?.avatar_url ? (
-            <img
-              src={comment.avatar_url}
-              alt="User Avatar"
-              className="w-8 h-8 rounded-full object-cover"
-            />
-          ) : (
-            <div className="flex justify-center items-center w-8 h-8 rounded-full bg-gradient-to-tl from-[#8A2BE2] to-[#491F70]">
-              <FaceIcon />
-            </div>
-          )}
-
+          <UserAvatar avatarUrl={comment.avatar_url} />
           <span className="text-sm font-bold text-blue-400">
             {comment.author}
           </span>

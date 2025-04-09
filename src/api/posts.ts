@@ -5,8 +5,12 @@ import {
   PostFromDbType,
 } from "../types/post.type";
 
-export const createNewPost = async (post: NewPostType, imageFile: File) => {
-  const filePath = `${Date.now()}-${imageFile.name}`;
+export const createNewPost = async (
+  post: NewPostType,
+  imageFile: File,
+  userId: string,
+) => {
+  const filePath = `${userId}/${Date.now()}-${imageFile.name}`;
 
   const { error: uploadError } = await supabaseClient.storage
     .from("post-images")
@@ -26,7 +30,7 @@ export const createNewPost = async (post: NewPostType, imageFile: File) => {
 };
 
 type FetchPostById = (
-  post_id: PostFromDbType["id"]
+  post_id: PostFromDbType["id"],
 ) => Promise<PostDetailsFromDbType>;
 
 export const fetchPostById: FetchPostById = async (post_id) => {

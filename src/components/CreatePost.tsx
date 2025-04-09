@@ -29,7 +29,7 @@ export const CreatePost = () => {
     mutationFn: (data: { post: NewPostType; imageFile: File }) => {
       if (!user) throw new Error("You must be logged in to add new post");
 
-      return createNewPost(data.post, data.imageFile);
+      return createNewPost(data.post, data.imageFile, user.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
@@ -40,7 +40,7 @@ export const CreatePost = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!selectedFile) return;
+    if (!selectedFile || !user) return;
 
     mutate({
       post: {
@@ -48,6 +48,7 @@ export const CreatePost = () => {
         content,
         avatar_url: user?.user_metadata.avatar_url || null,
         community_id: communityId,
+        user_id: user.id,
       },
       imageFile: selectedFile,
     });

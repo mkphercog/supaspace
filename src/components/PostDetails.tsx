@@ -7,6 +7,7 @@ import { fetchPostById } from "../api/posts";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Link } from "react-router";
 import { Loader } from "./Loader";
+import { UserAvatar } from "./UserAvatar";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];
@@ -42,15 +43,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
       <p className="text-gray-400">{data?.content}</p>
 
       <div className="flex items-center gap-2.5">
-        {data?.avatar_url ? (
-          <img
-            src={data.avatar_url}
-            alt="User Avatar"
-            className="w-[35px] h-[35px] rounded-full object-cover"
-          />
-        ) : (
-          <div className="w-[35px] h-[35px] rounded-full bg-gradient-to-tl from-[#8A2BE2] to-[#491F70]" />
-        )}
+        <UserAvatar avatarUrl={data?.avatar_url} />
 
         <p className="text-gray-500 text-sm">
           {`posted ${new Date(data!.created_at).toLocaleString()}`}

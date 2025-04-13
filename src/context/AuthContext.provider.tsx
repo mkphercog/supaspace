@@ -1,41 +1,80 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { supabaseClient } from "../supabase-client";
-import { User } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../api/queryKeys";
+import { fetchUserData, insertUserDataToDb } from "../api/users";
+import { DbUserDataType } from "../types/users";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [dbUserData, setDbUserData] = useState<DbUserDataType | null>(null);
+  const [currentSession, setCurrentSession] = useState<Session | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
-  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
+  const { data: loggedUserData } = useQuery({
+    queryFn: () => {
+      return fetchUserData(currentSession?.user.id);
+    },
+    queryKey: [QUERY_KEYS.me, currentSession?.user.id],
+    retry: false,
+  });
+
   useEffect(() => {
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (!session) return;
-      supabaseClient.auth
-        .refreshSession(session)
-        .then(({ data: { session } }) => {
-          setUser(session?.user ?? null);
-        });
+    if (loggedUserData === undefined) return;
+
+    if (loggedUserData) {
+      console.info(
+        "---- ℹ️ The user already exists in the DB, no action needed. ----"
+      );
+      setDbUserData(loggedUserData);
+    } else if (currentSession) {
+      console.info(
+        "---- ⚙️ No user in the DB, starting the process of adding.  ----"
+      );
+      insertUserDataToDb(currentSession?.user, setDbUserData);
+    }
+  }, [currentSession, loggedUserData]);
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_OUT") {
+        console.info("---- 👋🏼 User signed out correctly. ----");
+        signOut();
+      } else if (event === "INITIAL_SESSION" && session) {
+        console.info("---- ⚙️ Starting session refresh ----");
+        const {
+          data: { session: newSession },
+          error: newSessionError,
+        } = await supabaseClient.auth.refreshSession(session);
+
+        if (newSessionError || !newSession) {
+          throw new Error(
+            `❌ ${
+              newSessionError?.message ||
+              "Something went wrong during refreshing session."
+            }`
+          );
+        }
+
+        setCurrentSession(newSession);
+        setIsAdmin(newSession.user.id === ADMIN_ID);
+        console.info("---- ✅ Refreshed session - correct. ----");
+      }
     });
 
-    const { data: listener } = supabaseClient.auth.onAuthStateChange(
-      (_, session) => {
-        const isAdminLoggedIn = session?.user.id === ADMIN_ID;
-        setUser(session?.user ?? null);
-        setIsAdmin(isAdminLoggedIn);
-      }
-    );
-
     return () => {
-      listener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const signInWithGoogle = async () => {
     await supabaseClient.auth.signInWithOAuth({
@@ -44,7 +83,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const signOut = async () => {
-    await supabaseClient.auth.signOut();
+    if (currentSession) {
+      await supabaseClient.auth.signOut();
+    }
+    setCurrentSession(null);
+    setDbUserData(null);
+    setIsAdmin(false);
   };
 
   const deleteUserAccount = async () => {
@@ -59,7 +103,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     );
 
     if (!error) {
-      setUser(null);
+      signOut();
       navigate({ pathname: "/" });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
       alert("Your account and data deleted successfully.");
@@ -69,7 +113,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const value = {
-    user,
+    dbUserData,
+    currentSession,
     isAdmin,
     signInWithGoogle,
     signOut,

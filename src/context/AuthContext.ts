@@ -1,9 +1,11 @@
 import { createContext } from "react";
-import { User } from "@supabase/supabase-js";
+import { DbUserDataType } from "../types/users";
+import { Session } from "@supabase/supabase-js";
 
 export type AuthContextType = {
-  user: User | null;
-  isAdmin: boolean;
+  dbUserData: DbUserDataType | null;
+  currentSession: Session | null;
+  isAdmin: boolean | null;
   signInWithGoogle: () => void;
   signOut: () => void;
   deleteUserAccount: () => void;

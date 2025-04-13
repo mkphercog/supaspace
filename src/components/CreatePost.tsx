@@ -18,7 +18,7 @@ export const CreatePost = () => {
   const [communityId, setCommunityId] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { dbUserData } = useAuth();
 
   const { data: communities } = useQuery<CommunityFromDbType[], Error>({
     queryKey: [QUERY_KEYS.communities],
@@ -27,9 +27,9 @@ export const CreatePost = () => {
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (data: { post: NewPostType; imageFile: File }) => {
-      if (!user) throw new Error("You must be logged in to add new post");
+      if (!dbUserData) throw new Error("You must be logged in to add new post");
 
-      return createNewPost(data.post, data.imageFile, user.id);
+      return createNewPost(data.post, data.imageFile, dbUserData.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
@@ -40,15 +40,15 @@ export const CreatePost = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!selectedFile || !user) return;
+    if (!selectedFile || !dbUserData) return;
 
     mutate({
       post: {
         title,
         content,
-        avatar_url: user?.user_metadata.avatar_url || null,
+        avatar_url: dbUserData.avatar_url,
         community_id: communityId,
-        user_id: user.id,
+        user_id: dbUserData.id,
       },
       imageFile: selectedFile,
     });
@@ -69,6 +69,9 @@ export const CreatePost = () => {
     const value = e.target.value;
     setCommunityId(value ? Number(value) : null);
   };
+
+  const isSubmitDisabled =
+    isPending || !dbUserData || !title || !content || !selectedFile;
 
   return (
     <form className="max-w-2xl mx-auto space-y-4" onSubmit={handleSubmit}>
@@ -148,7 +151,7 @@ export const CreatePost = () => {
       <button
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
         type="submit"
-        disabled={isPending || !user || !title || !content || !selectedFile}
+        disabled={isSubmitDisabled}
       >
         {isPending ? "Creating..." : "Create Post"}
       </button>

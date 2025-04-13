@@ -17,9 +17,8 @@ const getNavLinkMobileClassNames = ({ isActive }: NavLinkRenderProps) => {
 };
 
 export const Navbar = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAdmin, deleteUserAccount } = useAuth();
+  const { isAdmin } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
@@ -27,14 +26,6 @@ export const Navbar = () => {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
-  };
-
-  const openDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogOpen(false);
   };
 
   return (
@@ -82,11 +73,7 @@ export const Navbar = () => {
             </div>
 
             <div className="hidden md:flex items-center">
-              <AuthButton
-                isMenuOpen={isMenuOpen}
-                toggleMenu={toggleMenu}
-                openDialog={openDialog}
-              />
+              <AuthButton isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
             </div>
 
             <div className="md:hidden">
@@ -108,11 +95,7 @@ export const Navbar = () => {
           >
             <div className="md:hidden bg-[rgba(10,10,10,0.9)] border-b border-white/10 shadow-lg">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                <AuthButton
-                  isMenuOpen={isMenuOpen}
-                  toggleMenu={toggleMenu}
-                  openDialog={openDialog}
-                />
+                <AuthButton isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
                 <NavLink
                   to="/"
                   onClick={closeMenu}
@@ -149,37 +132,6 @@ export const Navbar = () => {
           </div>
         )}
       </nav>
-
-      {isDialogOpen && (
-        <dialog
-          className="fixed top-0 bottom-0 w-full h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
-          onClick={closeDialog}
-        >
-          <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
-            <p>
-              Are you sure you want to delete your account with all your data?
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                className="bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
-                onClick={closeDialog}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  deleteUserAccount();
-                  closeDialog();
-                  closeMenu();
-                }}
-                className="bg-red-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-red-600"
-              >
-                Yes, delete permanently
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )}
     </>
   );
 };

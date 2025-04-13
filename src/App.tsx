@@ -6,6 +6,7 @@ import { PostDetailsPage } from "./pages/PostDetailsPage";
 import { CreateCommunityPage } from "./pages/CreateCommunityPage";
 import { CommunitiesPage } from "./pages/CommunitiesPage";
 import { CommunityPage } from "./pages/CommunityPage";
+import { UserSettingsPage } from "./pages/UserSettingsPage";
 import { NotFound } from "./components/NotFound";
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/community/create" element={<CreateCommunityPage />} />
           <Route path="/communities" element={<CommunitiesPage />} />
           <Route path="/community/:id" element={<CommunityPage />} />
+          <Route path="/settings" element={<UserSettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

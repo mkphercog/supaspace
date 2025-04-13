@@ -5,4 +5,5 @@ export const QUERY_KEYS = {
   posts: "posts",
   post: "post",
   votes: "votes",
+  me: "me",
 };

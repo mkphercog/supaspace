@@ -16,7 +16,7 @@ type Props = Pick<CommentFromDbType, "post_id">;
 export const CommentSection: FC<Props> = ({ post_id }) => {
   const [newCommentText, setNewCommentText] = useState("");
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { dbUserData } = useAuth();
 
   const {
     data: comments,
@@ -28,13 +28,14 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
   });
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (newComment: NewCommentType) => {
-      if (!user) throw new Error("You must be logged in to add comment");
+      if (!dbUserData) throw new Error("You must be logged in to add comment");
 
       return createNewComment({
         newComment,
         post_id,
-        user_id: user.id,
-        author: user.user_metadata.name,
+        user_id: dbUserData.id,
+        author: dbUserData.display_name,
+        avatar_url: dbUserData.avatar_url,
       });
     },
     onSuccess: () => {
@@ -89,7 +90,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
   return (
     <div className="mt-6">
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
-      {user ? (
+      {dbUserData ? (
         <form className="mb-4" onSubmit={handleSubmit}>
           <textarea
             className="w-full border border-white/10 bg-transparent p-2 rounded"

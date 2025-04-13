@@ -10,6 +10,7 @@ export const createNewComment = async ({
   post_id,
   user_id,
   author,
+  avatar_url,
 }: CreateNewCommentType) => {
   const { error } = await supabaseClient.from("comments").insert({
     post_id,
@@ -17,9 +18,13 @@ export const createNewComment = async ({
     parent_comment_id: newComment.parent_comment_id || null,
     user_id,
     author,
+    avatar_url,
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    supabaseClient.auth.signOut();
+    throw new Error(error.message);
+  }
 };
 
 export const createReplyComment = async ({
@@ -39,11 +44,14 @@ export const createReplyComment = async ({
     avatar_url,
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    supabaseClient.auth.signOut();
+    throw new Error(error.message);
+  }
 };
 
 type FetchCommentsType = (
-  post_id: CommentFromDbType["post_id"]
+  post_id: CommentFromDbType["post_id"],
 ) => Promise<CommentFromDbType[]>;
 
 export const fetchComments: FetchCommentsType = async (post_id) => {

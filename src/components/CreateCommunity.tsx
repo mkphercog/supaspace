@@ -9,7 +9,7 @@ export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { dbUserData } = useAuth();
   const navigate = useNavigate();
 
   const { mutate, isPending, isError } = useMutation({
@@ -57,7 +57,7 @@ export const CreateCommunity = () => {
       </div>
       <button
         type="submit"
-        disabled={isPending || !user || !name || !description}
+        disabled={isPending || !dbUserData || !name || !description}
         className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
         {isPending ? "Creating..." : "Create Community"}

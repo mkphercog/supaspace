@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const LikeButton: FC<Props> = ({ post_id }) => {
-  const { user } = useAuth();
+  const { dbUserData } = useAuth();
   const queryClient = useQueryClient();
 
   const {
@@ -26,9 +26,9 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
 
   const { mutate } = useMutation({
     mutationFn: (voteValue: number) => {
-      if (!user) throw new Error("Not logged in user");
+      if (!dbUserData) throw new Error("Not logged in user");
 
-      return createVote({ vote: voteValue, post_id, user_id: user.id });
+      return createVote({ vote: voteValue, post_id, user_id: dbUserData.id });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.votes, post_id] });
@@ -43,7 +43,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
     return <div>Error: {error.message}</div>;
   }
 
-  const userVote = votes?.find((vote) => vote.user_id === user?.id)?.vote;
+  const userVote = votes?.find((vote) => vote.user_id === dbUserData?.id)?.vote;
   const likes = votes?.filter((vote) => vote.vote === 1).length || 0;
   const dislikes = votes?.filter((vote) => vote.vote === -1).length || 0;
 
@@ -57,7 +57,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
             : "bg-gray-400 text-black hover:bg-gray-500"
         }
         disabled:cursor-not-allowed disabled:bg-gray-600`}
-        disabled={!user}
+        disabled={!dbUserData}
       >
         👍 {likes}
       </button>
@@ -68,7 +68,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
             ? "bg-red-500 text-white hover:bg-red-600"
             : "bg-gray-400 text-black hover:bg-gray-500"
         } disabled:cursor-not-allowed disabled:bg-gray-600`}
-        disabled={!user}
+        disabled={!dbUserData}
       >
         👎 {dislikes}
       </button>

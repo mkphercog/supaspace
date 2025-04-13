@@ -29,35 +29,57 @@ serve(async (req) => {
 
   const userId = user.id;
 
-  const { data: userFiles, error: userFilesError } = await supabase
+  const { data: userPostImagesFiles, error: userPostImagesError } =
+    await supabase
+      .storage
+      .from("post-images")
+      .list(userId);
+
+  const { data: userAvatarFiles, error: userAvatarError } = await supabase
     .storage
-    .from("post-images")
+    .from("avatars")
     .list(userId);
 
-  const pathsToDelete = userFiles?.map((file) => `${userId}/${file.name}`) ??
-    [];
+  const postImagesPathsToDelete = userPostImagesFiles?.map((file) =>
+    `${userId}/${file.name}`
+  ) ?? [];
 
-  if (userFilesError) {
+  const userAvatarsPathsToDelete =
+    userAvatarFiles?.map((file) => `${userId}/${file.name}`) ?? [];
+
+  if (userPostImagesError || userAvatarError) {
     return new Response(
-      JSON.stringify({ message: userFilesError }),
+      JSON.stringify({ message: userPostImagesError || userAvatarError }),
       { status: 500, headers: corsHeaders },
     );
   }
 
   try {
-    await Promise.all([
-      supabase.from("comments").delete().eq("user_id", userId),
+    const responses = await Promise.all([
       supabase.from("votes").delete().eq("user_id", userId),
+      supabase.from("comments").delete().eq("user_id", userId),
       supabase.from("posts").delete().eq("user_id", userId),
-      supabase.auth.admin.deleteUser(userId),
       supabase
         .storage
         .from("post-images")
-        .remove(pathsToDelete),
+        .remove(postImagesPathsToDelete),
+      supabase
+        .storage
+        .from("avatars")
+        .remove(userAvatarsPathsToDelete),
+      supabase.auth.admin.deleteUser(userId),
     ]);
 
+    const tableUesersResponse = await supabase.from("users").delete().eq(
+      "id",
+      userId,
+    );
+
     return new Response(
-      JSON.stringify({ message: "User and data deleted successfully" }),
+      JSON.stringify({
+        message: `User and data deleted successfully`,
+        responses: [...responses, tableUesersResponse],
+      }),
       {
         status: 200,
         headers: corsHeaders,

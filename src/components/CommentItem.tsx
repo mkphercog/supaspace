@@ -17,19 +17,20 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [replyText, setReplyText] = useState("");
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { dbUserData } = useAuth();
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (replyContent: string) => {
-      if (!user) throw new Error("You must be logged in to reply comment");
+      if (!dbUserData)
+        throw new Error("You must be logged in to reply comment");
 
       return createReplyComment({
         content: replyContent,
         post_id,
         parent_comment_id: comment.id,
-        user_id: user.id,
-        author: user.user_metadata.name,
-        avatar_url: user?.user_metadata.avatar_url || null,
+        user_id: dbUserData.id,
+        author: dbUserData.display_name,
+        avatar_url: dbUserData.avatar_url,
       });
     },
     onSuccess: () => {
@@ -63,7 +64,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         </span>
 
         <p className="pt-2 text-gray-300">{comment.content}</p>
-        {user && (
+        {dbUserData && (
           <button
             onClick={() => setShowReply((prev) => !prev)}
             className="text-blue-500 text-sm mt-1 transition-all hover:cursor-pointer hover:text-blue-300"
@@ -72,7 +73,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           </button>
         )}
       </div>
-      {showReply && user && (
+      {showReply && dbUserData && (
         <form onSubmit={handleReplySubmit} className="mb-2">
           <textarea
             value={replyText}
@@ -84,7 +85,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <button
             type="submit"
             className="mt-1 bg-blue-500 text-white px-3 py-1 rounded transition-colors hover:bg-blue-600 hover:cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
-            disabled={isPending || !user || !replyText}
+            disabled={isPending || !dbUserData || !replyText}
           >
             {isPending ? "Posting..." : "Post peply"}
           </button>

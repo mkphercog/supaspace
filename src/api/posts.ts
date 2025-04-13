@@ -26,7 +26,10 @@ export const createNewPost = async (
     .from("posts")
     .insert({ ...post, image_url: publicUrl });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    supabaseClient.auth.signOut();
+    throw new Error(error.message);
+  }
 };
 
 type FetchPostById = (

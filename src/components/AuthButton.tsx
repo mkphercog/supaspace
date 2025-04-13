@@ -2,23 +2,25 @@ import { FC } from "react";
 import { GoogleLogoIcon } from "../assets/icons/GoogleLogoIcon";
 import { useAuth } from "../context/AuthContext.hook";
 import { UserAvatar } from "./UserAvatar";
+import { useNavigate } from "react-router";
 
 type AuthButtonProps = {
   isMenuOpen: boolean;
   toggleMenu: () => void;
-  openDialog: () => void;
 };
 
-export const AuthButton: FC<AuthButtonProps> = ({
-  isMenuOpen,
-  toggleMenu,
-  openDialog,
-}) => {
-  const { user, signInWithGoogle, signOut } = useAuth();
+export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
+  const { dbUserData, signInWithGoogle, signOut } = useAuth();
+  const navigate = useNavigate();
 
-  const displayName = user?.user_metadata.name || user?.email;
+  const displayName = dbUserData?.display_name || dbUserData?.email;
 
-  if (!user) {
+  const goToSettings = () => {
+    navigate({ pathname: "/settings" });
+    toggleMenu();
+  };
+
+  if (!dbUserData) {
     return (
       <div className="w-full flex justify-end">
         <button
@@ -40,12 +42,12 @@ export const AuthButton: FC<AuthButtonProps> = ({
             className="flex items-center gap-2 cursor-pointer"
             onClick={toggleMenu}
           >
-            <UserAvatar avatarUrl={user.user_metadata?.avatar_url} />
+            <UserAvatar avatarUrl={dbUserData.avatar_url} />
             <span className="text-gray-300">{displayName}</span>
           </button>
         </div>
 
-        {user.id && isMenuOpen && (
+        {dbUserData.id && isMenuOpen && (
           <div
             className={`
               flex flex-row gap-3 md:flex-col md:p-1
@@ -57,6 +59,12 @@ export const AuthButton: FC<AuthButtonProps> = ({
             `}
           >
             <button
+              onClick={goToSettings}
+              className="bg-gray-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-gray-600"
+            >
+              Setting
+            </button>
+            <button
               onClick={() => {
                 signOut();
                 toggleMenu();
@@ -64,12 +72,6 @@ export const AuthButton: FC<AuthButtonProps> = ({
               className="bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
             >
               Sign out
-            </button>
-            <button
-              onClick={openDialog}
-              className="bg-red-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-red-600"
-            >
-              Delete account
             </button>
           </div>
         )}

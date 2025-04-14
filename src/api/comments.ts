@@ -9,16 +9,12 @@ export const createNewComment = async ({
   newComment,
   post_id,
   user_id,
-  author,
-  avatar_url,
 }: CreateNewCommentType) => {
   const { error } = await supabaseClient.from("comments").insert({
     post_id,
     content: newComment.content,
     parent_comment_id: newComment.parent_comment_id || null,
     user_id,
-    author,
-    avatar_url,
   });
 
   if (error) {
@@ -32,16 +28,12 @@ export const createReplyComment = async ({
   post_id,
   parent_comment_id,
   user_id,
-  author,
-  avatar_url,
 }: ReplyCommentType) => {
   const { error } = await supabaseClient.from("comments").insert({
     post_id,
     content,
     parent_comment_id,
     user_id,
-    author,
-    avatar_url,
   });
 
   if (error) {
@@ -57,11 +49,37 @@ type FetchCommentsType = (
 export const fetchComments: FetchCommentsType = async (post_id) => {
   const { data, error } = await supabaseClient
     .from("comments")
-    .select("*")
+    .select("*, author:users(id, display_name, avatar_url)")
     .eq("post_id", post_id)
     .order("created_at", { ascending: true });
 
   if (error) throw new Error(error.message);
 
   return data as CommentFromDbType[];
+};
+
+export const deleteComments = async (
+  id: CommentFromDbType["id"],
+) => {
+  const { data: commentToDelete } = await supabaseClient
+    .from("comments")
+    .select("id, parent_comment_id")
+    .eq("id", id)
+    .single();
+
+  if (!commentToDelete) return;
+
+  if (commentToDelete.parent_comment_id === null) {
+    await supabaseClient
+      .from("comments")
+      .delete()
+      .or(
+        `id.eq.${commentToDelete.id},parent_comment_id.eq.${commentToDelete.id}`,
+      );
+  } else {
+    await supabaseClient
+      .from("comments")
+      .delete()
+      .eq("id", commentToDelete.id);
+  }
 };

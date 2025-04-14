@@ -4,9 +4,12 @@ export type CommentFromDbType = {
   parent_comment_id: number | null;
   content: string;
   user_id: string;
-  author: string;
+  author: {
+    id: string;
+    display_name: string;
+    avatar_url: string;
+  };
   created_at: string;
-  avatar_url: string;
 };
 
 export type NewCommentType = Pick<
@@ -21,7 +24,7 @@ export type CommentTreeType = CommentFromDbType & {
 export type ReplyCommentType =
   & Omit<
     CommentFromDbType,
-    "id" | "parent_comment_id" | "created_at"
+    "id" | "parent_comment_id" | "created_at" | "author"
   >
   & {
     parent_comment_id: number;
@@ -29,4 +32,4 @@ export type ReplyCommentType =
 
 export type CreateNewCommentType = {
   newComment: NewCommentType;
-} & Pick<CommentFromDbType, "post_id" | "user_id" | "author" | "avatar_url">;
+} & Pick<CommentFromDbType, "post_id" | "user_id">;

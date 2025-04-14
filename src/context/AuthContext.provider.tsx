@@ -18,9 +18,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   const { data: loggedUserData } = useQuery({
-    queryFn: () => {
-      return fetchUserData(currentSession?.user.id);
-    },
+    queryFn: () => fetchUserData(currentSession?.user.id),
     queryKey: [QUERY_KEYS.me, currentSession?.user.id],
     retry: false,
   });
@@ -89,6 +87,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     setCurrentSession(null);
     setDbUserData(null);
     setIsAdmin(false);
+    navigate({ pathname: "/" });
   };
 
   const deleteUserAccount = async () => {
@@ -104,7 +103,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
     if (!error) {
       signOut();
-      navigate({ pathname: "/" });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
       alert("Your account and data deleted successfully.");
     } else {

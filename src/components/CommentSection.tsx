@@ -34,8 +34,6 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
         newComment,
         post_id,
         user_id: dbUserData.id,
-        author: dbUserData.display_name,
-        avatar_url: dbUserData.avatar_url,
       });
     },
     onSuccess: () => {

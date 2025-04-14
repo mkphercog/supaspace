@@ -46,7 +46,6 @@ export const CreatePost = () => {
       post: {
         title,
         content,
-        avatar_url: dbUserData.avatar_url,
         community_id: communityId,
         user_id: dbUserData.id,
       },
@@ -57,8 +56,8 @@ export const CreatePost = () => {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedFileError(null);
-      if (event.target.files[0].size > 1000000) {
-        setSelectedFileError("Your file is too big, max size: 1MB.");
+      if (event.target.files[0].size > 500000) {
+        setSelectedFileError("Your file is too big, max size: 500kB.");
       } else {
         setSelectedFile(event.target.files[0]);
       }

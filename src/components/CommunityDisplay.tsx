@@ -3,7 +3,7 @@ import { PostItem } from "./PostItem";
 import { CommunityFromDbType } from "../types/community.type";
 import { fetchCommunityPosts } from "../api/community";
 import { QUERY_KEYS } from "../api/queryKeys";
-import { PostFromDbType } from "../types/post.type";
+import { PostListItemFromDbType } from "../types/post.type";
 import { Loader } from "./Loader";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const CommunityDisplay = ({ community_id }: Props) => {
-  const { data, error, isLoading } = useQuery<PostFromDbType[], Error>({
+  const { data, error, isLoading } = useQuery<PostListItemFromDbType[], Error>({
     queryKey: [QUERY_KEYS.communityPost, community_id],
     queryFn: () => fetchCommunityPosts(community_id),
   });
@@ -33,7 +33,7 @@ export const CommunityDisplay = ({ community_id }: Props) => {
         Community
       </h2>
       <h3 className="text-3xl md:text-4xl leading-15 font-bold mb-6 text-center text-blue-500">
-        #{data?.[0].community_name}
+        #{data?.[0].community.name}
       </h3>
 
       {data?.[0].id ? (

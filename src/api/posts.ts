@@ -3,6 +3,7 @@ import {
   NewPostType,
   PostDetailsFromDbType,
   PostFromDbType,
+  PostListItemFromDbType,
 } from "../types/post.type";
 
 export const createNewPost = async (
@@ -39,7 +40,9 @@ type FetchPostById = (
 export const fetchPostById: FetchPostById = async (post_id) => {
   const { data, error } = await supabaseClient
     .from("posts")
-    .select("*, communities(name)")
+    .select(
+      "*, community:communities(id, name), author:users(id, display_name, avatar_url)",
+    )
     .eq("id", post_id)
     .single();
 
@@ -50,12 +53,12 @@ export const fetchPostById: FetchPostById = async (post_id) => {
   return data as PostDetailsFromDbType;
 };
 
-export const fetchPosts = async (): Promise<PostFromDbType[]> => {
+export const fetchPosts = async (): Promise<PostListItemFromDbType[]> => {
   const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
 
   if (error) {
     throw new Error(error.message);
   }
 
-  return data as PostFromDbType[];
+  return data as PostListItemFromDbType[];
 };

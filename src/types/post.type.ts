@@ -4,26 +4,32 @@ export type PostFromDbType = {
   title: string;
   content: string;
   image_url: string;
-  avatar_url: string;
   user_id: string;
   like_count: number;
   comment_count: number;
   community_id?: number | null;
-  community_name: string;
+  community: {
+    id: number;
+    name: string;
+  };
+  author: {
+    id: string;
+    avatar_url: string;
+    display_name: string;
+  };
 };
+
+export type PostListItemFromDbType = Omit<
+  PostFromDbType,
+  "community_id" | "user_id"
+>;
 
 export type NewPostType = Pick<
   PostFromDbType,
-  "title" | "content" | "avatar_url" | "community_id" | "user_id"
+  "title" | "content" | "community_id" | "user_id"
 >;
 
-export type PostDetailsFromDbType =
-  & Omit<
-    PostFromDbType,
-    "like_count" | "comment_count" | "community_name"
-  >
-  & {
-    communities: {
-      name: string;
-    };
-  };
+export type PostDetailsFromDbType = Omit<
+  PostFromDbType,
+  "like_count" | "comment_count"
+>;

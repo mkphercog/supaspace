@@ -5,13 +5,13 @@ import { NavMenuIcon } from "../assets/icons/NavMenuIcon";
 import { useAuth } from "../context/AuthContext.hook";
 
 const getNavLinkDesktopClassNames = ({ isActive }: NavLinkRenderProps) => {
-  return `text-gray-300 hover:text-white transition-colors ${
+  return `text-gray-300 font-medium hover:text-white transition-colors duration-300 ${
     isActive && "text-purple-500"
   }`;
 };
 
 const getNavLinkMobileClassNames = ({ isActive }: NavLinkRenderProps) => {
-  return `block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 ${
+  return `block px-3 py-2 text-base font-medium text-gray-300 hover:text-white transition-colors duration-300 ${
     isActive && "text-purple-500"
   }`;
 };

@@ -39,11 +39,13 @@ export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
       <div className="w-full flex flex-col gap-4 items-end justify-end md:flex-row">
         <div className="flex items-center space-x-4">
           <button
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white"
             onClick={toggleMenu}
           >
             <UserAvatar avatarUrl={dbUserData.avatar_url} />
-            <span className="text-gray-300">{displayName}</span>
+            <span className="font-medium text-inherit transition-colors duration-300">
+              {displayName}
+            </span>
           </button>
         </div>
 

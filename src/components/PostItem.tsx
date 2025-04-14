@@ -1,22 +1,14 @@
 import { FC } from "react";
 import { Link } from "react-router";
-import { PostFromDbType } from "../types/post.type";
+import { PostListItemFromDbType } from "../types/post.type";
 import { UserAvatar } from "./UserAvatar";
 
 type PostItemProps = {
-  post: PostFromDbType;
+  post: PostListItemFromDbType;
 };
 
 export const PostItem: FC<PostItemProps> = ({
-  post: {
-    id,
-    title,
-    image_url,
-    avatar_url,
-    comment_count,
-    like_count,
-    created_at,
-  },
+  post: { id, title, image_url, comment_count, like_count, created_at, author },
 }) => {
   return (
     <div className="relative group">
@@ -27,12 +19,15 @@ export const PostItem: FC<PostItemProps> = ({
             {new Date(created_at).toLocaleString()}
           </p>
           <div className="flex items-center space-x-2">
-            <UserAvatar avatarUrl={avatar_url} />
+            <UserAvatar size="md" avatarUrl={author.avatar_url} />
 
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-col gap-2 flex-1">
               <div className="text-[20px] leading-[22px] font-semibold">
                 {title}
               </div>
+              <p className="text-xs text-gray-500">
+                {`by ${author.display_name}`}
+              </p>
             </div>
           </div>
 

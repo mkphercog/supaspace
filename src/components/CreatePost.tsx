@@ -3,10 +3,13 @@ import { useAuth } from "../context/AuthContext.hook";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
 import { Button } from "./ui/Button";
+import MDEditor, { commands } from "@uiw/react-md-editor";
+
+const COMMANDS_TO_HIDE = ["image", "comment"];
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<string | undefined>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileError, setSelectedFileError] = useState<string | null>(
     null
@@ -21,7 +24,7 @@ export const CreatePost = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!selectedFile || !dbUserData) return;
+    if (!selectedFile || !dbUserData || !content) return;
 
     mutate({
       postData: {
@@ -76,13 +79,15 @@ export const CreatePost = () => {
         <label className="block mb-2 font-medium" htmlFor="content">
           Content
         </label>
-        <textarea
+        <MDEditor
           id="content"
+          commands={commands
+            .getCommands()
+            .filter(
+              (command) => !COMMANDS_TO_HIDE.includes(command.name || "")
+            )}
           value={content}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
-          onChange={(e) => setContent(e.target.value)}
-          rows={5}
-          required
+          onChange={setContent}
         />
       </div>
 

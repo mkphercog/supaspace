@@ -22,3 +22,13 @@
     }
   }
 }
+
+/* Tailwind overrides some default styles from @uiw/react-md-editor, 
+   so I had to define them here to make the preview display lists correctly */
+ol > li {
+  list-style-type: decimal;
+}
+
+ul > li {
+  list-style-type: disc;
+}

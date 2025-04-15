@@ -1,12 +1,13 @@
 import { FC } from "react";
+import { Link } from "react-router";
+import { PhotoView } from "react-photo-view";
+import MDEditor from "@uiw/react-md-editor";
 import { PostFromDbType } from "../types/post.type";
+import { useFetchPostById } from "../api/posts";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
-import { useFetchPostById } from "../api/posts";
-import { Link } from "react-router";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
-import { PhotoView } from "react-photo-view";
 import { NotFound } from "./NotFound";
 
 type PostDetailsProps = {
@@ -38,7 +39,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         />
       </PhotoView>
 
-      <p className="text-gray-400">{data?.content}</p>
+      <MDEditor.Markdown source={data?.content} className="p-3 rounded-md" />
 
       <div className="flex items-center gap-2.5">
         <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />

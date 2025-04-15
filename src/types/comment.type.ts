@@ -12,24 +12,11 @@ export type CommentFromDbType = {
   created_at: string;
 };
 
-export type NewCommentType = Pick<
-  CommentFromDbType,
-  "content" | "parent_comment_id"
->;
-
 export type CommentTreeType = CommentFromDbType & {
   children?: CommentFromDbType[];
 };
 
-export type ReplyCommentType =
-  & Omit<
-    CommentFromDbType,
-    "id" | "parent_comment_id" | "created_at" | "author"
-  >
-  & {
-    parent_comment_id: number;
-  };
-
-export type CreateNewCommentType = {
-  newComment: NewCommentType;
-} & Pick<CommentFromDbType, "post_id" | "user_id">;
+export type CreateNewCommentType = Pick<
+  CommentFromDbType,
+  "content" | "parent_comment_id"
+>;

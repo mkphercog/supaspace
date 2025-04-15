@@ -3,9 +3,9 @@ import { supabaseClient } from "../supabase-client";
 import { Session } from "@supabase/supabase-js";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../api/queryKeys";
-import { fetchUserData, insertUserDataToDb } from "../api/users";
+import { insertUserDataToDb, useFetchUserData } from "../api/users";
 import { DbUserDataType } from "../types/users";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
@@ -14,14 +14,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [dbUserData, setDbUserData] = useState<DbUserDataType | null>(null);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const { data: loggedUserData } = useFetchUserData(currentSession?.user.id);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const { data: loggedUserData } = useQuery({
-    queryFn: () => fetchUserData(currentSession?.user.id),
-    queryKey: [QUERY_KEYS.me, currentSession?.user.id],
-    retry: false,
-  });
 
   useEffect(() => {
     if (loggedUserData === undefined) return;

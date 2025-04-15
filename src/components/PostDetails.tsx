@@ -1,10 +1,8 @@
 import { FC } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { PostDetailsFromDbType, PostFromDbType } from "../types/post.type";
+import { PostFromDbType } from "../types/post.type";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
-import { fetchPostById } from "../api/posts";
-import { QUERY_KEYS } from "../api/queryKeys";
+import { useFetchPostById } from "../api/posts";
 import { Link } from "react-router";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
@@ -16,11 +14,7 @@ type PostDetailsProps = {
 };
 
 export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
-  const { data, error, isLoading } = useQuery<PostDetailsFromDbType, Error>({
-    queryKey: [QUERY_KEYS.post, post_id],
-    queryFn: () => fetchPostById(post_id),
-    retry: false,
-  });
+  const { data, error, isLoading } = useFetchPostById(post_id);
 
   if (isLoading) {
     return <Loader />;

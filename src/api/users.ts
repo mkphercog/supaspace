@@ -2,25 +2,29 @@ import { Dispatch } from "react";
 import { User } from "@supabase/supabase-js";
 import { supabaseClient } from "../supabase-client";
 import { DbUserDataType } from "../types/users";
+import { QUERY_KEYS } from "./queryKeys";
+import { useQuery } from "@tanstack/react-query";
 
-type FetchUserDataType = (
- id: DbUserDataType["id"] | undefined,
-) => Promise<DbUserDataType | null>;
+export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
+ return useQuery({
+  queryFn: async () => {
+   if (!userId) return null;
 
-export const fetchUserData: FetchUserDataType = async (id) => {
- if (!id) return null;
+   const { data, error } = await supabaseClient
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .single();
 
- const { data, error } = await supabaseClient
-  .from("users")
-  .select("*")
-  .eq("id", id)
-  .single();
+   if (error) {
+    return null;
+   }
 
- if (error) {
-  return null;
- }
-
- return data as DbUserDataType;
+   return data as DbUserDataType;
+  },
+  queryKey: [QUERY_KEYS.me, userId],
+  retry: false,
+ });
 };
 
 export const insertUserDataToDb = async (
@@ -29,7 +33,7 @@ export const insertUserDataToDb = async (
 ) => {
  if (!userData) throw new Error("---- No user data. ----");
 
- const filePath = `${userData.id}/userAvatar`;
+ const filePath = `${userData.id}/userAvatar-${Date.now()}`;
  const fetchedUserAvatar = await fetch(userData.user_metadata.avatar_url);
  if (!fetchedUserAvatar.ok) {
   throw new Error("❌ Error during fetching user avatar from Google.");
@@ -39,6 +43,7 @@ export const insertUserDataToDb = async (
  const { error: uploadError } = await supabaseClient.storage
   .from("avatars")
   .upload(filePath, avatarBlob, { upsert: true });
+
  if (uploadError) throw new Error(`❌ ${uploadError.message}`);
  console.info("---- ✅ User AVATAR saved in DB correctly. ----");
 

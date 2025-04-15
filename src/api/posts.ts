@@ -1,3 +1,4 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import {
   NewPostType,
@@ -5,60 +6,81 @@ import {
   PostFromDbType,
   PostListItemFromDbType,
 } from "../types/post.type";
+import { QUERY_KEYS } from "./queryKeys";
+import { useNavigate } from "react-router";
+import { DbUserDataType } from "../types/users";
 
-export const createNewPost = async (
-  post: NewPostType,
-  imageFile: File,
-  userId: string,
-) => {
-  const filePath = `${userId}/${Date.now()}-${imageFile.name}`;
+export const useCreateNewPost = (user_id?: DbUserDataType["id"]) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const { error: uploadError } = await supabaseClient.storage
-    .from("post-images")
-    .upload(filePath, imageFile);
+  return useMutation({
+    mutationFn: async (
+      { postData, imageFile }: { postData: NewPostType; imageFile: File },
+    ) => {
+      if (!user_id) throw new Error("You must be logged in to add new post");
 
-  if (uploadError) throw new Error(uploadError.message);
+      const filePath = `${user_id}/${imageFile.name}-${Date.now()}`;
 
-  const {
-    data: { publicUrl },
-  } = supabaseClient.storage.from("post-images").getPublicUrl(filePath);
+      const { error: uploadError } = await supabaseClient.storage
+        .from("post-images")
+        .upload(filePath, imageFile);
 
-  const { error } = await supabaseClient
-    .from("posts")
-    .insert({ ...post, image_url: publicUrl });
+      if (uploadError) throw new Error(uploadError.message);
 
-  if (error) {
-    supabaseClient.auth.signOut();
-    throw new Error(error.message);
-  }
+      const {
+        data: { publicUrl },
+      } = supabaseClient.storage.from("post-images").getPublicUrl(filePath);
+
+      const { error } = await supabaseClient
+        .from("posts")
+        .insert({ ...postData, image_url: publicUrl });
+
+      if (error) {
+        supabaseClient.auth.signOut();
+        throw new Error(error.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
+      navigate("/");
+    },
+  });
 };
 
-type FetchPostById = (
-  post_id: PostFromDbType["id"],
-) => Promise<PostDetailsFromDbType>;
+export const useFetchPostById = (post_id: PostFromDbType["id"]) => {
+  return useQuery<PostDetailsFromDbType, Error>({
+    queryKey: [QUERY_KEYS.post, post_id],
+    queryFn: async () => {
+      const { data, error } = await supabaseClient
+        .from("posts")
+        .select(
+          "*, community:communities(id, name), author:users(id, display_name, avatar_url)",
+        )
+        .eq("id", post_id)
+        .single();
 
-export const fetchPostById: FetchPostById = async (post_id) => {
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .select(
-      "*, community:communities(id, name), author:users(id, display_name, avatar_url)",
-    )
-    .eq("id", post_id)
-    .single();
+      if (error) {
+        throw new Error(error.message);
+      }
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data as PostDetailsFromDbType;
+      return data as PostDetailsFromDbType;
+    },
+    retry: false,
+  });
 };
 
-export const fetchPosts = async (): Promise<PostListItemFromDbType[]> => {
-  const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
+export const useFetchPosts = () => {
+  return useQuery<PostListItemFromDbType[], Error>({
+    queryKey: [QUERY_KEYS.posts],
+    queryFn: async () => {
+      const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
 
-  if (error) {
-    throw new Error(error.message);
-  }
+      if (error) {
+        throw new Error(error.message);
+      }
 
-  return data as PostListItemFromDbType[];
+      return data as PostListItemFromDbType[];
+    },
+  });
 };

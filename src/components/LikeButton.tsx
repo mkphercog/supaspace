@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
 import { useAuth } from "../context/AuthContext.hook";
-import { VoteFromDbType } from "../types/vote.type";
+
 import { PostFromDbType } from "../types/post.type";
-import { fetchVotes, createVote } from "../api/votes";
+import { useCreateVote, useFetchVotes } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
 
@@ -15,21 +15,11 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
   const { dbUserData } = useAuth();
   const queryClient = useQueryClient();
 
-  const {
-    data: votes,
-    isLoading,
-    error,
-  } = useQuery<VoteFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.votes, post_id],
-    queryFn: () => fetchVotes(post_id),
-  });
+  const { data: votes, isLoading, error } = useFetchVotes(post_id);
 
-  const { mutate } = useMutation({
-    mutationFn: (voteValue: number) => {
-      if (!dbUserData) throw new Error("Not logged in user");
-
-      return createVote({ vote: voteValue, post_id, user_id: dbUserData.id });
-    },
+  const { mutate, isPending } = useCreateVote({
+    user_id: dbUserData?.id,
+    post_id,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.votes, post_id] });
     },
@@ -57,7 +47,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
             : "bg-gray-400 text-black hover:bg-gray-500"
         }
         disabled:cursor-not-allowed disabled:bg-gray-600`}
-        disabled={!dbUserData}
+        disabled={!dbUserData || isPending}
       >
         👍 {likes}
       </button>
@@ -68,7 +58,7 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
             ? "bg-red-500 text-white hover:bg-red-600"
             : "bg-gray-400 text-black hover:bg-gray-500"
         } disabled:cursor-not-allowed disabled:bg-gray-600`}
-        disabled={!dbUserData}
+        disabled={!dbUserData || isPending}
       >
         👎 {dislikes}
       </button>

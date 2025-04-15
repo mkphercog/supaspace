@@ -1,15 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { CommunityFromDbType } from "../types/community.type";
-import { fetchCommunities } from "../api/community";
-import { QUERY_KEYS } from "../api/queryKeys";
+import { useFetchCommunities } from "../api/community";
 import { Loader } from "./Loader";
 
 export const CommunityList = () => {
-  const { data, isLoading, error } = useQuery<CommunityFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.communities],
-    queryFn: fetchCommunities,
-  });
+  const { data, isLoading, error } = useFetchCommunities();
 
   if (isLoading) {
     return <Loader />;

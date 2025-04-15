@@ -1,24 +1,13 @@
 import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext.hook";
-import { createNewCommunity } from "../api/community";
-import { QUERY_KEYS } from "../api/queryKeys";
+import { useCreateNewCommunity } from "../api/community";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const queryClient = useQueryClient();
   const { dbUserData } = useAuth();
-  const navigate = useNavigate();
 
-  const { mutate, isPending, isError } = useMutation({
-    mutationFn: createNewCommunity,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.communities] });
-      navigate("/communities");
-    },
-  });
+  const { mutate, isPending, isError } = useCreateNewCommunity();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

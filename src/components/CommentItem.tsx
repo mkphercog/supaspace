@@ -1,8 +1,8 @@
 import { FC, FormEvent, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { useAuth } from "../context/AuthContext.hook";
-import { createReplyComment, deleteComments } from "../api/comments";
+import { useCreateNewComment, useDeleteComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
@@ -32,18 +32,9 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     mutate: createReplyCommentMutation,
     isPending,
     isError,
-  } = useMutation({
-    mutationFn: (replyContent: string) => {
-      if (!dbUserData)
-        throw new Error("You must be logged in to reply comment");
-
-      return createReplyComment({
-        content: replyContent,
-        post_id,
-        parent_comment_id: comment.id,
-        user_id: dbUserData.id,
-      });
-    },
+  } = useCreateNewComment({
+    user_id: dbUserData?.id,
+    post_id,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, post_id],
@@ -53,8 +44,8 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     },
   });
 
-  const { mutate: deleteCommentMutation } = useMutation({
-    mutationFn: () => deleteComments(comment.id),
+  const { mutate: deleteCommentMutation } = useDeleteComments({
+    id: comment.id,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, post_id],
@@ -69,7 +60,10 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
 
     if (!replyText) return;
 
-    createReplyCommentMutation(replyText);
+    createReplyCommentMutation({
+      content: replyText,
+      parent_comment_id: comment.id,
+    });
   };
 
   const handleDeleteComment = () => {

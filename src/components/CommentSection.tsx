@@ -1,13 +1,9 @@
 import { FC, FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { CommentItem } from "./CommentItem";
-import {
-  NewCommentType,
-  CommentFromDbType,
-  CommentTreeType,
-} from "../types/comment.type";
-import { createNewComment, fetchComments } from "../api/comments";
+import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
+import { useCreateNewComment, useFetchComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
 
@@ -18,24 +14,11 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
   const queryClient = useQueryClient();
   const { dbUserData } = useAuth();
 
-  const {
-    data: comments,
-    isLoading,
-    error,
-  } = useQuery<CommentFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.comments, post_id],
-    queryFn: () => fetchComments(post_id),
-  });
-  const { mutate, isPending, isError } = useMutation({
-    mutationFn: (newComment: NewCommentType) => {
-      if (!dbUserData) throw new Error("You must be logged in to add comment");
+  const { data: comments, isLoading, error } = useFetchComments(post_id);
 
-      return createNewComment({
-        newComment,
-        post_id,
-        user_id: dbUserData.id,
-      });
-    },
+  const { mutate, isPending, isError } = useCreateNewComment({
+    user_id: dbUserData?.id,
+    post_id,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, post_id],

@@ -1,15 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { PostItem } from "./PostItem";
-import { PostListItemFromDbType } from "../types/post.type";
-import { fetchPosts } from "../api/posts";
-import { QUERY_KEYS } from "../api/queryKeys";
+import { useFetchPosts } from "../api/posts";
 import { Loader } from "./Loader";
 
 export const PostList = () => {
-  const { data, error, isLoading } = useQuery<PostListItemFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.posts],
-    queryFn: fetchPosts,
-  });
+  const { data, error, isLoading } = useFetchPosts();
 
   if (isLoading) {
     return <Loader />;

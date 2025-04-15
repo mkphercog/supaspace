@@ -1,12 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useNavigate } from "react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext.hook";
-import { NewPostType } from "../types/post.type";
-import { CommunityFromDbType } from "../types/community.type";
-import { createNewPost } from "../api/posts";
-import { fetchCommunities } from "../api/community";
-import { QUERY_KEYS } from "../api/queryKeys";
+import { useCreateNewPost } from "../api/posts";
+import { useFetchCommunities } from "../api/community";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -16,26 +11,11 @@ export const CreatePost = () => {
     null
   );
   const [communityId, setCommunityId] = useState<number | null>(null);
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { dbUserData } = useAuth();
 
-  const { data: communities } = useQuery<CommunityFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.communities],
-    queryFn: fetchCommunities,
-  });
+  const { data: communities } = useFetchCommunities();
 
-  const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: { post: NewPostType; imageFile: File }) => {
-      if (!dbUserData) throw new Error("You must be logged in to add new post");
-
-      return createNewPost(data.post, data.imageFile, dbUserData.id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
-      navigate("/");
-    },
-  });
+  const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -43,7 +23,7 @@ export const CreatePost = () => {
     if (!selectedFile || !dbUserData) return;
 
     mutate({
-      post: {
+      postData: {
         title,
         content,
         community_id: communityId,

@@ -1,9 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import { PostItem } from "./PostItem";
 import { CommunityFromDbType } from "../types/community.type";
-import { fetchCommunityPosts } from "../api/community";
-import { QUERY_KEYS } from "../api/queryKeys";
-import { PostListItemFromDbType } from "../types/post.type";
+import { useFetchCommunityPosts } from "../api/community";
 import { Loader } from "./Loader";
 
 type Props = {
@@ -11,10 +8,7 @@ type Props = {
 };
 
 export const CommunityDisplay = ({ community_id }: Props) => {
-  const { data, error, isLoading } = useQuery<PostListItemFromDbType[], Error>({
-    queryKey: [QUERY_KEYS.communityPost, community_id],
-    queryFn: () => fetchCommunityPosts(community_id),
-  });
+  const { data, error, isLoading } = useFetchCommunityPosts(community_id);
 
   if (isLoading) {
     return <Loader />;

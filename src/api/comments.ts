@@ -61,25 +61,8 @@ export const fetchComments: FetchCommentsType = async (post_id) => {
 export const deleteComments = async (
   id: CommentFromDbType["id"],
 ) => {
-  const { data: commentToDelete } = await supabaseClient
+  await supabaseClient
     .from("comments")
-    .select("id, parent_comment_id")
-    .eq("id", id)
-    .single();
-
-  if (!commentToDelete) return;
-
-  if (commentToDelete.parent_comment_id === null) {
-    await supabaseClient
-      .from("comments")
-      .delete()
-      .or(
-        `id.eq.${commentToDelete.id},parent_comment_id.eq.${commentToDelete.id}`,
-      );
-  } else {
-    await supabaseClient
-      .from("comments")
-      .delete()
-      .eq("id", commentToDelete.id);
-  }
+    .delete()
+    .eq("id", id);
 };

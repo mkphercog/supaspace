@@ -101,6 +101,7 @@ export const UserSettings = () => {
     }
 
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    setSelectedFile(null);
   };
 
   return (

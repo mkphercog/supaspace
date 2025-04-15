@@ -56,9 +56,10 @@ serve(async (req) => {
 
   try {
     const responses = await Promise.all([
-      supabase.from("votes").delete().eq("user_id", userId),
-      supabase.from("comments").delete().eq("user_id", userId),
-      supabase.from("posts").delete().eq("user_id", userId),
+      supabase.from("users").delete().eq(
+        "id",
+        userId,
+      ),
       supabase
         .storage
         .from("post-images")
@@ -70,15 +71,10 @@ serve(async (req) => {
       supabase.auth.admin.deleteUser(userId),
     ]);
 
-    const tableUesersResponse = await supabase.from("users").delete().eq(
-      "id",
-      userId,
-    );
-
     return new Response(
       JSON.stringify({
         message: `User and data deleted successfully`,
-        responses: [...responses, tableUesersResponse],
+        responses: [...responses],
       }),
       {
         status: 200,

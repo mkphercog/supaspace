@@ -32,7 +32,13 @@ export const CreateCommunity = () => {
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
+          className={`
+            w-full text-sm rounded-md p-2 block         
+            border border-gray-500 hover:border-purple-600 focus:outline-none
+            bg-transparent focus:border-purple-600
+            transition-colors duration-300
+            hover:cursor-text
+          `}
           required
         />
       </div>
@@ -44,8 +50,14 @@ export const CreateCommunity = () => {
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
-          rows={3}
+          className={`
+            w-full text-sm rounded-md p-2 block         
+            border border-gray-500 hover:border-purple-600 focus:outline-none
+            bg-transparent focus:border-purple-600
+            transition-colors duration-300
+            hover:cursor-text
+          `}
+          rows={5}
         />
       </div>
       <Button

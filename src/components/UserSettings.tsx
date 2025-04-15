@@ -141,10 +141,11 @@ export const UserSettings = () => {
                     type="file"
                     accept="image/*"
                     className={`
-                      px-4 mr-4 py-2.5
-                      block w-full text-sm border rounded-lg cursor-pointer
-                      text-gray-200 focus:outline-none bg-gray-700 border-gray-600 placeholder-gray-400
-                      transition-all hover:cursor-pointer hover:bg-gray-800
+                      w-full text-sm rounded-md p-2 block
+                      border border-gray-500 hover:border-purple-600 focus:outline-none
+                      bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+                      transition-colors duration-300
+                      hover:cursor-pointer
                       file:hidden
                     `}
                     onChange={handleFileChange}
@@ -196,7 +197,13 @@ export const UserSettings = () => {
               <input
                 placeholder={`Current name: ${dbUserData?.display_name}`}
                 type="text"
-                className="w-full border border-white/10 bg-transparent p-2 rounded"
+                className={`
+                  w-full text-sm rounded-md p-2 block         
+                  border border-gray-500 hover:border-purple-600 focus:outline-none
+                  bg-transparent focus:border-purple-600
+                  transition-colors duration-300
+                  hover:cursor-text
+                `}
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
               />
@@ -244,7 +251,7 @@ export const UserSettings = () => {
               Are you sure you want to delete your account with all your data?
             </p>
             <div className="flex gap-3 justify-end">
-              <Button variant="secondary" onClick={closeDialog}>
+              <Button variant="ghost" onClick={closeDialog}>
                 Cancel
               </Button>
               <Button

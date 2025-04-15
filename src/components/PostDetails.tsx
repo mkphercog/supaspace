@@ -39,7 +39,10 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         />
       </PhotoView>
 
-      <MDEditor.Markdown source={data?.content} className="p-3 rounded-md" />
+      <MDEditor.Markdown
+        source={data?.content}
+        className="p-3 bg-transparent!"
+      />
 
       <div className="flex items-center gap-2.5">
         <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />

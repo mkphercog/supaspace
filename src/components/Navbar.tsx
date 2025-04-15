@@ -19,7 +19,7 @@ const getNavLinkMobileClassNames = ({ isActive }: NavLinkRenderProps) => {
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAdmin } = useAuth();
+  const { isAdmin, currentSession } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
@@ -53,9 +53,11 @@ export const Navbar = () => {
               <NavLink to="/" className={getNavLinkDesktopClassNames}>
                 Home
               </NavLink>
-              <NavLink to="/create" className={getNavLinkDesktopClassNames}>
-                New post
-              </NavLink>
+              {currentSession && (
+                <NavLink to="/create" className={getNavLinkDesktopClassNames}>
+                  New post
+                </NavLink>
+              )}
               <NavLink
                 to="/communities"
                 className={getNavLinkDesktopClassNames}

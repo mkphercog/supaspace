@@ -8,6 +8,7 @@ import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { UserAvatar } from "./UserAvatar";
 import { Button } from "./ui/Button";
+import MDEditor from "@uiw/react-md-editor";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
@@ -76,7 +77,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
       <div className="p-2 pl-4 bg-gray-700/20 rounded-xl">
         <div className="grid gap-3 grid-cols-[auto_1fr] grid-rows-[auto_1fr] mb-2">
           <UserAvatar avatarUrl={comment.author.avatar_url} size="md" />
-          <div className="flex flex-col bg-gray-600/20 p-2 rounded-xl">
+          <div className="flex flex-col gap-1 bg-gray-600/20 p-2 rounded-xl">
             <div className="flex items-center justify-between">
               <span className="text-sm font-bold text-blue-400">
                 {comment.author.display_name}
@@ -85,11 +86,14 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
                 {new Date(comment.created_at).toLocaleString()}
               </span>
             </div>
-            <p className="text-gray-300">{comment.content}</p>
+            <MDEditor.Markdown
+              source={comment.content}
+              className="pl-1 bg-transparent!"
+            />
             {dbUserData?.id === comment.user_id && (
               <Button
-                className="self-end text-xs"
-                variant="destructive"
+                className="self-end text-xs text-red-500!"
+                variant="ghost"
                 onClick={openDialog}
               >
                 Delete
@@ -101,7 +105,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
             <Button
               onClick={() => setShowReply((prev) => !prev)}
               variant="ghost"
-              className="col-span-2 justify-self-start text-sm hover:text-blue-500"
+              className="col-span-2 justify-self-start text-sm text-blue-500!"
             >
               {showReply ? "Cancel" : "Reply"}
             </Button>
@@ -113,9 +117,15 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              className="w-full border border-white/10 bg-transparent p-2 rounded"
+              className={`
+                w-full text-sm rounded-md p-2 block         
+                border border-gray-500 hover:border-purple-600 focus:outline-none
+                bg-transparent focus:border-purple-600
+                transition-colors duration-300
+                hover:cursor-text
+              `}
               placeholder="Write a reply..."
-              rows={2}
+              rows={3}
             />
             <Button
               type="submit"
@@ -132,7 +142,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         {comment.children && comment.children.length > 0 && (
           <div>
             <Button
-              className="flex gap-2 mb-2 text-xs hover:text-purple-500"
+              className="flex gap-2 mb-2 text-xs text-purple-400!"
               variant="ghost"
               onClick={() => setIsCollapsed((prev) => !prev)}
             >
@@ -167,7 +177,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
             <p>Are you sure you want to delete your comment?</p>
             <div className="flex gap-3 justify-end">
-              <Button variant="secondary" onClick={closeDialog}>
+              <Button variant="ghost" onClick={closeDialog}>
                 Cancel
               </Button>
               <Button

@@ -9,14 +9,14 @@ type ButtonVariants =
 
 const BUTTON_VARIANT: Record<ButtonVariants, string> = {
   primary: `
-    bg-purple-500 hover:bg-purple-600
-    border-purple-500 hover:border-purple-600
+    bg-purple-600 hover:bg-purple-700
+    border-purple-600 hover:border-purple-700
     disabled:bg-purple-500/20 disabled:text-gray-700 disabled:border-purple-800/10
    `,
   secondary: `
     bg-gray-500 hover:bg-gray-600
     border-gray-500 hover:border-gray-600
-    disabled:bg-gray-500/20 disabled:text-gray-700 disabled:border-gray-700/10
+    disabled:bg-gray-500/20 disabled:text-gray-600 disabled:border-gray-700/10
    `,
   destructive: `
      bg-red-700 hover:bg-red-800

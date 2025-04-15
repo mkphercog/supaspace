@@ -75,7 +75,13 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
       {dbUserData ? (
         <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
           <textarea
-            className="w-full border border-white/10 bg-transparent p-2 rounded"
+            className={`
+              w-full text-sm rounded-md p-2 block         
+              border border-gray-500 hover:border-purple-600 focus:outline-none
+              bg-transparent focus:border-purple-600
+              transition-colors duration-300
+              hover:cursor-text
+            `}
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
             placeholder="Write a comment..."

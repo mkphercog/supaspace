@@ -4,6 +4,7 @@ import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
 import { Button } from "./ui/Button";
 import MDEditor, { commands } from "@uiw/react-md-editor";
+import { NotFound } from "./NotFound";
 
 const COMMANDS_TO_HIDE = ["image", "comment"];
 
@@ -15,11 +16,14 @@ export const CreatePost = () => {
     null
   );
   const [communityId, setCommunityId] = useState<number | null>(null);
-  const { dbUserData } = useAuth();
+  const { dbUserData, currentSession } = useAuth();
 
   const { data: communities } = useFetchCommunities();
-
   const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
+
+  if (!currentSession) {
+    return <NotFound />;
+  }
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -57,90 +61,105 @@ export const CreatePost = () => {
     isPending || !dbUserData || !title || !content || !selectedFile;
 
   return (
-    <form
-      className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
-      onSubmit={handleSubmit}
-    >
-      <div>
-        <label className="block mb-2 font-medium" htmlFor="title">
-          Title
-        </label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
+    <>
+      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        Create new post
+      </h2>
 
-      <div>
-        <label className="block mb-2 font-medium" htmlFor="content">
-          Content
-        </label>
-        <MDEditor
-          id="content"
-          commands={commands
-            .getCommands()
-            .filter(
-              (command) => !COMMANDS_TO_HIDE.includes(command.name || "")
-            )}
-          value={content}
-          onChange={setContent}
-        />
-      </div>
+      <form
+        className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
+        onSubmit={handleSubmit}
+      >
+        <div>
+          <label className="block mb-2 font-medium" htmlFor="title">
+            Title
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            className={`
+            w-full text-sm rounded-md p-2 block         
+            border border-gray-500 hover:border-purple-600 focus:outline-none
+            bg-transparent focus:border-purple-600
+            transition-colors duration-300
+            hover:cursor-text
+          `}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block mb-2 font-medium" htmlFor="community">
-          Select community
-        </label>
-        <select
-          className={`
-            text-sm rounded block w-full p-2.5
-            bg-gray-700 border-gray-600 text-white
-            focus:ring-blue-500 focus:border-blue-500
-            transition-all hover:cursor-pointer hover:bg-gray-800
-            `}
-          id="community"
-          onChange={handleCommunityChange}
-        >
-          <option value=""> -- Choose a community -- </option>
-          {communities?.map((community) => (
-            <option key={community.id} value={community.id}>
-              {community.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div>
+          <label className="block mb-2 font-medium" htmlFor="content">
+            Content
+          </label>
+          <MDEditor
+            id="content"
+            commands={commands
+              .getCommands()
+              .filter(
+                (command) => !COMMANDS_TO_HIDE.includes(command.name || "")
+              )}
+            value={content}
+            onChange={setContent}
+          />
+        </div>
 
-      <div>
-        <label className="block mb-2 font-medium" htmlFor="imageUrl">
-          Upload image
-        </label>
-        <input
-          id="imageUrl"
-          type="file"
-          accept="image/*"
-          className={`
-            block w-full text-sm border rounded-lg cursor-pointer
-            text-gray-200 focus:outline-none bg-gray-700 border-gray-600 placeholder-gray-400
-            transition-all hover:cursor-pointer hover:bg-gray-800
-            file:bg-gray-600 file:font-semibold file:px-4 file:mr-4 file:border-0 file:py-2.5 file:pointer-events-none
-            `}
-          onChange={handleFileChange}
-          required
-        />
-        {selectedFileError && (
-          <p className="text-red-400">{selectedFileError}</p>
-        )}
-      </div>
+        <div>
+          <label className="block mb-2 font-medium" htmlFor="community">
+            Select community
+          </label>
+          <select
+            id="community"
+            className={`
+            w-full text-sm rounded-md p-2 block
+            border border-gray-500 hover:border-purple-600 focus:outline-none
+            bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+            transition-colors duration-300
+            hover:cursor-pointer
+          `}
+            onChange={handleCommunityChange}
+          >
+            <option value=""> -- Choose a community -- </option>
+            {communities?.map((community) => (
+              <option key={community.id} value={community.id}>
+                {community.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <Button className="self-end" type="submit" disabled={isSubmitDisabled}>
-        {isPending ? "Creating..." : "Create Post"}
-      </Button>
+        <div>
+          <label className="block mb-2 font-medium" htmlFor="imageUrl">
+            Upload image
+          </label>
+          <input
+            id="imageUrl"
+            type="file"
+            accept="image/*"
+            className={`
+            w-full text-sm rounded-md p-2 block
+            border border-gray-500 hover:border-purple-600 focus:outline-none
+            bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+            transition-colors duration-300
+            hover:cursor-pointer
+            file:hidden
+          `}
+            onChange={handleFileChange}
+            required
+          />
+          {selectedFileError && (
+            <p className="text-red-400">{selectedFileError}</p>
+          )}
+        </div>
 
-      {isError && <p className="text-red-500">Error creating post.</p>}
-    </form>
+        <Button className="self-end" type="submit" disabled={isSubmitDisabled}>
+          {isPending ? "Creating..." : "Create Post"}
+        </Button>
+
+        {isError && <p className="text-red-500">Error creating post.</p>}
+      </form>
+    </>
   );
 };

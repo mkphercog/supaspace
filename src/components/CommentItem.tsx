@@ -7,6 +7,7 @@ import { QUERY_KEYS } from "../api/queryKeys";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { UserAvatar } from "./UserAvatar";
+import { Button } from "./ui/Button";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
@@ -86,26 +87,29 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
             </div>
             <p className="text-gray-300">{comment.content}</p>
             {dbUserData?.id === comment.user_id && (
-              <button
-                className="self-end text-red-400 text-sm transition-all hover:cursor-pointer hover:text-red-500"
+              <Button
+                className="self-end text-xs"
+                variant="destructive"
                 onClick={openDialog}
               >
                 Delete
-              </button>
+              </Button>
             )}
           </div>
 
           {dbUserData && (
-            <button
+            <Button
               onClick={() => setShowReply((prev) => !prev)}
-              className="mt-1 col-span-2 justify-self-start text-blue-500 text-sm transition-all hover:cursor-pointer hover:text-blue-300"
+              variant="ghost"
+              className="col-span-2 justify-self-start text-sm hover:text-blue-500"
             >
               {showReply ? "Cancel" : "Reply"}
-            </button>
+            </Button>
           )}
         </div>
+
         {showReply && dbUserData && (
-          <form onSubmit={handleReplySubmit} className="mb-2">
+          <form onSubmit={handleReplySubmit} className="flex flex-col gap-3">
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
@@ -113,35 +117,36 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
               placeholder="Write a reply..."
               rows={2}
             />
-            <button
+            <Button
               type="submit"
-              className="mt-1 bg-blue-500 text-white px-3 py-1 rounded transition-colors hover:bg-blue-600 hover:cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
+              className="self-end"
               disabled={isPending || !dbUserData || !replyText}
             >
               {isPending ? "Posting..." : "Post reply"}
-            </button>
+            </Button>
+
             {isError && <p className="text-red-500">Error posting reply.</p>}
           </form>
         )}
 
         {comment.children && comment.children.length > 0 && (
           <div>
-            <button
-              className="flex gap-2 mb-2 transition-all hover:cursor-pointer hover:text-purple-500"
+            <Button
+              className="flex gap-2 mb-2 text-xs hover:text-purple-500"
+              variant="ghost"
               onClick={() => setIsCollapsed((prev) => !prev)}
-              title={isCollapsed ? "Hide replies" : "Show replies"}
             >
               {!isCollapsed ? (
                 <>
-                  <ChevronDownIcon /> <p className="text-xs">Hide replies</p>
+                  <ChevronDownIcon /> <p>Hide replies</p>
                 </>
               ) : (
                 <>
                   <ChevronUpIcon />
-                  <p className="text-xs">Show replies</p>
+                  <p>Show replies</p>
                 </>
               )}
-            </button>
+            </Button>
 
             {!isCollapsed && (
               <div className="space-y-2">
@@ -153,6 +158,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           </div>
         )}
       </div>
+
       {isDialogOpen && (
         <dialog
           className="fixed top-0 bottom-0 w-full h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
@@ -161,21 +167,18 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
             <p>Are you sure you want to delete your comment?</p>
             <div className="flex gap-3 justify-end">
-              <button
-                className="bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
-                onClick={closeDialog}
-              >
+              <Button variant="secondary" onClick={closeDialog}>
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   handleDeleteComment();
                   closeDialog();
                 }}
-                className="bg-red-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-red-600"
+                variant="destructive"
               >
                 Yes, delete permanently
-              </button>
+              </Button>
             </div>
           </div>
         </dialog>

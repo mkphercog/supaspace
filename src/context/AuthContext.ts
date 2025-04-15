@@ -8,7 +8,8 @@ export type AuthContextType = {
   isAdmin: boolean | null;
   signInWithGoogle: () => void;
   signOut: () => void;
-  deleteUserAccount: () => void;
+  deleteUserWithData: () => void;
+  isDeleteUserWithDataPending: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(

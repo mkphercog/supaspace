@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { useCreateNewCommunity } from "../api/community";
+import { Button } from "./ui/Button";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
@@ -15,7 +16,10 @@ export const CreateCommunity = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
+    >
       <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         Create new community
       </h2>
@@ -44,13 +48,13 @@ export const CreateCommunity = () => {
           rows={3}
         />
       </div>
-      <button
+      <Button
         type="submit"
+        className="self-end"
         disabled={isPending || !dbUserData || !name || !description}
-        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
         {isPending ? "Creating..." : "Create Community"}
-      </button>
+      </Button>
       {isError && <p className="text-red-500">Error creating community.</p>}
     </form>
   );

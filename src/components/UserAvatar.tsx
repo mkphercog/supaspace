@@ -1,11 +1,13 @@
-import { FC } from "react";
+import { FC, SyntheticEvent } from "react";
 import DefaultAvatar from "../assets/images/defaultAvatar.png";
+import { PhotoView } from "react-photo-view";
 
 type AvatarSize = "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 
 type UserAvatarProps = {
   avatarUrl?: string;
   size?: AvatarSize;
+  isPhotoView?: boolean;
 };
 
 const AVATAR_SIZE: Record<AvatarSize, string> = {
@@ -17,24 +19,41 @@ const AVATAR_SIZE: Record<AvatarSize, string> = {
   "5xl": "w-40 h-40",
 };
 
-export const UserAvatar: FC<UserAvatarProps> = ({ avatarUrl, size = "sm" }) => {
+const getUserAvatarData = (size: AvatarSize, avatarUrl?: string) => {
+  return {
+    className: `${AVATAR_SIZE[size]} rounded-full object-cover`,
+    src: avatarUrl,
+    alt: "User Avatar",
+    loading: "lazy" as HTMLImageElement["loading"],
+    onError: (e: SyntheticEvent<HTMLImageElement, Event>) =>
+      (e.currentTarget.src = DefaultAvatar),
+  };
+};
+
+export const UserAvatar: FC<UserAvatarProps> = ({
+  avatarUrl,
+  size = "sm",
+  isPhotoView = false,
+}) => {
+  const userAvatarData = getUserAvatarData(size, avatarUrl);
+
   if (!avatarUrl) {
     return (
       <img
-        className={`${AVATAR_SIZE[size]} rounded-full object-cover`}
+        className={userAvatarData["className"]}
         src={DefaultAvatar}
         alt="Default User Avatar"
       />
     );
   }
 
+  if (!isPhotoView) {
+    return <img {...userAvatarData} />;
+  }
+
   return (
-    <img
-      className={`${AVATAR_SIZE[size]} rounded-full object-cover`}
-      src={avatarUrl}
-      alt="User Avatar"
-      loading="lazy"
-      onError={(e) => (e.currentTarget.src = DefaultAvatar)}
-    />
+    <PhotoView src={avatarUrl}>
+      <img {...userAvatarData} />
+    </PhotoView>
   );
 };

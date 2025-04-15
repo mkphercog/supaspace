@@ -3,6 +3,7 @@ import { GoogleLogoIcon } from "../assets/icons/GoogleLogoIcon";
 import { useAuth } from "../context/AuthContext.hook";
 import { UserAvatar } from "./UserAvatar";
 import { useNavigate } from "react-router";
+import { Button } from "./ui/Button";
 
 type AuthButtonProps = {
   isMenuOpen: boolean;
@@ -23,13 +24,10 @@ export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
   if (!dbUserData) {
     return (
       <div className="w-full flex justify-end">
-        <button
-          onClick={signInWithGoogle}
-          className="flex items-center gap-2 bg-purple-600 px-3 py-1 rounded transition-colors hover:cursor-pointer hover:bg-purple-700"
-        >
+        <Button onClick={signInWithGoogle} className="flex items-center gap-2">
           Sign in
           <GoogleLogoIcon />
-        </button>
+        </Button>
       </div>
     );
   }
@@ -38,21 +36,22 @@ export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
     <div>
       <div className="w-full flex flex-col gap-4 items-end justify-end md:flex-row">
         <div className="flex items-center space-x-4">
-          <button
-            className="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white"
+          <Button
+            className="flex items-center gap-2"
             onClick={toggleMenu}
+            variant="ghost"
           >
             <UserAvatar avatarUrl={dbUserData.avatar_url} />
             <span className="font-medium text-inherit transition-colors duration-300">
               {displayName}
             </span>
-          </button>
+          </Button>
         </div>
 
         {dbUserData.id && isMenuOpen && (
           <div
             className={`
-              flex flex-row gap-3 md:flex-col md:p-1
+              flex flex-row gap-3 md:flex-col md:px-4 md:py-2
               opacity-100 md:opacity-0 md:absolute md:bottom-0 md:right-0
               bg-transparent rounded-b-lg
               md:border md:border-white/10 md:shadow-lg md:border-t-0
@@ -60,21 +59,17 @@ export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
               ${isMenuOpen ? "md:animate-fade-in" : "md:animate-fade-out"}
             `}
           >
-            <button
-              onClick={goToSettings}
-              className="bg-gray-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-gray-600"
-            >
+            <Button onClick={goToSettings} variant="secondary">
               Setting
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 signOut();
                 toggleMenu();
               }}
-              className="bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
             >
               Sign out
-            </button>
+            </Button>
           </div>
         )}
       </div>

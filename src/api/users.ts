@@ -3,7 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { supabaseClient } from "../supabase-client";
 import { DbUserDataType } from "../types/users";
 import { QUERY_KEYS } from "./queryKeys";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
  return useQuery({
@@ -30,12 +30,14 @@ export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
 export const insertUserDataToDb = async (
  userData: User | null,
  setDbUserData: Dispatch<React.SetStateAction<DbUserDataType | null>>,
+ signOut: () => void,
 ) => {
  if (!userData) throw new Error("---- No user data. ----");
 
  const filePath = `${userData.id}/userAvatar-${Date.now()}`;
  const fetchedUserAvatar = await fetch(userData.user_metadata.avatar_url);
  if (!fetchedUserAvatar.ok) {
+  signOut();
   throw new Error("❌ Error during fetching user avatar from Google.");
  }
  const avatarBlob = await fetchedUserAvatar.blob();
@@ -65,4 +67,26 @@ export const insertUserDataToDb = async (
  console.info("---- ✅ User DATA saved in DB correctly. ----");
 
  setDbUserData(newDbUserData);
+};
+
+export const useDeleteUserWithData = (
+ { onSuccess }: { onSuccess: () => void },
+) => {
+ return useMutation({
+  mutationFn: async () => {
+   const session = await supabaseClient.auth.getSession();
+   await supabaseClient.functions.invoke(
+    "delete-user-with-data",
+    {
+     headers: {
+      Authorization: `Bearer ${session.data.session?.access_token}`,
+     },
+    },
+   );
+  },
+  onError: () => {
+   alert("An error occurred while deleting your account and user data.");
+  },
+  onSuccess,
+ });
 };

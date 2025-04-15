@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
+import { Button } from "./ui/Button";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -53,7 +54,10 @@ export const CreatePost = () => {
     isPending || !dbUserData || !title || !content || !selectedFile;
 
   return (
-    <form className="max-w-2xl mx-auto space-y-4" onSubmit={handleSubmit}>
+    <form
+      className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
+      onSubmit={handleSubmit}
+    >
       <div>
         <label className="block mb-2 font-medium" htmlFor="title">
           Title
@@ -127,13 +131,9 @@ export const CreatePost = () => {
         )}
       </div>
 
-      <button
-        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
-        type="submit"
-        disabled={isSubmitDisabled}
-      >
+      <Button className="self-end" type="submit" disabled={isSubmitDisabled}>
         {isPending ? "Creating..." : "Create Post"}
-      </button>
+      </Button>
 
       {isError && <p className="text-red-500">Error creating post.</p>}
     </form>

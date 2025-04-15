@@ -5,9 +5,10 @@ import { QUERY_KEYS } from "../api/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
+import { Button } from "./ui/Button";
 
 export const UserSettings = () => {
-  const { currentSession, dbUserData, signOut, deleteUserAccount } = useAuth();
+  const { currentSession, dbUserData, signOut, deleteUserWithData } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -114,10 +115,19 @@ export const UserSettings = () => {
         <section className="relative group">
           <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-15 pointer-events-none"></div>
           <div className="relative flex flex-col gap-3 border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] rounded-[20px]">
-            <h3 className="text-2xl font-semibold mb-4">Account info</h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-semibold mb-4">Account info</h3>
+              <Button onClick={signOut} variant="secondary">
+                Sign out
+              </Button>
+            </div>
 
             <div className="w-full flex flex-col gap-3 items-center">
-              <UserAvatar avatarUrl={dbUserData?.avatar_url} size="5xl" />
+              <UserAvatar
+                avatarUrl={dbUserData?.avatar_url}
+                size="5xl"
+                isPhotoView={true}
+              />
               <form
                 onSubmit={handleSubmitNewAvatar}
                 className="flex flex-col gap-4 w-full"
@@ -144,12 +154,13 @@ export const UserSettings = () => {
                     <p className="text-red-400">{selectedFileError}</p>
                   )}
                 </div>
-                <button
-                  className="self-end bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed"
+                <Button
+                  className="self-end"
+                  type="submit"
                   disabled={!selectedFile || !!selectedFileError}
                 >
                   Change avatar
-                </button>
+                </Button>
               </form>
             </div>
 
@@ -171,14 +182,6 @@ export const UserSettings = () => {
                 {new Date(dbUserData?.created_at || "").toLocaleString()}
               </span>
             </p>
-            <button
-              onClick={() => {
-                signOut();
-              }}
-              className="self-end bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
-            >
-              Sign out
-            </button>
           </div>
         </section>
 
@@ -197,15 +200,15 @@ export const UserSettings = () => {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
               />
-              <button
+              <Button
                 type="submit"
                 disabled={
                   !displayName || displayName === dbUserData?.display_name
                 }
-                className="self-end bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600 disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed"
+                className="self-end"
               >
                 Change
-              </button>
+              </Button>
             </form>
           </div>
         </section>
@@ -220,12 +223,13 @@ export const UserSettings = () => {
               Deleting your account is a permanent action. This cannot be
               undone, and all your data will be lost forever.
             </p>
-            <button
+            <Button
+              className="self-end"
+              variant="destructive"
               onClick={openDialog}
-              className="self-end bg-red-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-red-600"
             >
               Delete account
-            </button>
+            </Button>
           </div>
         </section>
       </div>
@@ -240,21 +244,18 @@ export const UserSettings = () => {
               Are you sure you want to delete your account with all your data?
             </p>
             <div className="flex gap-3 justify-end">
-              <button
-                className="bg-purple-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-purple-600"
-                onClick={closeDialog}
-              >
+              <Button variant="secondary" onClick={closeDialog}>
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
-                  deleteUserAccount();
+                  deleteUserWithData();
                   closeDialog();
                 }}
-                className="bg-red-500 px-3 py-1 rounded cursor-pointer transition-colors hover:bg-red-600"
+                variant="destructive"
               >
                 Yes, delete permanently
-              </button>
+              </Button>
             </div>
           </div>
         </dialog>

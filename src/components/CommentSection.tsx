@@ -6,6 +6,7 @@ import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { useCreateNewComment, useFetchComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
+import { Button } from "./ui/Button";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 
@@ -72,7 +73,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
     <div className="mt-6">
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
       {dbUserData ? (
-        <form className="mb-4" onSubmit={handleSubmit}>
+        <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
           <textarea
             className="w-full border border-white/10 bg-transparent p-2 rounded"
             value={newCommentText}
@@ -80,13 +81,14 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
             placeholder="Write a comment..."
             rows={3}
           />
-          <button
-            className="mt-2 bg-purple-500 text-white px-4 py-2 rounded cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
-            disabled={!newCommentText || isPending}
+          <Button
             type="submit"
+            className="self-end"
+            disabled={!newCommentText || isPending}
           >
             {isPending ? "Posting..." : "Post comment"}
-          </button>
+          </Button>
+
           {isError && (
             <p className="text-red-500 mt-2">Error posting comment.</p>
           )}
@@ -97,7 +99,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
         </p>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-10">
         {commentTree?.map((comment) => (
           <CommentItem key={comment.id} comment={comment} post_id={post_id} />
         ))}

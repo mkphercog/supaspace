@@ -8,8 +8,12 @@ import { CommunitiesPage } from "./pages/CommunitiesPage";
 import { CommunityPage } from "./pages/CommunityPage";
 import { UserSettingsPage } from "./pages/UserSettingsPage";
 import { NotFound } from "./components/NotFound";
+import { useAuth } from "./context/AuthContext.hook";
+import { Loader } from "./components/Loader";
 
 const App = () => {
+  const { isDeleteUserWithDataPending } = useAuth();
+
   return (
     <div className="min-h-screen bg-black text-gray-100 transition-opacity duration-700 pt-20 relative">
       <Navbar />
@@ -25,6 +29,15 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+
+      {isDeleteUserWithDataPending && (
+        <div className="fixed inset-0 bg-gray-950/90 z-[1000] flex flex-col items-center justify-center">
+          <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            Your account is deleting, please wait...
+          </h2>
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

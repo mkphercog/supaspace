@@ -6,6 +6,7 @@ import { PostFromDbType } from "../types/post.type";
 import { useCreateVote, useFetchVotes } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
+import { Button } from "./ui/Button";
 
 type Props = {
   post_id: PostFromDbType["id"];
@@ -39,29 +40,21 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
 
   return (
     <div className="flex items-center space-x-4 my-4">
-      <button
+      <Button
         onClick={() => mutate(1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
-          userVote === 1
-            ? "bg-green-500 text-white hover:bg-green-600"
-            : "bg-gray-400 text-black hover:bg-gray-500"
-        }
-        disabled:cursor-not-allowed disabled:bg-gray-600`}
+        variant={userVote === 1 ? "success" : "secondary"}
         disabled={!dbUserData || isPending}
       >
         👍 {likes}
-      </button>
-      <button
+      </Button>
+
+      <Button
         onClick={() => mutate(-1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
-          userVote === -1
-            ? "bg-red-500 text-white hover:bg-red-600"
-            : "bg-gray-400 text-black hover:bg-gray-500"
-        } disabled:cursor-not-allowed disabled:bg-gray-600`}
+        variant={userVote === -1 ? "destructive" : "secondary"}
         disabled={!dbUserData || isPending}
       >
         👎 {dislikes}
-      </button>
+      </Button>
     </div>
   );
 };

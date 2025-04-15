@@ -3,6 +3,7 @@ import { Link, NavLink, NavLinkRenderProps } from "react-router";
 import { AuthButton } from "./AuthButton";
 import { NavMenuIcon } from "../assets/icons/NavMenuIcon";
 import { useAuth } from "../context/AuthContext.hook";
+import { Button } from "./ui/Button";
 
 const getNavLinkDesktopClassNames = ({ isActive }: NavLinkRenderProps) => {
   return `text-gray-300 font-medium hover:text-white transition-colors duration-300 ${
@@ -77,13 +78,14 @@ export const Navbar = () => {
             </div>
 
             <div className="md:hidden">
-              <button
+              <Button
                 onClick={toggleMenu}
-                className="text-gray-300 focus:outline-none"
+                variant="ghost"
+                className="focus:outline-none"
                 aria-label="Toggle menu"
               >
                 <NavMenuIcon isOpen={isMenuOpen} />
-              </button>
+              </Button>
             </div>
           </div>
         </div>

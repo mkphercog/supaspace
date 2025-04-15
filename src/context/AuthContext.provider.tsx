@@ -1,12 +1,16 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { supabaseClient } from "../supabase-client";
 import { Session } from "@supabase/supabase-js";
-import { AuthContext } from "./AuthContext";
+import { AuthContext, AuthContextType } from "./AuthContext";
 import { useNavigate } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../api/queryKeys";
-import { insertUserDataToDb, useFetchUserData } from "../api/users";
+import {
+  insertUserDataToDb,
+  useDeleteUserWithData,
+  useFetchUserData,
+} from "../api/users";
 import { DbUserDataType } from "../types/users";
+import { QUERY_KEYS } from "../api/queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
@@ -17,6 +21,15 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: loggedUserData } = useFetchUserData(currentSession?.user.id);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const { mutate: deleteUserWithData, isPending: isDeleteUserWithDataPending } =
+    useDeleteUserWithData({
+      onSuccess: () => {
+        signOut();
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
+        alert("Your account and data deleted successfully.");
+      },
+    });
 
   useEffect(() => {
     if (loggedUserData === undefined) return;
@@ -30,8 +43,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       console.info(
         "---- ⚙️ No user in the DB, starting the process of adding.  ----"
       );
-      insertUserDataToDb(currentSession?.user, setDbUserData);
+      insertUserDataToDb(currentSession?.user, setDbUserData, signOut);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSession, loggedUserData]);
 
   useEffect(() => {
@@ -85,33 +99,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     navigate({ pathname: "/" });
   };
 
-  const deleteUserAccount = async () => {
-    const session = await supabaseClient.auth.getSession();
-    const { error } = await supabaseClient.functions.invoke(
-      "delete-user-with-data",
-      {
-        headers: {
-          Authorization: `Bearer ${session.data.session?.access_token}`,
-        },
-      }
-    );
-
-    if (!error) {
-      signOut();
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
-      alert("Your account and data deleted successfully.");
-    } else {
-      alert("An error occurred while deleting your account and user data.");
-    }
-  };
-
-  const value = {
+  const value: AuthContextType = {
     dbUserData,
     currentSession,
     isAdmin,
     signInWithGoogle,
     signOut,
-    deleteUserAccount,
+    deleteUserWithData,
+    isDeleteUserWithDataPending,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

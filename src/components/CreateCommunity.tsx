@@ -2,11 +2,12 @@ import { FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { useCreateNewCommunity } from "../api/community";
 import { Button } from "./ui/Button";
+import { NotFound } from "./NotFound";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const { dbUserData } = useAuth();
+  const { dbUserData, currentSession } = useAuth();
 
   const { mutate, isPending, isError } = useCreateNewCommunity();
 
@@ -14,6 +15,10 @@ export const CreateCommunity = () => {
     e.preventDefault();
     mutate({ name, description });
   };
+
+  if (!currentSession) {
+    return <NotFound />;
+  }
 
   return (
     <form
@@ -24,13 +29,15 @@ export const CreateCommunity = () => {
         Create new community
       </h2>
       <div>
-        <label htmlFor="name" className="block mb-2 font-medium">
+        <label htmlFor="communityName" className="block mb-1 font-medium">
           Community name
         </label>
         <input
+          id="communityName"
+          name="communityName"
           type="text"
-          id="name"
           value={name}
+          autoComplete="off"
           onChange={(e) => setName(e.target.value)}
           className={`
             w-full text-sm rounded-md p-2 block         
@@ -43,11 +50,15 @@ export const CreateCommunity = () => {
         />
       </div>
       <div>
-        <label htmlFor="description" className="block mb-2 font-medium">
+        <label
+          htmlFor="communityDescription"
+          className="block mb-1 font-medium"
+        >
           Description
         </label>
         <textarea
-          id="description"
+          id="communityDescription"
+          name="communityDescription"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className={`

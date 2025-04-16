@@ -1,9 +1,9 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
 import { Button } from "./ui/Button";
-import MDEditor, { commands } from "@uiw/react-md-editor";
+import MDEditor, { RefMDEditor, commands } from "@uiw/react-md-editor";
 import { NotFound } from "./NotFound";
 
 const COMMANDS_TO_HIDE = ["image", "comment"];
@@ -20,6 +20,7 @@ export const CreatePost = () => {
 
   const { data: communities } = useFetchCommunities();
   const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
+  const MDEditorRef = useRef<RefMDEditor>(null);
 
   if (!currentSession) {
     return <NotFound />;
@@ -71,11 +72,12 @@ export const CreatePost = () => {
         onSubmit={handleSubmit}
       >
         <div>
-          <label className="block mb-2 font-medium" htmlFor="title">
+          <label htmlFor="postTitle" className="block mb-1 font-medium">
             Title
           </label>
           <input
-            id="title"
+            id="postTitle"
+            name="postTitle"
             type="text"
             value={title}
             className={`
@@ -91,11 +93,27 @@ export const CreatePost = () => {
         </div>
 
         <div>
-          <label className="block mb-2 font-medium" htmlFor="content">
+          <label
+            htmlFor="postContent"
+            className="block mb-1 font-medium"
+            onClick={() => MDEditorRef.current?.textarea?.focus()}
+            onMouseEnter={() =>
+              MDEditorRef.current?.container?.classList.add("border-purple-600")
+            }
+            onMouseLeave={() =>
+              MDEditorRef.current?.container?.classList.remove(
+                "border-purple-600"
+              )
+            }
+          >
             Content
           </label>
           <MDEditor
-            id="content"
+            textareaProps={{
+              id: "postContent",
+              name: "postContent",
+            }}
+            ref={MDEditorRef}
             commands={commands
               .getCommands()
               .filter(
@@ -103,15 +121,17 @@ export const CreatePost = () => {
               )}
             value={content}
             onChange={setContent}
+            className="border border-gray-500 hover:border hover:border-purple-600"
           />
         </div>
 
         <div>
-          <label className="block mb-2 font-medium" htmlFor="community">
+          <label htmlFor="postCommunity" className="block mb-1 font-medium">
             Select community
           </label>
           <select
-            id="community"
+            id="postCommunity"
+            name="postCommunity"
             className={`
             w-full text-sm rounded-md p-2 block
             border border-gray-500 hover:border-purple-600 focus:outline-none
@@ -131,11 +151,12 @@ export const CreatePost = () => {
         </div>
 
         <div>
-          <label className="block mb-2 font-medium" htmlFor="imageUrl">
+          <label htmlFor="postImageUrl" className="block mb-1 font-medium">
             Upload image
           </label>
           <input
-            id="imageUrl"
+            id="postImageUrl"
+            name="postImageUrl"
             type="file"
             accept="image/*"
             className={`

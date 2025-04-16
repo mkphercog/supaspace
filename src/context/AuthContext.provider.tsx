@@ -32,18 +32,27 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     });
 
   useEffect(() => {
-    if (loggedUserData === undefined) return;
+    switch (loggedUserData) {
+      case "NO_LOGGED_USER":
+      case undefined:
+        break;
 
-    if (loggedUserData) {
-      console.info(
-        "---- ℹ️ The user already exists in the DB, no action needed. ----"
-      );
-      setDbUserData(loggedUserData);
-    } else if (currentSession) {
-      console.info(
-        "---- ⚙️ No user in the DB, starting the process of adding.  ----"
-      );
-      insertUserDataToDb(currentSession?.user, setDbUserData, signOut);
+      case "NO_USER_IN_AUTH":
+        signOut();
+        break;
+
+      case "USER_IN_AUTH_BUT_NO_IN_USERS_TABLE":
+        insertUserDataToDb(
+          currentSession?.user || null,
+          setDbUserData,
+          signOut
+        );
+        break;
+
+      default:
+        if (dbUserData === loggedUserData) return;
+        setDbUserData(loggedUserData);
+        break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSession, loggedUserData]);

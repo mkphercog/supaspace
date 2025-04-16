@@ -115,6 +115,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         {showReply && dbUserData && (
           <form onSubmit={handleReplySubmit} className="flex flex-col gap-3">
             <textarea
+              id={`commentReplyTo-${comment.id}`}
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               className={`

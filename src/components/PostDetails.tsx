@@ -48,7 +48,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />
 
         <div className="flex flex-col">
-          <p className="font-bold text-gray-500 text-base">
+          <p className="font-bold text-gray-200 text-base">
             {data?.author.display_name}
           </p>
           <p className="text-gray-500 text-sm">

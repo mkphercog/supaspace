@@ -75,6 +75,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
       {dbUserData ? (
         <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
           <textarea
+            id="commentContent"
             className={`
               w-full text-sm rounded-md p-2 block         
               border border-gray-500 hover:border-purple-600 focus:outline-none

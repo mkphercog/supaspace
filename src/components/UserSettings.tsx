@@ -115,9 +115,13 @@ export const UserSettings = () => {
         <section className="relative group">
           <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-15 pointer-events-none"></div>
           <div className="relative flex flex-col gap-3 border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] rounded-[20px]">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
               <h3 className="text-2xl font-semibold mb-4">Account info</h3>
-              <Button onClick={signOut} variant="secondary">
+              <Button
+                onClick={signOut}
+                variant="ghost"
+                className="text-purple-500"
+              >
                 Sign out
               </Button>
             </div>
@@ -133,11 +137,12 @@ export const UserSettings = () => {
                 className="flex flex-col gap-4 w-full"
               >
                 <div>
-                  <label className="block mb-2 font-medium" htmlFor="imageUrl">
+                  <label htmlFor="userAvatarUrl" className="block mb-1">
                     Upload new avatar
                   </label>
                   <input
-                    id="imageUrl"
+                    id="userAvatarUrl"
+                    name="userAvatarUrl"
                     type="file"
                     accept="image/*"
                     className={`
@@ -165,21 +170,21 @@ export const UserSettings = () => {
               </form>
             </div>
 
-            <p className="text-sm md:text-base">
+            <p className="text-sm md:text-base text-gray-200">
               Display name:{" "}
-              <span className="font-semibold text-gray-400 ">
+              <span className="font-semibold text-purple-400">
                 {dbUserData?.display_name}
               </span>
             </p>
-            <p className="text-sm md:text-base">
+            <p className="text-sm md:text-base text-gray-200">
               Your e-mail:{" "}
-              <span className="font-semibold text-gray-400 ">
+              <span className="font-semibold text-purple-400">
                 {dbUserData?.email}
               </span>
             </p>
-            <p className="text-sm md:text-base">
+            <p className="text-sm md:text-base text-gray-200">
               Account created at:{" "}
-              <span className="font-semibold text-gray-400">
+              <span className="font-semibold text-purple-400">
                 {new Date(dbUserData?.created_at || "").toLocaleString()}
               </span>
             </p>
@@ -194,19 +199,27 @@ export const UserSettings = () => {
               className="flex flex-col gap-3"
               onSubmit={handleSubmitChangeDisplayName}
             >
-              <input
-                placeholder={`Current name: ${dbUserData?.display_name}`}
-                type="text"
-                className={`
+              <div>
+                <label htmlFor="userDisplayName" className="block mb-1">
+                  New display name
+                </label>
+                <input
+                  id="userDisplayName"
+                  name="userDisplayName"
+                  type="text"
+                  autoComplete="off"
+                  className={`
                   w-full text-sm rounded-md p-2 block         
                   border border-gray-500 hover:border-purple-600 focus:outline-none
                   bg-transparent focus:border-purple-600
                   transition-colors duration-300
                   hover:cursor-text
-                `}
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
+                  `}
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder={dbUserData?.display_name}
+                />
+              </div>
               <Button
                 type="submit"
                 disabled={

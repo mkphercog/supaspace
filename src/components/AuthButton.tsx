@@ -42,7 +42,7 @@ export const AuthButton: FC<AuthButtonProps> = ({ isMenuOpen, toggleMenu }) => {
             variant="ghost"
           >
             <UserAvatar avatarUrl={dbUserData.avatar_url} />
-            <span className="font-medium text-inherit transition-colors duration-300">
+            <span className="text-inherit transition-colors duration-300">
               {displayName}
             </span>
           </Button>

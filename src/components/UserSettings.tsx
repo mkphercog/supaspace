@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext.hook";
 import { supabaseClient } from "../supabase-client";
 import { QUERY_KEYS } from "../api/queryKeys";
@@ -10,12 +10,14 @@ import { Button } from "./ui/Button";
 export const UserSettings = () => {
   const { currentSession, dbUserData, signOut, deleteUserWithData } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileError, setSelectedFileError] = useState<string | null>(
     null
   );
   const queryClient = useQueryClient();
+  const userAvatarUrlRef = useRef<HTMLInputElement>(null);
 
   if (!currentSession) {
     return <NotFound />;
@@ -27,6 +29,14 @@ export const UserSettings = () => {
 
   const openDialog = () => {
     setIsDialogOpen(true);
+  };
+
+  const closeAvatarDialog = () => {
+    setIsAvatarDialogOpen(false);
+  };
+
+  const openAvatarDialog = () => {
+    setIsAvatarDialogOpen(true);
   };
 
   const handleSubmitChangeDisplayName = async (e: FormEvent) => {
@@ -53,6 +63,7 @@ export const UserSettings = () => {
       setSelectedFileError("Your file is too big, max size: 500kB.");
     } else {
       setSelectedFile(event.target.files[0]);
+      setSelectedFileError(null);
     }
   };
 
@@ -70,12 +81,14 @@ export const UserSettings = () => {
     const avatarsImagesPathsToDelete =
       avatarsList?.map((file) => `${dbUserData?.id}/${file.name}`) ?? [];
 
-    const { error: removeError } = await supabaseClient.storage
-      .from("avatars")
-      .remove(avatarsImagesPathsToDelete);
+    if (avatarsImagesPathsToDelete.length) {
+      const { error: removeError } = await supabaseClient.storage
+        .from("avatars")
+        .remove(avatarsImagesPathsToDelete);
 
-    if (removeError) {
-      throw new Error(removeError.message);
+      if (removeError) {
+        throw new Error(removeError.message);
+      }
     }
 
     const { error } = await supabaseClient.storage
@@ -103,6 +116,44 @@ export const UserSettings = () => {
 
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
     setSelectedFile(null);
+    setSelectedFileError(null);
+    if (userAvatarUrlRef.current) {
+      userAvatarUrlRef.current.value = "";
+    }
+  };
+
+  const deleteUserAvatar = async () => {
+    if (!dbUserData) return;
+
+    const { data, error } = await supabaseClient.storage
+      .from("avatars")
+      .list(dbUserData.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const userAvatarsPathsToDelete =
+      data?.map((file) => `${dbUserData.id}/${file.name}`) ?? [];
+
+    if (userAvatarsPathsToDelete.length) {
+      const { error: deleteAvatarError } = await supabaseClient.storage
+        .from("avatars")
+        .remove(userAvatarsPathsToDelete);
+
+      const { error: avatarErrorTable } = await supabaseClient
+        .from("users")
+        .update({ avatar_url: null })
+        .eq("id", dbUserData.id);
+
+      if (deleteAvatarError || avatarErrorTable) {
+        throw new Error(
+          deleteAvatarError?.message || avatarErrorTable?.message
+        );
+      }
+
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    }
   };
 
   return (
@@ -132,6 +183,15 @@ export const UserSettings = () => {
                 size="5xl"
                 isPhotoView={true}
               />
+              <Button
+                variant="ghost"
+                onClick={openAvatarDialog}
+                className="text-red-500"
+                disabled={!dbUserData?.avatar_url}
+              >
+                Delete avatar
+              </Button>
+
               <form
                 onSubmit={handleSubmitNewAvatar}
                 className="flex flex-col gap-4 w-full"
@@ -143,6 +203,7 @@ export const UserSettings = () => {
                   <input
                     id="userAvatarUrl"
                     name="userAvatarUrl"
+                    ref={userAvatarUrlRef}
                     type="file"
                     accept="image/*"
                     className={`
@@ -152,7 +213,7 @@ export const UserSettings = () => {
                       transition-colors duration-300
                       hover:cursor-pointer
                       file:hidden
-                    `}
+                      `}
                     onChange={handleFileChange}
                     required
                   />
@@ -271,6 +332,31 @@ export const UserSettings = () => {
                 onClick={() => {
                   deleteUserWithData();
                   closeDialog();
+                }}
+                variant="destructive"
+              >
+                Yes, delete permanently
+              </Button>
+            </div>
+          </div>
+        </dialog>
+      )}
+
+      {isAvatarDialogOpen && (
+        <dialog
+          className="fixed top-0 bottom-0 w-full h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
+          onClick={closeDialog}
+        >
+          <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
+            <p>Are you sure you want to delete your avatar?</p>
+            <div className="flex gap-3 justify-end">
+              <Button variant="ghost" onClick={closeAvatarDialog}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  deleteUserAvatar();
+                  closeAvatarDialog();
                 }}
                 variant="destructive"
               >

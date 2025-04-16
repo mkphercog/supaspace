@@ -107,13 +107,15 @@ export const Navbar = () => {
                 >
                   Home
                 </NavLink>
-                <NavLink
-                  to="/create"
-                  onClick={closeMenu}
-                  className={getNavLinkMobileClassNames}
-                >
-                  New post
-                </NavLink>
+                {currentSession && (
+                  <NavLink
+                    to="/create"
+                    onClick={closeMenu}
+                    className={getNavLinkMobileClassNames}
+                  >
+                    New post
+                  </NavLink>
+                )}
                 <NavLink
                   to="/communities"
                   onClick={closeMenu}

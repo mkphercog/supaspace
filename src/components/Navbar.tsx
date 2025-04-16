@@ -73,6 +73,10 @@ export const Navbar = () => {
                   New community
                 </NavLink>
               )}
+
+              <NavLink to="/info" className={getNavLinkDesktopClassNames}>
+                Info
+              </NavLink>
             </div>
 
             <div className="hidden md:flex items-center">
@@ -133,6 +137,9 @@ export const Navbar = () => {
                     New community
                   </NavLink>
                 )}
+                <NavLink to="/info" className={getNavLinkMobileClassNames}>
+                  Info
+                </NavLink>
               </div>
             </div>
           </div>

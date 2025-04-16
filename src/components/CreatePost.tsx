@@ -121,7 +121,7 @@ export const CreatePost = () => {
               )}
             value={content}
             onChange={setContent}
-            className="border border-gray-500 hover:border hover:border-purple-600"
+            className="transition-colors duration-300 border border-gray-500 hover:border hover:border-purple-600"
           />
         </div>
 

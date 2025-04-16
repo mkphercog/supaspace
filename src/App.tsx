@@ -9,6 +9,7 @@ import { CommunityPage } from "./pages/CommunityPage";
 import { UserSettingsPage } from "./pages/UserSettingsPage";
 import { NotFound } from "./components/NotFound";
 import { useAuth } from "./context/AuthContext.hook";
+import { AppInfoPage } from "./pages/AppInfoPage";
 import { Loader } from "./components/Loader";
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/communities" element={<CommunitiesPage />} />
           <Route path="/community/:id" element={<CommunityPage />} />
           <Route path="/settings" element={<UserSettingsPage />} />
+          <Route path="/info" element={<AppInfoPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

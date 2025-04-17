@@ -95,6 +95,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const signInWithGoogle = async () => {
     await supabaseClient.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        queryParams: {
+          prompt: "select_account",
+        },
+      },
     });
   };
 

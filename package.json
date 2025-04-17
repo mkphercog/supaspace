@@ -8,7 +8,7 @@
     "host": "vite --host",
     "createMdFiles": "cp mdsource.md public/appInfo.md && cp mdsource.md README.md && node scripts/replaceVersion.cjs",
     "build": "tsc -b && vite build",
-    "gitPushWithMdFiles": "createMdFiles && git push",
+    "gitPushWithMdFiles": "npm run createMdFiles && git push",
     "lint": "eslint .",
     "preview": "vite preview"
   },

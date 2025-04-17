@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { version } from "../../package.json";
 import { Loader } from "./Loader";
 
 export const AppInfo = () => {
@@ -11,11 +10,7 @@ export const AppInfo = () => {
     fetch("/appInfo.md")
       .then((res) => res.text())
       .then((appInfoText) => {
-        const appInfoTextWithVersion = appInfoText.replace(
-          /{{version}}/g,
-          version
-        );
-        setAppInfoText(appInfoTextWithVersion);
+        setAppInfoText(appInfoText);
       });
 
     fetch("/changelog.md")

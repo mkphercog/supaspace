@@ -1,4 +1,4 @@
-# ![infoIcon](./src/assets/icons/infoIcon.svg) About Supa.space() - `v1.0.0`
+# ![infoIcon](./src/assets/icons/infoIcon.svg) About Supa.space() - `v{{version}}`
 
 **Supa.space()** is a lightweight and minimal social platform where you can freely share thoughts, ideas, and connect with others.
 
@@ -46,7 +46,7 @@ All data is stored securely and is only used to support core features of the app
 
 ### ![versionIcon](./src/assets/icons/versionIcon.svg) Version
 
-Current version: `v1.0.0`
+Current version: `v{{version}}`
 
 ### ![techStackIcon](./src/assets/icons/techStackIcon.svg) Tech Stack
 

@@ -1,12 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
 import { useAuth } from "../context/AuthContext.hook";
-
 import { PostFromDbType } from "../types/post.type";
 import { useCreateVote, useFetchVotes } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
 import { Button } from "./ui/Button";
+import LikeIcon from "../assets/icons/likeIcon.svg";
+import DislikeIcon from "../assets/icons/dislikeIcon.svg";
 
 type Props = {
   post_id: PostFromDbType["id"];
@@ -44,16 +45,18 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
         onClick={() => mutate(1)}
         variant={userVote === 1 ? "success" : "secondary"}
         disabled={!dbUserData || isPending}
+        className="flex gap-2 items-center"
       >
-        👍 {likes}
+        <img src={LikeIcon} alt="LikeIcon" /> {likes}
       </Button>
 
       <Button
         onClick={() => mutate(-1)}
         variant={userVote === -1 ? "destructive" : "secondary"}
         disabled={!dbUserData || isPending}
+        className="flex gap-2 items-center"
       >
-        👎 {dislikes}
+        <img src={DislikeIcon} alt="DislikeIcon" /> {dislikes}
       </Button>
     </div>
   );

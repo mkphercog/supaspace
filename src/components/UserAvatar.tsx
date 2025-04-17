@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import DefaultAvatar from "../assets/images/defaultAvatar.png";
+import DefaultAvatar from "../assets/icons/defaultAvatar.svg";
 import { PhotoView } from "react-photo-view";
 
 type AvatarSize = "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";

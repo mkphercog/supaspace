@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Link } from "react-router";
 import { PostListItemFromDbType } from "../types/post.type";
 import { UserAvatar } from "./UserAvatar";
+import ChartIcon from "../assets/icons/chartIcon.svg";
+import CommentsIcon from "../assets/icons/commentsIcon.svg";
 
 type PostItemProps = {
   post: PostListItemFromDbType;
@@ -40,10 +42,12 @@ export const PostItem: FC<PostItemProps> = ({
           </div>
           <div className="flex justify-around items-center">
             <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
-              📊 <span className="ml-2">{like_count ?? 0}</span>
+              <img src={ChartIcon} alt="ChartIcon" />
+              <span className="ml-2">{like_count ?? 0}</span>
             </span>
             <span className="cursor-pointer h-10 w-[50px] px-1 flex items-center justify-center font-extrabold rounded-lg">
-              💬 <span className="ml-2">{comment_count ?? 0}</span>
+              <img src={CommentsIcon} alt="CommentsIcon" />{" "}
+              <span className="ml-2">{comment_count ?? 0}</span>
             </span>
           </div>
         </div>

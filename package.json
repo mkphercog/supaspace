@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "vite",
     "host": "vite --host",
-    "createMdFiles": "cp mdsource.md public/appInfo.md && cp mdsource.md README.md && node scripts/replaceVersion.cjs",
     "build": "tsc -b && vite build",
-    "commitMdFiles": "git add . && git commit -m \"update md files\" || true",
-    "gitPushWithMdFiles": "npm run createMdFiles && npm run commitMdFiles",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "createMdFiles": "cp mdsource.md public/appInfo.md && cp mdsource.md README.md && node scripts/replaceVersion.cjs",
+    "commitMdFiles": "git add . && git commit -m \"update md files\" || true",
+    "gitPushWithMdFiles": "npm run createMdFiles && npm run commitMdFiles && git push"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",

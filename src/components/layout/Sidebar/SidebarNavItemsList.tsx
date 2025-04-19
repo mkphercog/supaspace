@@ -66,9 +66,9 @@ export const SidebarNavItemsList = () => {
   return (
     <nav>
       <ul
-        className={`flex flex-col ${
-          sidebarStatus === "show" ? "items-start" : "items-end"
-        } gap-5`}
+        className={`flex flex-col gap-5 
+          ${sidebarStatus === "show" ? "items-start" : "items-end"} 
+        `}
       >
         {SIDEBAR_ITEMS.map((item) => (
           <SidebarItem
@@ -78,7 +78,6 @@ export const SidebarNavItemsList = () => {
             path={item.path}
             icon={item.icon}
             isVisible={item.isVisible}
-            isSidebarOpen={sidebarStatus === "show"}
             onClick={item.onClick}
           />
         ))}

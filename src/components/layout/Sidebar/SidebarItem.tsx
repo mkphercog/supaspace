@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
 import { Button, Typography } from "../../ui";
+import { useSidebar } from "../../../context/SidebarContext";
 
 export type SidebarItemBaseProps = {
   text: ReactNode;
   icon: ReactNode;
-  isSidebarOpen: boolean;
   isVisible: boolean;
   onClick?: () => void;
 };
@@ -25,18 +25,24 @@ export const SidebarItem: FC<SidebarItemProps> = ({
   as,
   text,
   icon,
-  isSidebarOpen,
   isVisible,
   onClick,
   ...restProps
 }) => {
+  const { sidebarStatus } = useSidebar();
+
+  const isSidebarOpen = sidebarStatus === "show";
+
   if (!isVisible) return null;
 
   if (as === "button") {
     return (
       <li
         onClick={onClick}
-        className={`${isSidebarOpen ? "w-full" : "w-auto"} list-none!`}
+        className={`
+          flex items-center list-none!
+          ${isSidebarOpen ? "w-full" : "w-auto"}
+        `}
       >
         <Button
           variant="ghost"
@@ -46,7 +52,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({
             hover:bg-transparent!
           `}
         >
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             {icon}
             {isSidebarOpen && text}
           </div>

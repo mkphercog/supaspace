@@ -33,8 +33,7 @@ export const Sidebar = () => {
 
       <footer
         className={`
-          flex flex-col gap-4 
-          ${sidebarStatus === "show" ? "justify-start" : "justify-end"}
+          flex ${sidebarStatus === "show" ? "justify-start" : "justify-end"} 
         `}
       >
         <AuthButton isInSidebar />

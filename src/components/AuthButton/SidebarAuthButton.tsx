@@ -26,7 +26,6 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
         text="Sign in"
         icon={<SignInIcon />}
         isVisible={true}
-        isSidebarOpen={sidebarStatus === "show"}
         onClick={signInWithGoogle}
       />
     );
@@ -48,7 +47,6 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
             />
           }
           isVisible={!!dbUserData}
-          isSidebarOpen={sidebarStatus === "show"}
           onClick={toggleAvatarMenu}
         />
       </div>
@@ -72,7 +70,6 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
           text="Settings"
           icon={<SettingsIcon />}
           isVisible={!!dbUserData}
-          isSidebarOpen={sidebarStatus === "show"}
           onClick={goToSettings}
         />
 
@@ -81,7 +78,6 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
           text="Sign out"
           icon={<SignOutIcon />}
           isVisible={!!dbUserData}
-          isSidebarOpen={sidebarStatus === "show"}
           onClick={signOut}
         />
       </div>

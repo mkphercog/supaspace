@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useSidebar } from "../context/SidebarContext/SidebarContext.hook";
 import { Typography } from "./ui";
+import { LogoIcon } from "../assets/icons";
 
 type LogoProps = {
   isInSidebar?: boolean;
@@ -16,8 +17,8 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
         className={`self-start flex items-center gap-2
           ${
             sidebarStatus.includes("icon")
-              ? "hover:scale-110"
-              : "hover:scale-105"
+              ? "h-auto hover:scale-110"
+              : "h-[40px] hover:scale-105"
           }
               `}
       >
@@ -30,7 +31,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
   return (
     <Typography.Link
       to="/"
-      className="h-full flex items-center gap-2 hover:scale-105"
+      className="px-3 py-1 h-full flex items-center gap-2 hover:scale-105"
     >
       {sidebarStatus === "hidden" && <Image />}
       {sidebarStatus !== "show" && <Name />}
@@ -38,13 +39,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
   );
 };
 
-const Image = () => (
-  <img
-    src="/favicon.ico"
-    alt="Supa.space() logo"
-    className="w-auto h-full rounded-full object-cover"
-  />
-);
+const Image = () => <LogoIcon className="w-auto h-full" />;
 
 const Name = () => (
   <div className="flex">

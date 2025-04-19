@@ -1,9 +1,10 @@
-export const CreateCommunityIcon = () => (
+export const CreateCommunityIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
     width="24"
     height="24"
-    viewBox="0 0 20 20"
+    className={`shrink-0 ${className}`}
   >
     <path
       fill="currentColor"

@@ -2,10 +2,8 @@ import { FC } from "react";
 import { AuthButtonsProps } from "./AuthButton.types";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { Button, Typography } from "../ui";
-import { SignInIcon } from "../../assets/icons/SignInIcon";
+import { SignInIcon, SignOutIcon, SettingsIcon } from "../../assets/icons";
 import { UserAvatar } from "../UserAvatar";
-import { SettingsIcon } from "../../assets/icons/SettingsIcon";
-import { SignOutIcon } from "../../assets/icons/SignOutIcon";
 
 export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,
@@ -41,7 +39,7 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   return (
     <div
       ref={ref}
-      className="relative flex flex-col gap-4 items-end justify-end md:flex-row"
+      className="flex flex-col gap-4 items-end justify-end md:flex-row"
     >
       <div className="w-full flex items-center">
         <Button
@@ -58,9 +56,10 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
 
       <div
         className={`
-          absolute right-0 px-5 py-3
+          absolute right-4 px-3 py-2
           flex flex-col gap-2
-          bg-gray-800/70 backdrop-blur-sm rounded-md 
+          bg-[rgba(12,13,15,0.95)] backdrop-blur-sm rounded-md 
+          border-1 border-white/10
           ${
             isAvatarMenuOpen
               ? "opacity-100 top-[60px]"
@@ -70,11 +69,13 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
         `}
       >
         <Button className="flex gap-2" onClick={goToSettings} variant="ghost">
-          <SettingsIcon /> Settings
+          <SettingsIcon />
+          <Typography.Text>Settings</Typography.Text>
         </Button>
 
         <Button className="flex gap-2" onClick={signOut} variant="ghost">
-          <SignOutIcon /> Sign out
+          <SignOutIcon />
+          <Typography.Text>Sign out</Typography.Text>
         </Button>
       </div>
     </div>

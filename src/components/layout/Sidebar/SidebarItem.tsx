@@ -54,7 +54,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({
         >
           <div className="flex items-center gap-2">
             {icon}
-            {isSidebarOpen && text}
+            {isSidebarOpen && <Typography.Text>{text}</Typography.Text>}
           </div>
         </Button>
       </li>

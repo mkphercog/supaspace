@@ -10,25 +10,24 @@ export const Card: FC<PropsWithChildren<CardProps>> = ({
   children,
 }) => {
   const classNames = withHover
-    ? "opacity-0 group-hover:opacity-50 transition duration-300"
-    : "opacity-20";
+    ? "opacity-0 group-hover:opacity-30 transition duration-300"
+    : "opacity-15";
 
   return (
     <section className="relative group">
       <div
         className={`
           absolute -inset-1 
-          rounded-2xl blur-sm pointer-events-none
-          bg-gradient-to-r from-pink-600 to-purple-600 
+          rounded-2xl blur-xs pointer-events-none
+          bg-gradient-to-r from-pink-700 to-purple-700 
           ${classNames}
         `}
       />
-
       <div
         className={`
           relative h-full 
           flex flex-col gap-3 
-          border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] 
+          border border-white/10 p-5 bg-[rgba(12,13,15,0.95)] 
           rounded-2xl 
         `}
       >

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import DefaultAvatar from "../assets/icons/defaultAvatar.svg";
 import { PhotoView } from "react-photo-view";
+import { DefaultAvatarIcon } from "../assets/icons";
 
 type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 
@@ -27,15 +27,23 @@ export const UserAvatar: FC<UserAvatarProps> = ({
   isPhotoView = false,
   className,
 }) => {
-  const [avatarSrc, setAvatarSrc] = useState(DefaultAvatar);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    setAvatarSrc(avatarUrl || DefaultAvatar);
+    setAvatarSrc(avatarUrl || null);
   }, [avatarUrl]);
 
   const handleImgError = () => {
-    setAvatarSrc(DefaultAvatar);
+    setAvatarSrc(null);
   };
+
+  if (!avatarSrc) {
+    return (
+      <DefaultAvatarIcon
+        className={`${AVATAR_SIZE[size]} rounded-full bg-purple-800`}
+      />
+    );
+  }
 
   const imgProps = {
     className: `

@@ -4,8 +4,7 @@ import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { useAuth } from "../context/AuthContext";
 import { useCreateNewComment, useDeleteComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
-import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
-import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
+import { ChevronUpIcon } from "../assets/icons";
 import { UserAvatar } from "./UserAvatar";
 import { Button, Typography } from "./ui";
 import MDEditor from "@uiw/react-md-editor";
@@ -147,29 +146,18 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         {comment.children && comment.children.length > 0 && (
           <div>
             <Button
-              className="mb-1"
+              className="flex items-center gap-1 mb-1 text-purple-400"
               variant="ghost"
               onClick={() => setIsCollapsed((prev) => !prev)}
             >
-              <Typography.Text
-                size="xs"
-                color="lightPurple"
-                className="text-inherit flex items-center gap-1"
-              >
-                {!isCollapsed ? (
-                  <>
-                    <ChevronDownIcon /> Hide replies
-                  </>
-                ) : (
-                  <>
-                    <ChevronUpIcon /> Show replies
-                  </>
-                )}
+              <ChevronUpIcon className={`${isCollapsed ? "rotate-180" : ""}`} />
+              <Typography.Text size="xs" className="text-inherit">
+                {isCollapsed ? "Show replies" : "Hide replies"}
               </Typography.Text>
             </Button>
 
             {!isCollapsed && (
-              <div className="space-y-2">
+              <div>
                 {comment.children.map((child, key) => (
                   <CommentItem key={key} comment={child} post_id={post_id} />
                 ))}

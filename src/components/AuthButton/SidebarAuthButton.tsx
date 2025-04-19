@@ -2,10 +2,8 @@ import { FC } from "react";
 import { AuthButtonsProps } from "./AuthButton.types";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { SidebarItem } from "../layout/Sidebar/SidebarItem";
-import { SignInIcon } from "../../assets/icons/SignInIcon";
+import { SignInIcon, SignOutIcon, SettingsIcon } from "../../assets/icons";
 import { UserAvatar } from "../UserAvatar";
-import { SettingsIcon } from "../../assets/icons/SettingsIcon";
-import { SignOutIcon } from "../../assets/icons/SignOutIcon";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,
@@ -34,7 +32,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   return (
     <div
       ref={ref}
-      className="relative flex flex-col gap-4 items-end justify-end md:flex-row"
+      className="flex flex-col gap-4 items-end justify-end md:flex-row"
     >
       <div className="w-full flex items-center">
         <SidebarItem
@@ -53,12 +51,13 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
 
       <div
         className={`
-          absolute left-0 px-5 py-3 
+          absolute left-3 px-3 py-2
           flex flex-col gap-2
-          bg-gray-800/70 backdrop-blur-sm rounded-md
+          bg-[rgba(12,13,15,0.95)] backdrop-blur-sm rounded-md 
+          border-1 border-white/10
           ${
             isAvatarMenuOpen
-              ? "opacity-100 bottom-[60px]"
+              ? "opacity-100 bottom-[65px]"
               : "opacity-0 bottom-[-130px]"
           }
           ${sidebarStatus === "hidden" ? "hidden" : ""}

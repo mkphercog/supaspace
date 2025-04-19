@@ -1,8 +1,10 @@
-import { CommunityIcon } from "../../../assets/icons/CommunityIcon";
-import { CreateCommunityIcon } from "../../../assets/icons/CreateCommunityIcon";
-import { DashboardIcon } from "../../../assets/icons/DashboardIcon";
-import { InfoIcon } from "../../../assets/icons/InfoIcon";
-import { PostIcon } from "../../../assets/icons/PostIcon";
+import {
+  CommunityIcon,
+  CreateCommunityIcon,
+  DashboardIcon,
+  InfoIcon,
+  PostIcon,
+} from "../../../assets/icons";
 import { useAuth } from "../../../context/AuthContext";
 import { useSidebar } from "../../../context/SidebarContext";
 import {

@@ -5,9 +5,8 @@ import { PostFromDbType } from "../types/post.type";
 import { useCreateVote, useFetchVotes } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
-import { Button } from "./ui";
-import LikeIcon from "../assets/icons/likeIcon.svg";
-import DislikeIcon from "../assets/icons/dislikeIcon.svg";
+import { Button, Typography } from "./ui";
+import { LikeIcon, DislikeIcon } from "../assets/icons";
 
 type Props = {
   post_id: PostFromDbType["id"];
@@ -47,7 +46,8 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
         disabled={!dbUserData || isPending}
         className="flex gap-2 items-center"
       >
-        <img src={LikeIcon} alt="LikeIcon" /> {likes}
+        <LikeIcon />
+        <Typography.Text>{likes}</Typography.Text>
       </Button>
 
       <Button
@@ -56,7 +56,8 @@ export const LikeButton: FC<Props> = ({ post_id }) => {
         disabled={!dbUserData || isPending}
         className="flex gap-2 items-center"
       >
-        <img src={DislikeIcon} alt="DislikeIcon" /> {dislikes}
+        <DislikeIcon />
+        <Typography.Text>{dislikes}</Typography.Text>
       </Button>
     </div>
   );

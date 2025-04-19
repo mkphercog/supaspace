@@ -1,6 +1,6 @@
 import { SidebarStatusType } from "../../../context/SidebarContext/SidebarContext";
 import { useSidebar } from "../../../context/SidebarContext/SidebarContext.hook";
-import { AuthButton } from "../../AuthButton/";
+import { AuthButton } from "../../AuthButton";
 import { SidebarNavItemsList } from "./SidebarNavItemsList";
 import { SidebarHeader } from "./SidebarHeader";
 
@@ -17,8 +17,7 @@ export const Sidebar = () => {
   return (
     <aside
       className={`
-        shrink-0 relative
-        md:p-3 z-10
+        shrink-0 relative z-10
         flex flex-col h-dvh
         transition-all duration-300 
         bg-[rgba(10,10,10,0.8)] shadow-[1px_0px_10px_1px] shadow-purple-950/80

@@ -1,6 +1,7 @@
 import { PostItem } from "./PostItem";
 import { useFetchPosts } from "../api/posts";
 import { Loader } from "./Loader";
+import { Typography } from "./ui";
 
 export const PostList = () => {
   const { data, error, isLoading } = useFetchPosts();
@@ -15,7 +16,9 @@ export const PostList = () => {
 
   if (!data?.length) {
     return (
-      <p className="text-md text-center text-gray-300 mt-2">No posts found</p>
+      <Typography.Text className="text-md text-center mt-2">
+        No posts found
+      </Typography.Text>
     );
   }
 

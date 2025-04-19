@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Link } from "react-router";
 import { PhotoView } from "react-photo-view";
 import MDEditor from "@uiw/react-md-editor";
 import { PostFromDbType } from "../types/post.type";
@@ -9,6 +8,8 @@ import { CommentSection } from "./CommentSection";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
+import { Typography } from "./ui";
+import PostPlaceholderImage from "../assets/images/postPlaceholder.jpg";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];
@@ -26,14 +27,12 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        {data?.title}
-      </h2>
+    <div className="space-y-6 max-w-5xl mx-auto">
+      <Typography.Header>{data?.title}</Typography.Header>
 
-      <PhotoView src={data?.image_url}>
+      <PhotoView src={data?.image_url || PostPlaceholderImage}>
         <img
-          src={data?.image_url}
+          src={data?.image_url || PostPlaceholderImage}
           alt={data?.title}
           className="mt-4 rounded object-cover w-full h-64"
         />
@@ -48,24 +47,21 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />
 
         <div className="flex flex-col">
-          <p className="font-bold text-gray-200 text-base">
+          <Typography.Text size="lg" className="font-bold">
             {data?.author.display_name}
-          </p>
-          <p className="text-gray-500 text-sm">
+          </Typography.Text>
+          <Typography.Text size="sm">
             {`posted ${new Date(data!.created_at).toLocaleString()}`}
-          </p>
+          </Typography.Text>
         </div>
       </div>
 
       {data?.community ? (
-        <Link
-          to={`/community/${data.community.id}`}
-          className="transition-all hover:cursor-pointer hover:text-purple-500"
-        >
+        <Typography.Link to={`/community/${data.community.id}`} color="lime">
           #{data.community.name}
-        </Link>
+        </Typography.Link>
       ) : (
-        <p className="text-gray-500 text-sm">#No community</p>
+        <Typography.Text className="font-bold">#No community</Typography.Text>
       )}
 
       <LikeButton post_id={post_id} />

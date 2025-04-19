@@ -2,15 +2,17 @@ import { FC, useEffect, useState } from "react";
 import DefaultAvatar from "../assets/icons/defaultAvatar.svg";
 import { PhotoView } from "react-photo-view";
 
-type AvatarSize = "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
+type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 
 type UserAvatarProps = {
   avatarUrl?: string;
   size?: AvatarSize;
   isPhotoView?: boolean;
+  className?: string;
 };
 
 const AVATAR_SIZE: Record<AvatarSize, string> = {
+  xs: "w-6 h-6",
   sm: "w-8 h-8",
   md: "w-10 h-10",
   lg: "w-12 h-12",
@@ -23,6 +25,7 @@ export const UserAvatar: FC<UserAvatarProps> = ({
   avatarUrl,
   size = "sm",
   isPhotoView = false,
+  className,
 }) => {
   const [avatarSrc, setAvatarSrc] = useState(DefaultAvatar);
 
@@ -35,9 +38,11 @@ export const UserAvatar: FC<UserAvatarProps> = ({
   };
 
   const imgProps = {
-    className: `${AVATAR_SIZE[size]} rounded-full object-cover ${
-      isPhotoView ? "cursor-pointer" : ""
-    }`,
+    className: `
+      ${AVATAR_SIZE[size]} rounded-full object-cover 
+      ${isPhotoView ? "cursor-pointer" : ""} 
+      ${className}
+    `,
     src: avatarSrc,
     alt: "User Avatar",
     loading: "lazy" as const,

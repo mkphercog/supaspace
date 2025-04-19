@@ -1,8 +1,10 @@
 import { CreateCommunity } from "../components/CreateCommunity";
+import { Typography } from "../components/ui";
 
 export const CreateCommunityPage = () => {
   return (
-    <div className="pt-0 md:pt-10">
+    <div>
+      <Typography.Header>Create new community</Typography.Header>
       <CreateCommunity />
     </div>
   );

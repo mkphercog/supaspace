@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { DbUserDataType } from "../types/users";
+import { DbUserDataType } from "../../types/users";
 import { Session } from "@supabase/supabase-js";
 
 export type AuthContextType = {

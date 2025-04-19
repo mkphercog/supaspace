@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { useAuth } from "../context/AuthContext.hook";
+import { useAuth } from "../context/AuthContext";
 import { supabaseClient } from "../supabase-client";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
-import { Button } from "./ui/Button";
+import { Button, Card, Typography } from "./ui";
 
 export const UserSettings = () => {
   const { currentSession, dbUserData, signOut, deleteUserWithData } = useAuth();
@@ -158,172 +158,169 @@ export const UserSettings = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-10 max-w-5xl mx-auto">
-        <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Settings
-        </h2>
+      <div className="flex flex-col gap-y-16 max-w-5xl mx-auto">
+        <Card>
+          <div className="flex justify-between items-center">
+            <Typography.Header as="h4" color="gray" className="mb-0!">
+              Account info
+            </Typography.Header>
 
-        <section className="relative group">
-          <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-15 pointer-events-none"></div>
-          <div className="relative flex flex-col gap-3 border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] rounded-[20px]">
-            <div className="flex justify-between items-start">
-              <h3 className="text-2xl font-semibold mb-4">Account info</h3>
-              <Button
-                onClick={signOut}
-                variant="ghost"
-                className="text-purple-500"
-              >
-                Sign out
-              </Button>
-            </div>
-
-            <div className="w-full flex flex-col gap-3 items-center">
-              <UserAvatar
-                avatarUrl={dbUserData?.avatar_url}
-                size="5xl"
-                isPhotoView={true}
-              />
-              <Button
-                variant="ghost"
-                onClick={openAvatarDialog}
-                className="text-red-500"
-                disabled={!dbUserData?.avatar_url}
-              >
-                Delete avatar
-              </Button>
-
-              <form
-                onSubmit={handleSubmitNewAvatar}
-                className="flex flex-col gap-4 w-full"
-              >
-                <div>
-                  <label htmlFor="userAvatarUrl" className="block mb-1">
-                    Upload new avatar
-                  </label>
-                  <input
-                    id="userAvatarUrl"
-                    name="userAvatarUrl"
-                    ref={userAvatarUrlRef}
-                    type="file"
-                    accept="image/*"
-                    className={`
-                      w-full text-sm rounded-md p-2 block
-                      border border-gray-500 hover:border-purple-600 focus:outline-none
-                      bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
-                      transition-colors duration-300
-                      hover:cursor-pointer
-                      file:hidden
-                      `}
-                    onChange={handleFileChange}
-                    required
-                  />
-                  {selectedFileError && (
-                    <p className="text-red-400">{selectedFileError}</p>
-                  )}
-                </div>
-                <Button
-                  className="self-end"
-                  type="submit"
-                  disabled={!selectedFile || !!selectedFileError}
-                >
-                  Change avatar
-                </Button>
-              </form>
-            </div>
-
-            <p className="text-sm md:text-base text-gray-200">
-              Display name:{" "}
-              <span className="font-semibold text-purple-400">
-                {dbUserData?.display_name}
-              </span>
-            </p>
-            <p className="text-sm md:text-base text-gray-200">
-              Your e-mail:{" "}
-              <span className="font-semibold text-purple-400">
-                {dbUserData?.email}
-              </span>
-            </p>
-            <p className="text-sm md:text-base text-gray-200">
-              Account created at:{" "}
-              <span className="font-semibold text-purple-400">
-                {new Date(dbUserData?.created_at || "").toLocaleString()}
-              </span>
-            </p>
+            <Button
+              onClick={signOut}
+              variant="ghost"
+              className="text-purple-500"
+            >
+              Sign out
+            </Button>
           </div>
-        </section>
 
-        <section className="relative group">
-          <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-15 pointer-events-none"></div>
-          <div className="relative flex flex-col gap-3 border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] rounded-[20px]">
-            <h3 className="text-2xl font-semibold mb-4">Change display name</h3>
+          <div className="w-full flex flex-col gap-3 items-center">
+            <UserAvatar
+              avatarUrl={dbUserData?.avatar_url}
+              size="5xl"
+              isPhotoView={true}
+            />
+            <Button
+              variant="ghost"
+              onClick={openAvatarDialog}
+              className="text-red-500"
+              disabled={!dbUserData?.avatar_url}
+            >
+              Delete avatar
+            </Button>
+
             <form
-              className="flex flex-col gap-3"
-              onSubmit={handleSubmitChangeDisplayName}
+              onSubmit={handleSubmitNewAvatar}
+              className="flex flex-col gap-4 w-full"
             >
               <div>
-                <label htmlFor="userDisplayName" className="block mb-1">
-                  New display name
+                <label htmlFor="userAvatarUrl" className="block mb-1">
+                  Upload new avatar
                 </label>
                 <input
-                  id="userDisplayName"
-                  name="userDisplayName"
-                  type="text"
-                  autoComplete="off"
+                  id="userAvatarUrl"
+                  name="userAvatarUrl"
+                  ref={userAvatarUrlRef}
+                  type="file"
+                  accept="image/*"
                   className={`
+                    w-full text-sm rounded-md p-2 block
+                    border border-gray-500 hover:border-purple-600 focus:outline-none
+                    bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+                    transition-colors duration-300
+                    hover:cursor-pointer
+                    file:hidden
+                  `}
+                  onChange={handleFileChange}
+                  required
+                />
+                {selectedFileError && (
+                  <Typography.Text color="red">
+                    {selectedFileError}
+                  </Typography.Text>
+                )}
+              </div>
+              <Button
+                className="self-end"
+                type="submit"
+                disabled={!selectedFile || !!selectedFileError}
+              >
+                Change avatar
+              </Button>
+            </form>
+          </div>
+
+          <div className="flex gap-2">
+            <Typography.Text>Display name:</Typography.Text>
+            <Typography.Text color="lightPurple" className="font-semibold">
+              {dbUserData?.display_name}
+            </Typography.Text>
+          </div>
+
+          <div className="flex gap-2">
+            <Typography.Text>Your e-mail:</Typography.Text>
+            <Typography.Text color="lightPurple" className="font-semibold">
+              {dbUserData?.email}
+            </Typography.Text>
+          </div>
+
+          <div className="flex gap-2">
+            <Typography.Text>Account created at:</Typography.Text>
+            <Typography.Text color="lightPurple" className="font-semibold">
+              {new Date(dbUserData?.created_at || "").toLocaleString()}
+            </Typography.Text>
+          </div>
+        </Card>
+
+        <Card>
+          <Typography.Header as="h4" color="gray">
+            Change display name
+          </Typography.Header>
+          <form
+            className="flex flex-col gap-3"
+            onSubmit={handleSubmitChangeDisplayName}
+          >
+            <div>
+              <label htmlFor="userDisplayName" className="block mb-1">
+                New display name
+              </label>
+              <input
+                id="userDisplayName"
+                name="userDisplayName"
+                type="text"
+                autoComplete="off"
+                className={`
                   w-full text-sm rounded-md p-2 block         
                   border border-gray-500 hover:border-purple-600 focus:outline-none
                   bg-transparent focus:border-purple-600
                   transition-colors duration-300
                   hover:cursor-text
-                  `}
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder={dbUserData?.display_name}
-                />
-              </div>
-              <Button
-                type="submit"
-                disabled={
-                  !displayName || displayName === dbUserData?.display_name
-                }
-                className="self-end"
-              >
-                Change
-              </Button>
-            </form>
-          </div>
-        </section>
-
-        <section className="relative group">
-          <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-15 pointer-events-none"></div>
-          <div className="relative flex flex-col gap-3 border border-white/10 p-5 bg-[rgba(12,13,15,0.9)] rounded-[20px]">
-            <h3 className="text-2xl font-semibold mb-4">
-              Delete account with all data
-            </h3>
-            <p className="text-sm md:text-base">
-              Deleting your account is a permanent action. This cannot be
-              undone, and all your data will be lost forever.
-            </p>
+                `}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder={dbUserData?.display_name}
+              />
+            </div>
             <Button
+              type="submit"
+              disabled={
+                !displayName || displayName === dbUserData?.display_name
+              }
               className="self-end"
-              variant="destructive"
-              onClick={openDialog}
             >
-              Delete account
+              Change
             </Button>
-          </div>
-        </section>
+          </form>
+        </Card>
+
+        <Card>
+          <Typography.Header as="h4" color="gray">
+            Delete account with all data
+          </Typography.Header>
+
+          <Typography.Text>
+            Deleting your account is a permanent action. This cannot be undone,
+            and all your data will be lost forever.
+          </Typography.Text>
+          <Button
+            className="self-end"
+            variant="destructive"
+            onClick={openDialog}
+          >
+            Delete account
+          </Button>
+        </Card>
       </div>
 
       {isDialogOpen && (
         <dialog
-          className="fixed top-0 bottom-0 w-full h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
+          className="fixed top-0 bottom-0 w-full  h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
           onClick={closeDialog}
         >
-          <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
-            <p>
+          <div className="flex flex-col gap-4 max-w-[60%] bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
+            <Typography.Header as="h4" color="red">
               Are you sure you want to delete your account with all your data?
-            </p>
+            </Typography.Header>
             <div className="flex gap-3 justify-end">
               <Button variant="ghost" onClick={closeDialog}>
                 Cancel
@@ -344,11 +341,13 @@ export const UserSettings = () => {
 
       {isAvatarDialogOpen && (
         <dialog
-          className="fixed top-0 bottom-0 w-full h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
+          className="fixed top-0 bottom-0 w-full  h-screen z-50 bg-[rgba(10,10,10,0.8)] backdrop-blur-sm flex items-center justify-center"
           onClick={closeDialog}
         >
-          <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
-            <p>Are you sure you want to delete your avatar?</p>
+          <div className="flex flex-col max-w-[60%] gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
+            <Typography.Header as="h4" color="red">
+              Are you sure you want to delete your avatar?
+            </Typography.Header>
             <div className="flex gap-3 justify-end">
               <Button variant="ghost" onClick={closeAvatarDialog}>
                 Cancel

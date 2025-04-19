@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { useAuth } from "../context/AuthContext.hook";
+import { useAuth } from "../context/AuthContext";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
-import { Button } from "./ui/Button";
+import { Button, Typography } from "./ui";
 import MDEditor, { RefMDEditor, commands } from "@uiw/react-md-editor";
 import { NotFound } from "./NotFound";
 
@@ -62,11 +62,7 @@ export const CreatePost = () => {
     isPending || !dbUserData || !title || !content || !selectedFile;
 
   return (
-    <>
-      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        Create new post
-      </h2>
-
+    <div className="max-w-3xl mx-auto">
       <form
         className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
         onSubmit={handleSubmit}
@@ -81,12 +77,12 @@ export const CreatePost = () => {
             type="text"
             value={title}
             className={`
-            w-full text-sm rounded-md p-2 block         
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-transparent focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-text
-          `}
+              w-full text-sm rounded-md p-2 block         
+              border border-gray-500 hover:border-purple-600 focus:outline-none
+              bg-transparent focus:border-purple-600
+              transition-colors duration-300
+              hover:cursor-text
+            `}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
@@ -133,12 +129,12 @@ export const CreatePost = () => {
             id="postCommunity"
             name="postCommunity"
             className={`
-            w-full text-sm rounded-md p-2 block
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-pointer
-          `}
+              w-full text-sm rounded-md p-2 block
+              border border-gray-500 hover:border-purple-600 focus:outline-none
+              bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+              transition-colors duration-300
+              hover:cursor-pointer
+            `}
             onChange={handleCommunityChange}
           >
             <option value=""> -- Choose a community -- </option>
@@ -160,18 +156,18 @@ export const CreatePost = () => {
             type="file"
             accept="image/*"
             className={`
-            w-full text-sm rounded-md p-2 block
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-pointer
-            file:hidden
-          `}
+              w-full text-sm rounded-md p-2 block
+              border border-gray-500 hover:border-purple-600 focus:outline-none
+              bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
+              transition-colors duration-300
+              hover:cursor-pointer
+              file:hidden
+            `}
             onChange={handleFileChange}
             required
           />
           {selectedFileError && (
-            <p className="text-red-400">{selectedFileError}</p>
+            <Typography.Text color="red">{selectedFileError}</Typography.Text>
           )}
         </div>
 
@@ -179,8 +175,10 @@ export const CreatePost = () => {
           {isPending ? "Creating..." : "Create Post"}
         </Button>
 
-        {isError && <p className="text-red-500">Error creating post.</p>}
+        {isError && (
+          <Typography.Text color="red">Error creating post.</Typography.Text>
+        )}
       </form>
-    </>
+    </div>
   );
 };

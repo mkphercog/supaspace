@@ -2,7 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./context/AuthContext.provider";
+import { AuthProvider } from "./context/AuthContext/AuthContext.provider";
+import { SidebarProvider } from "./context/SidebarContext/SidebarContext.provider";
 import { PhotoProvider } from "react-photo-view";
 import App from "./App";
 
@@ -16,9 +17,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <Router>
         <AuthProvider>
-          <PhotoProvider>
-            <App />
-          </PhotoProvider>
+          <SidebarProvider>
+            <PhotoProvider>
+              <App />
+            </PhotoProvider>
+          </SidebarProvider>
         </AuthProvider>
       </Router>
     </QueryClientProvider>

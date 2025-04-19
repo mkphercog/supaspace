@@ -2,6 +2,7 @@ import { PostItem } from "./PostItem";
 import { CommunityFromDbType } from "../types/community.type";
 import { useFetchCommunityPosts } from "../api/community";
 import { Loader } from "./Loader";
+import { Typography } from "./ui";
 
 type Props = {
   community_id: CommunityFromDbType["id"];
@@ -23,12 +24,9 @@ export const CommunityDisplay = ({ community_id }: Props) => {
 
   return (
     <div>
-      <h2 className="text-4xl md:text-6xl leading-14 md:leading-20 font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        Community
-      </h2>
-      <h3 className="text-3xl md:text-4xl leading-15 font-bold mb-6 text-center text-blue-500">
+      <Typography.Header color="lime">
         #{data?.[0].community.name}
-      </h3>
+      </Typography.Header>
 
       {data?.[0].id ? (
         <div className="flex flex-wrap gap-6 justify-center">
@@ -37,9 +35,9 @@ export const CommunityDisplay = ({ community_id }: Props) => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-400">
+        <Typography.Text className="text-center">
           No posts in this community yet.
-        </p>
+        </Typography.Text>
       )}
     </div>
   );

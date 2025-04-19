@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { supabaseClient } from "../supabase-client";
+import { supabaseClient } from "../../supabase-client";
 import { Session } from "@supabase/supabase-js";
 import { AuthContext, AuthContextType } from "./AuthContext";
 import { useNavigate } from "react-router";
@@ -7,9 +7,9 @@ import {
   insertUserDataToDb,
   useDeleteUserWithData,
   useFetchUserData,
-} from "../api/users";
-import { DbUserDataType } from "../types/users";
-import { QUERY_KEYS } from "../api/queryKeys";
+} from "../../api/users";
+import { DbUserDataType } from "../../types/users";
+import { QUERY_KEYS } from "../../api/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;

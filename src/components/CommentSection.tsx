@@ -1,12 +1,12 @@
 import { FC, FormEvent, useState } from "react";
-import { useAuth } from "../context/AuthContext.hook";
+import { useAuth } from "../context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommentItem } from "./CommentItem";
 import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
 import { useCreateNewComment, useFetchComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
-import { Button } from "./ui/Button";
+import { Button, Typography } from "./ui";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 
@@ -67,27 +67,37 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   const commentTree = comments ? buildCommentTree(comments) : [];
 
   return (
     <div className="mt-6">
-      <h3 className="text-2xl font-semibold mb-4">Comments</h3>
+      <Typography.Header as="h4" color="gray">
+        Comments section
+      </Typography.Header>
+
       {dbUserData ? (
         <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
-          <textarea
-            id="commentContent"
-            className={`
-              w-full text-sm rounded-md p-2 block         
-              border border-gray-500 hover:border-purple-600 focus:outline-none
-              bg-transparent focus:border-purple-600
-              transition-colors duration-300
-              hover:cursor-text
-            `}
-            value={newCommentText}
-            onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="Write a comment..."
-            rows={3}
-          />
+          <div>
+            <label htmlFor="commentContent" className="block mb-1 font-medium">
+              New comment
+            </label>
+            <textarea
+              id="commentContent"
+              name="commentContent"
+              className={`
+                w-full text-sm rounded-md p-2 block         
+                border border-gray-500 hover:border-purple-600 focus:outline-none
+                bg-transparent focus:border-purple-600
+                transition-colors duration-300
+                hover:cursor-text
+              `}
+              value={newCommentText}
+              onChange={(e) => setNewCommentText(e.target.value)}
+              placeholder="Write a comment..."
+              rows={3}
+            />
+          </div>
           <Button
             type="submit"
             className="self-end"
@@ -97,20 +107,28 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
           </Button>
 
           {isError && (
-            <p className="text-red-500 mt-2">Error posting comment.</p>
+            <Typography.Text className="mt-2" color="red">
+              Error posting comment.
+            </Typography.Text>
           )}
         </form>
       ) : (
-        <p className="mb-4 text-purple-400">
+        <Typography.Text size="lg" className="mb-4 text-center" color="purple">
           You must be logged in to post a comment.
-        </p>
+        </Typography.Text>
       )}
 
-      <div className="space-y-10">
-        {commentTree?.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} post_id={post_id} />
-        ))}
-      </div>
+      {commentTree.length ? (
+        <div className="space-y-10">
+          {commentTree?.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} post_id={post_id} />
+          ))}
+        </div>
+      ) : (
+        <Typography.Text color="purple" className="text-center">
+          No comments yet.
+        </Typography.Text>
+      )}
     </div>
   );
 };

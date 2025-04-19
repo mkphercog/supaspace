@@ -1,8 +1,10 @@
 import { CreatePost } from "../components/CreatePost";
+import { Typography } from "../components/ui";
 
 export const CreatePostPage = () => {
   return (
-    <div className="pt-0 md:pt-10">
+    <div>
+      <Typography.Header>Create new post</Typography.Header>
       <CreatePost />
     </div>
   );

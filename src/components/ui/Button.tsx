@@ -19,19 +19,19 @@ const BUTTON_VARIANT: Record<ButtonVariants, string> = {
     disabled:bg-gray-500/20 disabled:text-gray-600 disabled:border-gray-700/10
    `,
   destructive: `
-     bg-red-700 hover:bg-red-800
-     border-red-700 hover:border-red-800
-     disabled:bg-red-500/20 disabled:text-gray-700 disabled:border-red-800/10
+    bg-red-700 hover:bg-red-800
+    border-red-700 hover:border-red-800
+    disabled:bg-red-500/20 disabled:text-gray-700 disabled:border-red-800/10
     `,
   ghost: `
-     bg-transparent hover:bg-gray-700/30
-     border-transparent hover:border-transparent
-     disabled:bg-gray-800/20 disabled:text-gray-800 disabled:border-transparent
+    bg-transparent hover:bg-gray-700/30
+    border-transparent hover:border-transparent
+    disabled:bg-gray-800/20 disabled:text-gray-800 disabled:border-transparent
     `,
   success: `
-   bg-green-600 hover:bg-green-800
-   border-green-600 hover:border-green-800
-   disabled:bg-green-500/20 disabled:text-gray-700 disabled:border-green-800/10
+    bg-green-600 hover:bg-green-800
+    border-green-600 hover:border-green-800
+    disabled:bg-green-500/20 disabled:text-gray-700 disabled:border-green-800/10
   `,
 };
 
@@ -57,11 +57,11 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
         px-3 py-1
         cursor-pointer 
       text-gray-200
-        rounded-md transition-colors duration-300 border
-        ${BUTTON_VARIANT[variant]}
+        rounded-md transition duration-300 border
         disabled:cursor-not-allowed
+        ${BUTTON_VARIANT[variant]}
         ${className}
-       `}
+      `}
       onClick={onClick}
       disabled={disabled}
       type={type}

@@ -1,11 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
-import { useAuth } from "../context/AuthContext.hook";
+import { useAuth } from "../context/AuthContext";
 import { PostFromDbType } from "../types/post.type";
 import { useCreateVote, useFetchVotes } from "../api/votes";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { Loader } from "./Loader";
-import { Button } from "./ui/Button";
+import { Button } from "./ui";
 import LikeIcon from "../assets/icons/likeIcon.svg";
 import DislikeIcon from "../assets/icons/dislikeIcon.svg";
 

@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import { useFetchCommunities } from "../api/community";
 import { Loader } from "./Loader";
+import { Card, Typography } from "./ui";
 
 export const CommunityList = () => {
   const { data, isLoading, error } = useFetchCommunities();
@@ -15,30 +15,28 @@ export const CommunityList = () => {
 
   if (!data?.length) {
     return (
-      <p className="text-md text-center text-gray-300 mt-2">
+      <Typography.Text className="text-center">
         No communities found
-      </p>
+      </Typography.Text>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4">
+    <div className="flex flex-col gap-y-6 max-w-3xl mx-auto">
       {data?.map((community) => (
-        <div
-          key={community.id}
-          className="border border-white/10 p-4 rounded hover:-translate-y-1 transition transform"
-        >
-          <Link
-            to={`/community/${community.id}`}
-            className="text-2xl font-bold text-purple-500 hover:underline"
-          >
-            {community.name}
-          </Link>
-          <p className="text-gray-400 mt-2">{community.description}</p>
-          <p className="text-xs text-gray-300 mt-2">
-            Created: {new Date(community.created_at).toLocaleString()}
-          </p>
-        </div>
+        <Typography.Link key={community.id} to={`/community/${community.id}`}>
+          <Card withHover>
+            <Typography.Header as="h4" color="lime" className="mb-0!">
+              #{community.name}
+            </Typography.Header>
+
+            <Typography.Text>{community.description}</Typography.Text>
+
+            <Typography.Text size="xs" className="font-normal">
+              Created at: {new Date(community.created_at).toLocaleString()}
+            </Typography.Text>
+          </Card>
+        </Typography.Link>
       ))}
     </div>
   );

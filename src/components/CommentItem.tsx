@@ -1,13 +1,13 @@
 import { FC, FormEvent, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
-import { useAuth } from "../context/AuthContext.hook";
+import { useAuth } from "../context/AuthContext";
 import { useCreateNewComment, useDeleteComments } from "../api/comments";
 import { QUERY_KEYS } from "../api/queryKeys";
 import { ChevronDownIcon } from "../assets/icons/ChevronDownIcon";
 import { ChevronUpIcon } from "../assets/icons/ChevronUpIcon";
 import { UserAvatar } from "./UserAvatar";
-import { Button } from "./ui/Button";
+import { Button, Typography } from "./ui";
 import MDEditor from "@uiw/react-md-editor";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
@@ -79,24 +79,22 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <UserAvatar avatarUrl={comment.author.avatar_url} size="md" />
           <div className="flex flex-col gap-1 bg-gray-600/20 p-2 rounded-xl">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-blue-400">
+              <Typography.Text size="sm" className="font-bold text-blue-400!">
                 {comment.author.display_name}
-              </span>
-              <span className="text-xs text-gray-500">
+              </Typography.Text>
+              <Typography.Text size="xs" className="text-gray-500">
                 {new Date(comment.created_at).toLocaleString()}
-              </span>
+              </Typography.Text>
             </div>
             <MDEditor.Markdown
               source={comment.content}
               className="pl-1 bg-transparent!"
             />
             {dbUserData?.id === comment.user_id && (
-              <Button
-                className="self-end text-xs text-red-500!"
-                variant="ghost"
-                onClick={openDialog}
-              >
-                Delete
+              <Button className="self-end" variant="ghost" onClick={openDialog}>
+                <Typography.Text size="xs" color="red">
+                  Delete
+                </Typography.Text>
               </Button>
             )}
           </div>
@@ -105,9 +103,11 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
             <Button
               onClick={() => setShowReply((prev) => !prev)}
               variant="ghost"
-              className="col-span-2 justify-self-start text-sm text-blue-500!"
+              className="col-span-2 justify-self-end text-blue-500!"
             >
-              {showReply ? "Cancel" : "Reply"}
+              <Typography.Text size="sm" className="text-inherit">
+                {showReply ? "Cancel" : "Reply"}
+              </Typography.Text>
             </Button>
           )}
         </div>
@@ -136,27 +136,36 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
               {isPending ? "Posting..." : "Post reply"}
             </Button>
 
-            {isError && <p className="text-red-500">Error posting reply.</p>}
+            {isError && (
+              <Typography.Text color="red">
+                Error posting reply.
+              </Typography.Text>
+            )}
           </form>
         )}
 
         {comment.children && comment.children.length > 0 && (
           <div>
             <Button
-              className="flex gap-2 mb-2 text-xs text-purple-400!"
+              className="mb-1"
               variant="ghost"
               onClick={() => setIsCollapsed((prev) => !prev)}
             >
-              {!isCollapsed ? (
-                <>
-                  <ChevronDownIcon /> <p>Hide replies</p>
-                </>
-              ) : (
-                <>
-                  <ChevronUpIcon />
-                  <p>Show replies</p>
-                </>
-              )}
+              <Typography.Text
+                size="xs"
+                color="lightPurple"
+                className="text-inherit flex items-center gap-1"
+              >
+                {!isCollapsed ? (
+                  <>
+                    <ChevronDownIcon /> Hide replies
+                  </>
+                ) : (
+                  <>
+                    <ChevronUpIcon /> Show replies
+                  </>
+                )}
+              </Typography.Text>
             </Button>
 
             {!isCollapsed && (
@@ -176,7 +185,9 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           onClick={closeDialog}
         >
           <div className="flex flex-col gap-4 bg-gray-700/30 rounded-xl p-5 text-white border border-white/10 shadow-lg">
-            <p>Are you sure you want to delete your comment?</p>
+            <Typography.Header as="h4" color="red">
+              Are you sure you want to delete your comment?
+            </Typography.Header>
             <div className="flex gap-3 justify-end">
               <Button variant="ghost" onClick={closeDialog}>
                 Cancel

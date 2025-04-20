@@ -158,18 +158,14 @@ export const UserSettings = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-16 max-w-5xl mx-auto">
+      <div className="flex flex-col gap-y-16 max-w-4xl mx-auto">
         <Card>
           <div className="flex justify-between items-center">
             <Typography.Header as="h4" color="gray" className="mb-0!">
               Account info
             </Typography.Header>
 
-            <Button
-              onClick={signOut}
-              variant="ghost"
-              className="text-purple-500"
-            >
+            <Button onClick={signOut} variant="ghost">
               Sign out
             </Button>
           </div>
@@ -230,21 +226,21 @@ export const UserSettings = () => {
             </form>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <Typography.Text>Display name:</Typography.Text>
             <Typography.Text color="lightPurple" className="font-semibold">
               {dbUserData?.display_name}
             </Typography.Text>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <Typography.Text>Your e-mail:</Typography.Text>
             <Typography.Text color="lightPurple" className="font-semibold">
               {dbUserData?.email}
             </Typography.Text>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <Typography.Text>Account created at:</Typography.Text>
             <Typography.Text color="lightPurple" className="font-semibold">
               {new Date(dbUserData?.created_at || "").toLocaleString()}

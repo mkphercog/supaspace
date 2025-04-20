@@ -22,7 +22,7 @@ export const CommunityList = () => {
   }
 
   return (
-    <div className="flex flex-col gap-y-6 max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto flex flex-col gap-y-6">
       {data?.map((community) => (
         <Typography.Link key={community.id} to={`/community/${community.id}`}>
           <Card withHover>

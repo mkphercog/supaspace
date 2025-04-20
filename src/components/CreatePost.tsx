@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
-import { Button, Typography } from "./ui";
+import { Button, Card, Typography } from "./ui";
 import MDEditor, { RefMDEditor, commands } from "@uiw/react-md-editor";
 import { NotFound } from "./NotFound";
 
@@ -62,11 +62,8 @@ export const CreatePost = () => {
     isPending || !dbUserData || !title || !content || !selectedFile;
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <form
-        className="max-w-2xl mx-auto space-y-4 flex flex-col gap-2"
-        onSubmit={handleSubmit}
-      >
+    <Card className="max-w-2xl mx-auto">
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="postTitle" className="block mb-1 font-medium">
             Title
@@ -179,6 +176,6 @@ export const CreatePost = () => {
           <Typography.Text color="red">Error creating post.</Typography.Text>
         )}
       </form>
-    </div>
+    </Card>
   );
 };

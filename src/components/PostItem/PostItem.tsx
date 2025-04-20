@@ -51,7 +51,7 @@ export const PostItem: FC<PostItemProps> = ({
             />
           </div>
 
-          <Typography.Text size="sm" color="lime">
+          <Typography.Text size="sm">
             {`#${community.id ? community.name : "No community"}`}
           </Typography.Text>
 

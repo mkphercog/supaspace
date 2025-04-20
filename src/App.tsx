@@ -1,29 +1,32 @@
 import { Route, Routes } from "react-router";
-import { HomePage } from "./pages/HomePage";
-import { CreatePostPage } from "./pages/CreatePostPage";
-import { PostDetailsPage } from "./pages/PostDetailsPage";
-import { CreateCommunityPage } from "./pages/CreateCommunityPage";
-import { CommunitiesPage } from "./pages/CommunitiesPage";
-import { CommunityPage } from "./pages/CommunityPage";
-import { UserSettingsPage } from "./pages/UserSettingsPage";
+import {
+  AppInfoPage,
+  CommunitiesPage,
+  CommunityPage,
+  CreateCommunityPage,
+  CreatePostPage,
+  HomePage,
+  PostDetailsPage,
+  UserSettingsPage,
+} from "./pages";
+import { Sidebar, Topbar } from "./components/layout";
+import { Overlay, Typography } from "./components/ui";
+import { AnimatedBackground } from "./components/AnimatedBackground";
+import { Loader } from "./components/Loader";
 import { NotFound } from "./components/NotFound";
 import { useAuth } from "./context/AuthContext";
-import { AppInfoPage } from "./pages/AppInfoPage";
-import { Loader } from "./components/Loader";
-import { Overlay, Typography } from "./components/ui";
-import { Sidebar } from "./components/layout/Sidebar/Sidebar";
-import { Topbar } from "./components/layout/Topbar/Topbar";
 
 const App = () => {
   const { isDeleteUserWithDataPending } = useAuth();
 
   return (
-    <div className="flex overflow-hidden bg-black">
+    <div className="flex overflow-hidden">
       <Sidebar />
 
-      <div className="h-screen overflow-y-auto w-full grow bg-black text-gray-100 relative">
+      <div className="h-screen overflow-y-auto w-full grow text-gray-100 relative">
         <Topbar />
-        <div className=" p-4">
+
+        <div className="max-w-7xl mx-auto px-3 py-16">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/create" element={<CreatePostPage />} />
@@ -47,6 +50,8 @@ const App = () => {
           </Overlay>
         )}
       </div>
+
+      <AnimatedBackground />
     </div>
   );
 };

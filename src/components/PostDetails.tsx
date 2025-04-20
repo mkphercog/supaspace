@@ -8,7 +8,7 @@ import { CommentSection } from "./CommentSection";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
-import { Typography } from "./ui";
+import { Card, Typography } from "./ui";
 import PostPlaceholderImage from "../assets/images/postPlaceholder.jpg";
 
 type PostDetailsProps = {
@@ -27,7 +27,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <Card>
       <Typography.Header>{data?.title}</Typography.Header>
 
       <PhotoView src={data?.image_url || PostPlaceholderImage}>
@@ -38,10 +38,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
         />
       </PhotoView>
 
-      <MDEditor.Markdown
-        source={data?.content}
-        className="p-3 bg-transparent!"
-      />
+      <MDEditor.Markdown source={data?.content} className="bg-transparent!" />
 
       <div className="flex items-center gap-2.5">
         <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />
@@ -66,6 +63,6 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
 
       <LikeButton post_id={post_id} />
       <CommentSection post_id={post_id} />
-    </div>
+    </Card>
   );
 };

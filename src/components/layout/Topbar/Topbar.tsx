@@ -14,7 +14,7 @@ export const Topbar = () => {
     >
       <div
         className={`
-          relative max-w-6xl mx-auto   
+          relative max-w-7xl mx-auto   
           px-1 md:px-4 py-2 h-[50px]
           flex items-center
           ${sidebarStatus !== "show" ? "justify-between" : "justify-end"}

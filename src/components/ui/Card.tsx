@@ -8,13 +8,14 @@ type CardProps = {
 export const Card: FC<PropsWithChildren<CardProps>> = ({
   withHover = false,
   children,
+  className,
 }) => {
   const classNames = withHover
-    ? "opacity-0 group-hover:opacity-30 transition duration-300"
-    : "opacity-15";
+    ? "opacity-0 group-hover:opacity-20 transition duration-300"
+    : "opacity-10";
 
   return (
-    <section className="relative group">
+    <section className={`relative group ${className}`}>
       <div
         className={`
           absolute -inset-1 
@@ -27,7 +28,7 @@ export const Card: FC<PropsWithChildren<CardProps>> = ({
         className={`
           relative h-full 
           flex flex-col gap-3 
-          border border-white/10 p-5 bg-[rgba(12,13,15,0.95)] 
+          border border-white/10 p-5 bg-[rgba(12,13,15,0.88)] 
           rounded-2xl 
         `}
       >

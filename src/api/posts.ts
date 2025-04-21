@@ -55,7 +55,7 @@ export const useFetchPostById = (post_id: PostFromDbType["id"]) => {
       const { data, error } = await supabaseClient
         .from("posts")
         .select(
-          "*, community:communities(id, name), author:users(id, display_name, avatar_url)",
+          "*, community:communities(id, name), author:users(id, nickname, avatar_url)",
         )
         .eq("id", post_id)
         .single();

@@ -11,7 +11,7 @@ export const UserSettings = () => {
   const { currentSession, dbUserData, signOut, deleteUserWithData } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
-  const [displayName, setDisplayName] = useState("");
+  const [newNickname, setNewNickname] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileError, setSelectedFileError] = useState<string | null>(
     null
@@ -39,17 +39,30 @@ export const UserSettings = () => {
     setIsAvatarDialogOpen(true);
   };
 
-  const handleSubmitChangeDisplayName = async (e: FormEvent) => {
+  const handleSubmitChangeNickname = async (e: FormEvent) => {
     e.preventDefault();
 
     const { error } = await supabaseClient
       .from("users")
-      .update({ display_name: displayName })
+      .update({ nickname: newNickname })
       .eq("id", dbUserData?.id);
 
     if (error) throw new Error(`❌ ${error.message}`);
 
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    setNewNickname("");
+  };
+
+  const deleteNickname = async () => {
+    const { error } = await supabaseClient
+      .from("users")
+      .update({ nickname: dbUserData?.full_name_from_auth_provider })
+      .eq("id", dbUserData?.id);
+
+    if (error) throw new Error(`❌ ${error.message}`);
+
+    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    setNewNickname("");
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +169,9 @@ export const UserSettings = () => {
     }
   };
 
+  const isNickNameSameAsFullName =
+    dbUserData?.nickname === dbUserData?.full_name_from_auth_provider;
+
   return (
     <>
       <div className="flex flex-col gap-y-16 max-w-4xl mx-auto">
@@ -227,14 +243,23 @@ export const UserSettings = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-2">
-            <Typography.Text>Display name:</Typography.Text>
+            <Typography.Text>Full name:</Typography.Text>
             <Typography.Text color="lightPurple" className="font-semibold">
-              {dbUserData?.display_name}
+              {dbUserData?.full_name_from_auth_provider}
             </Typography.Text>
           </div>
 
+          {!isNickNameSameAsFullName && (
+            <div className="flex flex-col md:flex-row gap-2">
+              <Typography.Text>Nickname:</Typography.Text>
+              <Typography.Text color="lightPurple" className="font-semibold">
+                {dbUserData?.nickname}
+              </Typography.Text>
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row gap-2">
-            <Typography.Text>Your e-mail:</Typography.Text>
+            <Typography.Text>E-mail:</Typography.Text>
             <Typography.Text color="lightPurple" className="font-semibold">
               {dbUserData?.email}
             </Typography.Text>
@@ -250,19 +275,19 @@ export const UserSettings = () => {
 
         <Card>
           <Typography.Header as="h4" color="gray">
-            Change display name
+            Set nickname
           </Typography.Header>
           <form
             className="flex flex-col gap-3"
-            onSubmit={handleSubmitChangeDisplayName}
+            onSubmit={handleSubmitChangeNickname}
           >
             <div>
-              <label htmlFor="userDisplayName" className="block mb-1">
-                New display name
+              <label htmlFor="userNickname" className="block mb-1">
+                New nickname
               </label>
               <input
-                id="userDisplayName"
-                name="userDisplayName"
+                id="userNickname"
+                name="userNickname"
                 type="text"
                 autoComplete="off"
                 className={`
@@ -272,20 +297,37 @@ export const UserSettings = () => {
                   transition-colors duration-300
                   hover:cursor-text
                 `}
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder={dbUserData?.display_name}
+                value={newNickname}
+                onChange={(e) => setNewNickname(e.target.value)}
+                placeholder={
+                  isNickNameSameAsFullName
+                    ? "No nickname"
+                    : dbUserData?.nickname
+                }
               />
             </div>
-            <Button
-              type="submit"
-              disabled={
-                !displayName || displayName === dbUserData?.display_name
-              }
-              className="self-end"
-            >
-              Change
-            </Button>
+            <div className="flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="ghost"
+                className="text-red-500"
+                onClick={deleteNickname}
+                disabled={isNickNameSameAsFullName}
+              >
+                Delete
+              </Button>
+              <Button
+                type="submit"
+                disabled={
+                  !newNickname ||
+                  newNickname === dbUserData?.nickname ||
+                  newNickname === dbUserData?.full_name_from_auth_provider
+                }
+                className="self-end"
+              >
+                Submit
+              </Button>
+            </div>
           </form>
         </Card>
 

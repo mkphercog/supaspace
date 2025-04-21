@@ -39,7 +39,7 @@ export const PostItem: FC<PostItemProps> = ({
               {title}
             </Typography.Text>
             <Typography.Text size="xs">
-              {`by ${author.display_name}`}
+              {`by ${author.nickname}`}
             </Typography.Text>
           </div>
 

@@ -1,3 +1,5 @@
+import { DbUserDataType } from "./users";
+
 export type PostFromDbType = {
   id: number;
   created_at: string;
@@ -12,11 +14,7 @@ export type PostFromDbType = {
     id: number;
     name: string;
   };
-  author: {
-    id: string;
-    avatar_url: string;
-    display_name: string;
-  };
+  author: Pick<DbUserDataType, "id" | "nickname" | "avatar_url">;
 };
 
 export type PostListItemFromDbType = Omit<

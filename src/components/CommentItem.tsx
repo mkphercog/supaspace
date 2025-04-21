@@ -79,7 +79,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <div className="flex flex-col gap-1 bg-gray-600/20 p-2 rounded-xl">
             <div className="flex items-center justify-between">
               <Typography.Text size="sm" className="font-bold text-blue-400!">
-                {comment.author.display_name}
+                {comment.author.nickname}
               </Typography.Text>
               <Typography.Text size="xs" className="text-gray-500">
                 {new Date(comment.created_at).toLocaleString()}

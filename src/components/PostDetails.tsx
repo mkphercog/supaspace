@@ -45,7 +45,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
 
         <div className="flex flex-col">
           <Typography.Text size="lg" className="font-bold">
-            {data?.author.display_name}
+            {data?.author.nickname}
           </Typography.Text>
           <Typography.Text size="sm">
             {`posted ${new Date(data!.created_at).toLocaleString()}`}

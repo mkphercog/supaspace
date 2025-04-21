@@ -49,7 +49,7 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
         >
           <UserAvatar avatarUrl={dbUserData.avatar_url} />
           <Typography.Text className="font-semibold text-inherit">
-            {dbUserData.display_name}
+            {dbUserData.nickname}
           </Typography.Text>
         </Button>
       </div>

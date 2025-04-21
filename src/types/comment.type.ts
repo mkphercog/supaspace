@@ -1,14 +1,12 @@
+import { DbUserDataType } from "./users";
+
 export type CommentFromDbType = {
   id: number;
   post_id: number;
   parent_comment_id: number | null;
   content: string;
   user_id: string;
-  author: {
-    id: string;
-    display_name: string;
-    avatar_url: string;
-  };
+  author: Pick<DbUserDataType, "id" | "nickname" | "avatar_url">;
   created_at: string;
 };
 

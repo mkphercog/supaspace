@@ -9,10 +9,12 @@
 - You can **delete your account at any time** from the Settings page.  
   ![pointingIcon](./public/icons/pointingIcon.svg) This is a permanent action — all your posts, comments, and votes will be lost and cannot be recovered.
 
-### ![userSettingsIcon](./public/icons/userSettingsIcon.svg) Avatar & Display Name
+### ![userSettingsIcon](./public/icons/userSettingsIcon.svg) Avatar & Full Name
 
-- Your **avatar** and **display name** are imported from your Google profile by default.
-- You can **change** your display name or avatar at any time in your profile settings.
+- Your **avatar** and **full name** are imported from your Google profile by default.
+- You can **add a nickname** to use across the platform.
+- You can **change** your avatar image.
+- All of this is easily managed in your profile settings.
 - Maximum avatar image size: **500kB**.
 
 ### ![postIcon](./public/icons/postIcon.svg) Posting

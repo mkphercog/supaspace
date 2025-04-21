@@ -7,7 +7,7 @@ Initial release of **Supa.space()**, a minimal and lightweight social platform.
 ### Features:
 
 - Google login with automatic user creation.
-- Editable user profile (avatar & display name).
+- Editable user profile (avatar & nickname).
 - Post creation with Markdown editor + live preview.
 - Image support (max 500kB for avatars and post images).
 - Voting system for posts.

@@ -6,12 +6,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
 import { Button, Card, Typography } from "./ui";
+import { NicknameSection } from "./UserSettings/NicknameSection/NicknameSection";
 
 export const UserSettings = () => {
   const { currentSession, dbUserData, signOut, deleteUserWithData } = useAuth();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
-  const [newNickname, setNewNickname] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileError, setSelectedFileError] = useState<string | null>(
     null
@@ -37,32 +37,6 @@ export const UserSettings = () => {
 
   const openAvatarDialog = () => {
     setIsAvatarDialogOpen(true);
-  };
-
-  const handleSubmitChangeNickname = async (e: FormEvent) => {
-    e.preventDefault();
-
-    const { error } = await supabaseClient
-      .from("users")
-      .update({ nickname: newNickname })
-      .eq("id", dbUserData?.id);
-
-    if (error) throw new Error(`❌ ${error.message}`);
-
-    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
-    setNewNickname("");
-  };
-
-  const deleteNickname = async () => {
-    const { error } = await supabaseClient
-      .from("users")
-      .update({ nickname: dbUserData?.full_name_from_auth_provider })
-      .eq("id", dbUserData?.id);
-
-    if (error) throw new Error(`❌ ${error.message}`);
-
-    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
-    setNewNickname("");
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -273,63 +247,7 @@ export const UserSettings = () => {
           </div>
         </Card>
 
-        <Card>
-          <Typography.Header as="h4" color="gray">
-            Set nickname
-          </Typography.Header>
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={handleSubmitChangeNickname}
-          >
-            <div>
-              <label htmlFor="userNickname" className="block mb-1">
-                New nickname
-              </label>
-              <input
-                id="userNickname"
-                name="userNickname"
-                type="text"
-                autoComplete="off"
-                className={`
-                  w-full text-sm rounded-md p-2 block         
-                  border border-gray-500 hover:border-purple-600 focus:outline-none
-                  bg-transparent focus:border-purple-600
-                  transition-colors duration-300
-                  hover:cursor-text
-                `}
-                value={newNickname}
-                onChange={(e) => setNewNickname(e.target.value)}
-                placeholder={
-                  isNickNameSameAsFullName
-                    ? "No nickname"
-                    : dbUserData?.nickname
-                }
-              />
-            </div>
-            <div className="flex justify-end gap-3">
-              <Button
-                type="button"
-                variant="ghost"
-                className="text-red-500"
-                onClick={deleteNickname}
-                disabled={isNickNameSameAsFullName}
-              >
-                Delete
-              </Button>
-              <Button
-                type="submit"
-                disabled={
-                  !newNickname ||
-                  newNickname === dbUserData?.nickname ||
-                  newNickname === dbUserData?.full_name_from_auth_provider
-                }
-                className="self-end"
-              >
-                Submit
-              </Button>
-            </div>
-          </form>
-        </Card>
+        <NicknameSection />
 
         <Card>
           <Typography.Header as="h4" color="gray">

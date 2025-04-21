@@ -7,7 +7,8 @@ export type TypographyColors =
   | "lightPurple"
   | "gray"
   | "lime"
-  | "red";
+  | "red"
+  | "blue";
 
 export const TYPOGRAPHY_COLOR: Record<TypographyColors, string> = {
   purple: "text-purple-600",
@@ -15,6 +16,7 @@ export const TYPOGRAPHY_COLOR: Record<TypographyColors, string> = {
   gray: "text-gray-300",
   lime: "text-lime-500",
   red: "text-red-500",
+  blue: "text-sky-600",
 };
 
 export const Typography = {

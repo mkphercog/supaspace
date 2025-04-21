@@ -1,9 +1,12 @@
-export const Loader = () => {
+export const Loader = ({ className }: { className?: string }) => {
   return (
-    <div role="status" className="w-full flex justify-center">
+    <div
+      role="status"
+      className={`w-full flex items-center justify-center ${className}`}
+    >
       <svg
         aria-hidden="true"
-        className="w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600"
+        className="text-gray-200 animate-spin dark:text-gray-600 fill-purple-600 max-w-20 h-auto"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

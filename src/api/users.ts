@@ -3,7 +3,9 @@ import { User } from "@supabase/supabase-js";
 import { supabaseClient } from "../supabase-client";
 import { DbUserDataType } from "../types/users";
 import { QUERY_KEYS } from "./queryKeys";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { NICKNAME_MAX_LENGTH } from "../components/UserSettings/NicknameSection/validationSchema";
 
 type FetchUserDataErrorsType =
   | "NO_LOGGED_USER"
@@ -79,6 +81,7 @@ export const insertUserDataToDb = async (
     email: userData.email || "",
     avatar_url: publicUrl,
     full_name_from_auth_provider: userData.user_metadata.full_name,
+    nickname_updated_at: null,
   };
 
   const { error } = await supabaseClient.from("users").insert(newDbUserData);
@@ -109,4 +112,58 @@ export const useDeleteUserWithData = (
     },
     onSuccess,
   });
+};
+
+export const useSetNicknameMutation = () => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (data: { userId: string; nickname: string }) => {
+      const { error } = await supabaseClient
+        .from("users")
+        .update({ nickname: data.nickname, nickname_updated_at: new Date() })
+        .eq("id", data.userId);
+
+      if (error?.code === "23505") {
+        toast.error("This nickname is already taken.");
+        throw new Error();
+      } else if (error?.code === "23514") {
+        toast.error(`Nickname too long, max length: ${NICKNAME_MAX_LENGTH}`);
+        throw new Error();
+      } else if (error?.message.includes("24 hours")) {
+        toast.error(error.message);
+        throw new Error();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    setNewUserNickname: mutateAsync,
+    isSetNewUserNicknameLoading: isPending,
+  };
+};
+
+export const useDeleteNicknameMutation = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (data: { userId: string; nickname: string }) => {
+      const { error } = await supabaseClient
+        .from("users")
+        .update({ nickname: data.nickname })
+        .eq("id", data.userId);
+
+      if (error) throw new Error();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    deleteUserNickname: mutateAsync,
+    isDeleteNicknameLoading: isPending,
+  };
 };

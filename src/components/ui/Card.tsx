@@ -1,12 +1,15 @@
 import { FC, PropsWithChildren } from "react";
+import { Loader } from "../Loader";
 
 type CardProps = {
   withHover?: boolean;
   className?: string;
+  isLoading?: boolean;
 };
 
 export const Card: FC<PropsWithChildren<CardProps>> = ({
   withHover = false,
+  isLoading,
   children,
   className,
 }) => {
@@ -34,6 +37,10 @@ export const Card: FC<PropsWithChildren<CardProps>> = ({
       >
         {children}
       </div>
+
+      {isLoading && (
+        <Loader className="absolute top-0 bottom-0 left-0 right-0 p-20 bg-[rgba(12,13,15,0.88)]" />
+      )}
     </section>
   );
 };

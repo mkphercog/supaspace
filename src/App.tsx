@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router";
+import { ToastContainer } from "react-toastify";
 import {
   AppInfoPage,
   CommunitiesPage,
@@ -9,9 +10,8 @@ import {
   PostDetailsPage,
   UserSettingsPage,
 } from "./pages";
-import { Sidebar, Topbar } from "./components/layout";
+import { AnimatedBackground, Sidebar, Topbar } from "./components/layout";
 import { Overlay, Typography } from "./components/ui";
-import { AnimatedBackground } from "./components/AnimatedBackground";
 import { Loader } from "./components/Loader";
 import { NotFound } from "./components/NotFound";
 import { useAuth } from "./context/AuthContext";
@@ -51,6 +51,7 @@ const App = () => {
         )}
       </div>
 
+      <ToastContainer theme="dark" position="top-center" />
       <AnimatedBackground />
     </div>
   );

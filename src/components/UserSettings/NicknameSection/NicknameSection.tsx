@@ -20,6 +20,7 @@ import {
 } from "./validationSchema";
 import { DeleteNicknameButton } from "./DeleteNicknameButton";
 import { InfoIcon } from "../../../assets/icons";
+import { ONE_DAY_IN_MS } from "../../../constants";
 
 export const NicknameSection = () => {
   const { dbUserData } = useAuth();
@@ -61,7 +62,13 @@ export const NicknameSection = () => {
       });
   };
 
-  const newNickname = formParams.watch("userNickname");
+  const newNicknameValue = formParams.watch("userNickname");
+
+  const lastNicknameChangeInMs = dbUserData.nickname_updated_at
+    ? new Date(dbUserData.nickname_updated_at).getTime()
+    : Date.now() - ONE_DAY_IN_MS;
+  const timeAfterLastChange = Date.now() - lastNicknameChangeInMs;
+  const canChangeNickname = timeAfterLastChange >= ONE_DAY_IN_MS;
 
   return (
     <Card isLoading={isSetNewUserNicknameLoading || isDeleteNicknameLoading}>
@@ -97,13 +104,25 @@ export const NicknameSection = () => {
           You can change your nickname only once every 24 hours.
         </Typography.Text>
 
+        <Typography.Text size="xs" color={canChangeNickname ? "lime" : "blue"}>
+          {`Next change: ${
+            canChangeNickname
+              ? "Available"
+              : new Date(
+                  lastNicknameChangeInMs + ONE_DAY_IN_MS
+                ).toLocaleString()
+          }`}
+        </Typography.Text>
+
         <div className="flex gap-4 justify-end">
           <DeleteNicknameButton />
 
           <Button
             type="submit"
             disabled={
-              !!formParams.formState.errors.userNickname || !newNickname
+              !!formParams.formState.errors.userNickname ||
+              !newNicknameValue ||
+              !canChangeNickname
             }
             className="self-end"
           >

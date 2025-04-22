@@ -167,3 +167,101 @@ export const useDeleteNicknameMutation = () => {
     isDeleteNicknameLoading: isPending,
   };
 };
+
+export const useDeleteAvatarMutation = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async ({ userId }: { userId: string }) => {
+      const { data, error } = await supabaseClient.storage
+        .from("avatars")
+        .list(userId);
+
+      if (error) throw new Error();
+
+      const userAvatarsPathsToDelete = data?.map((file) =>
+        `${userId}/${file.name}`
+      ) ?? [];
+
+      if (userAvatarsPathsToDelete.length) {
+        const { error: deleteAvatarError } = await supabaseClient.storage
+          .from("avatars")
+          .remove(userAvatarsPathsToDelete);
+
+        const { error: avatarErrorTable } = await supabaseClient
+          .from("users")
+          .update({ avatar_url: null })
+          .eq("id", userId);
+
+        if (deleteAvatarError || avatarErrorTable) throw new Error();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    deleteUserAvatar: mutateAsync,
+    isDeleteUserAvatarLoading: isPending,
+  };
+};
+
+export const useEditUserAvatarMutation = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async ({ userId, file }: { userId: string; file: File }) => {
+      const filePath = `${userId}/userAvatar-${Date.now()}`;
+      const { data: avatarsList } = await supabaseClient.storage
+        .from("avatars")
+        .list(userId);
+
+      const avatarsImagesPathsToDelete = avatarsList?.map((file) =>
+        `${userId}/${file.name}`
+      ) ?? [];
+
+      if (avatarsImagesPathsToDelete.length) {
+        const { error: removeError } = await supabaseClient.storage
+          .from("avatars")
+          .remove(avatarsImagesPathsToDelete);
+
+        if (removeError) {
+          toast.error("Oops! Something went wrong. Please try again later.");
+          throw new Error(removeError.message);
+        }
+      }
+
+      const { error } = await supabaseClient.storage
+        .from("avatars")
+        .upload(filePath, file, { upsert: true });
+
+      if (error) {
+        toast.error("Oops! Something went wrong. Please try again later.");
+        throw new Error(error.message);
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabaseClient.storage.from("avatars").getPublicUrl(filePath);
+
+      const { error: updateAvatarUrlError } = await supabaseClient
+        .from("users")
+        .update({
+          avatar_url: publicUrl,
+        })
+        .eq("id", userId);
+
+      if (updateAvatarUrlError) {
+        toast.error("Oops! Something went wrong. Please try again later.");
+        throw new Error(updateAvatarUrlError.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    editUserAvatar: mutateAsync,
+    isEditUserAvatarLoading: isPending,
+  };
+};

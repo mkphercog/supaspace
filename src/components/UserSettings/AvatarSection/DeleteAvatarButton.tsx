@@ -1,26 +1,38 @@
 import { Id, toast } from "react-toastify";
 import { Button, Typography } from "../../ui";
-import { useDeleteNicknameMutation } from "../../../api/users";
 import { useAuth } from "../../../context/AuthContext";
+import { FC } from "react";
+import { UseMutateAsyncFunction } from "@tanstack/react-query";
 
 const toastCloseReasons = new Map<Id, "user-cancelled">();
 
-export const DeleteNicknameButton = () => {
+type DeleteAvatarButtonProps = {
+  deleteUserAvatar: UseMutateAsyncFunction<
+    void,
+    Error,
+    {
+      userId: string;
+    },
+    unknown
+  >;
+};
+
+export const DeleteAvatarButton: FC<DeleteAvatarButtonProps> = ({
+  deleteUserAvatar,
+}) => {
   const { dbUserData } = useAuth();
-  const { deleteUserNickname } = useDeleteNicknameMutation();
 
   if (!dbUserData) return null;
 
-  const realNicknameDelete = async () => {
+  const realAvatarDelete = async () => {
     toast.promise(
       async () =>
-        await deleteUserNickname({
+        await deleteUserAvatar({
           userId: dbUserData.id,
-          nickname: dbUserData.full_name_from_auth_provider,
         }),
       {
-        pending: `🚀 Deleting nickname: ${dbUserData.nickname}`,
-        success: `Nickname deleted successfully!`,
+        pending: `🚀 Deleting current avatar...`,
+        success: `Avatar deleted successfully!`,
         error: `Oops! Something went wrong. Please try again later.`,
       }
     );
@@ -31,7 +43,7 @@ export const DeleteNicknameButton = () => {
       () => (
         <div className="flex flex-col gap-4">
           <Typography.Text className="font-bold" color="red">
-            Deleting nickname
+            Deleting avatar
           </Typography.Text>
           <Typography.Text size="sm">
             If you want to stop this action, click "Cancel".
@@ -53,11 +65,11 @@ export const DeleteNicknameButton = () => {
           if (reason === "user-cancelled") {
             toast.info(
               <Typography.Text size="sm">
-                Your nickname stays with you! 😊
+                Your avatar stays with you! 😊
               </Typography.Text>
             );
           } else {
-            realNicknameDelete();
+            realAvatarDelete();
           }
           toastCloseReasons.delete(toastId);
         },
@@ -65,17 +77,14 @@ export const DeleteNicknameButton = () => {
     );
   };
 
-  const isNicknameSameAsFullName =
-    dbUserData?.nickname === dbUserData?.full_name_from_auth_provider;
-
   return (
     <Button
       type="button"
       variant="destructive"
       onClick={startDeletingProcess}
-      disabled={isNicknameSameAsFullName}
+      disabled={!dbUserData.avatar_url}
     >
-      Delete nickname
+      Delete avatar
     </Button>
   );
 };

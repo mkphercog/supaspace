@@ -1,24 +1,26 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, Ref } from "react";
 import { Loader } from "../Loader";
 
 type CardProps = {
+  ref?: Ref<HTMLElement>;
   withHover?: boolean;
-  className?: string;
   isLoading?: boolean;
+  className?: string;
 };
 
 export const Card: FC<PropsWithChildren<CardProps>> = ({
+  ref,
   withHover = false,
   isLoading,
-  children,
   className,
+  children,
 }) => {
   const classNames = withHover
     ? "opacity-0 group-hover:opacity-20 transition duration-300"
     : "opacity-10";
 
   return (
-    <section className={`relative group ${className}`}>
+    <section ref={ref} className={`relative group ${className}`}>
       <div
         className={`
           absolute -inset-1 

@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react";
 import { TYPOGRAPHY_COLOR, TypographyColors } from ".";
 
-type TextSizes = "xs" | "sm" | "md" | "lg";
+type TextSizes = "xxs" | "xs" | "sm" | "md" | "lg";
 
 type TextProps = {
   className?: string;
@@ -12,6 +12,7 @@ type TextProps = {
 };
 
 const TEXT_SIZE: Record<TextSizes, string> = {
+  xxs: "text-[0.5rem] md:text-[0.6rem]",
   xs: "text-[0.6rem] md:text-xs",
   sm: "text-xs md:text-sm",
   md: "text-sm md:text-base",

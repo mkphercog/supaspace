@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "../supabase-client";
 import { CommentFromDbType, CreateNewCommentType } from "../types/comment.type";
 import { QUERY_KEYS } from "./queryKeys";
@@ -53,23 +53,28 @@ export const useFetchComments = (post_id: CommentFromDbType["post_id"]) => {
   });
 };
 
-type UseDeleteCommentsProps = {
-  id: CommentFromDbType["id"];
-  onSuccess: () => void;
-};
-
-export const useDeleteComments = (
-  { id, onSuccess }: UseDeleteCommentsProps,
-) => {
-  return useMutation({
-    mutationFn: async () => {
+export const useDeleteCommentsMutation = (postId: number) => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (
+      commentId: CommentFromDbType["id"],
+    ) => {
       const { error } = await supabaseClient
         .from("comments")
         .delete()
-        .eq("id", id);
+        .eq("id", commentId);
 
-      if (error) throw new Error(error.message);
+      if (error) throw new Error();
     },
-    onSuccess,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.comments, postId],
+      });
+    },
   });
+
+  return {
+    deleteComment: mutateAsync,
+    isDeleteCommentLoading: isPending,
+  };
 };

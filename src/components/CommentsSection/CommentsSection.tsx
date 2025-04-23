@@ -1,16 +1,17 @@
 import { FC, FormEvent, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommentItem } from "./CommentItem";
-import { CommentFromDbType, CommentTreeType } from "../types/comment.type";
-import { useCreateNewComment, useFetchComments } from "../api/comments";
-import { QUERY_KEYS } from "../api/queryKeys";
-import { Loader } from "./Loader";
-import { Button, Typography } from "./ui";
+import { CommentFromDbType } from "../../types/comment.type";
+import { useCreateNewComment, useFetchComments } from "../../api/comments";
+import { QUERY_KEYS } from "../../api/queryKeys";
+import { Loader } from "../Loader";
+import { Button, Typography } from "../ui";
+import { buildFlatCommentsTree } from "./comments.utils";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 
-export const CommentSection: FC<Props> = ({ post_id }) => {
+export const CommentsSection: FC<Props> = ({ post_id }) => {
   const [newCommentText, setNewCommentText] = useState("");
   const queryClient = useQueryClient();
   const { dbUserData } = useAuth();
@@ -36,30 +37,6 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
     setNewCommentText("");
   };
 
-  const buildCommentTree = (
-    flatComments: CommentFromDbType[]
-  ): CommentTreeType[] => {
-    const map = new Map<number, CommentTreeType>();
-    const roots: CommentTreeType[] = [];
-
-    flatComments.forEach((comment) => {
-      map.set(comment.id, { ...comment, children: [] });
-    });
-
-    flatComments.forEach((comment) => {
-      if (comment.parent_comment_id) {
-        const parent = map.get(comment.parent_comment_id);
-        if (parent) {
-          parent.children?.push(map.get(comment.id)!);
-        }
-      } else {
-        roots.push(map.get(comment.id)!);
-      }
-    });
-
-    return roots;
-  };
-
   if (isLoading) {
     return <Loader />;
   }
@@ -68,7 +45,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
     return <div>Error: {error.message}</div>;
   }
 
-  const commentTree = comments ? buildCommentTree(comments) : [];
+  const commentTree = comments ? buildFlatCommentsTree(comments) : [];
 
   return (
     <div className="mt-6">
@@ -119,7 +96,7 @@ export const CommentSection: FC<Props> = ({ post_id }) => {
       )}
 
       {commentTree.length ? (
-        <div className="space-y-10">
+        <div className="space-y-8">
           {commentTree?.map((comment) => (
             <CommentItem key={comment.id} comment={comment} post_id={post_id} />
           ))}

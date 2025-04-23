@@ -34,7 +34,7 @@ export const Card: FC<PropsWithChildren<CardProps>> = ({
           relative h-full 
           flex flex-col gap-3 
           border border-white/10 p-5 bg-[rgba(12,13,15,0.88)] 
-          rounded-2xl 
+          rounded-2xl
         `}
       >
         {children}

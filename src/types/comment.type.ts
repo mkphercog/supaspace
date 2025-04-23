@@ -11,7 +11,8 @@ export type CommentFromDbType = {
 };
 
 export type CommentTreeType = CommentFromDbType & {
-  children?: CommentFromDbType[];
+  children: CommentTreeType[];
+  replyStyle: number;
 };
 
 export type CreateNewCommentType = Pick<

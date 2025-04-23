@@ -4,7 +4,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { PostFromDbType } from "../types/post.type";
 import { useFetchPostById } from "../api/posts";
 import { LikeButton } from "./LikeButton";
-import { CommentSection } from "./CommentSection";
+import { CommentsSection } from "./CommentsSection/CommentsSection";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
 import { NotFound } from "./NotFound";
@@ -62,7 +62,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
       )}
 
       <LikeButton post_id={post_id} />
-      <CommentSection post_id={post_id} />
+      <CommentsSection post_id={post_id} />
     </Card>
   );
 };

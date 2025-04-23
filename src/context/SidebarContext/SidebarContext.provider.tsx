@@ -4,10 +4,13 @@ import {
   SidebarContextType,
   SidebarStatusType,
 } from "./SidebarContext";
+import { useScreenSize } from "../../hooks/useScreenSize";
 
 export const SidebarProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [sidebarStatus, setSidebarStatus] =
-    useState<SidebarStatusType>("iconsToShow");
+  const { isMdUp } = useScreenSize();
+  const [sidebarStatus, setSidebarStatus] = useState<SidebarStatusType>(
+    isMdUp ? "show" : "hidden"
+  );
 
   const toggleSidebarStatus = () => {
     setSidebarStatus(() => {

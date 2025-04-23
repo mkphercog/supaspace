@@ -1,7 +1,7 @@
 import { UserSettings } from "../components/UserSettings";
 import { Typography } from "../components/ui";
 
-export const UserSettingsPage = () => {
+const UserSettingsPage = () => {
   return (
     <div>
       <Typography.Header>Settings</Typography.Header>
@@ -9,3 +9,5 @@ export const UserSettingsPage = () => {
     </div>
   );
 };
+
+export default UserSettingsPage;

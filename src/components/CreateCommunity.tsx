@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCreateNewCommunity } from "../api/community";
 import { Button, Card, Typography } from "./ui";
-import { NotFound } from "./NotFound";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
@@ -17,7 +17,7 @@ export const CreateCommunity = () => {
   };
 
   if (!currentSession) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   return (

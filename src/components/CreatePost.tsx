@@ -4,7 +4,7 @@ import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
 import { Button, Card, Typography } from "./ui";
 import MDEditor, { RefMDEditor, commands } from "@uiw/react-md-editor";
-import { NotFound } from "./NotFound";
+import NotFoundPage from "../pages/NotFoundPage";
 
 const COMMANDS_TO_HIDE = ["image", "comment"];
 
@@ -23,7 +23,7 @@ export const CreatePost = () => {
   const MDEditorRef = useRef<RefMDEditor>(null);
 
   if (!currentSession) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const handleSubmit = async (event: FormEvent) => {

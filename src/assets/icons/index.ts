@@ -10,6 +10,7 @@ export * from "./DislikeIcon";
 export * from "./InfoIcon";
 export * from "./LikeIcon";
 export * from "./LogoIcon";
+export * from "./NoRocketIcon";
 export * from "./PostIcon";
 export * from "./SettingsIcon";
 export * from "./SignInIcon";

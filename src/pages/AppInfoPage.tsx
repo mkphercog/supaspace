@@ -1,7 +1,7 @@
 import { AppInfo } from "../components/AppInfo";
 import { Typography } from "../components/ui";
 
-export const AppInfoPage = () => {
+const AppInfoPage = () => {
   return (
     <div>
       <Typography.Header>Information</Typography.Header>
@@ -9,3 +9,5 @@ export const AppInfoPage = () => {
     </div>
   );
 };
+
+export default AppInfoPage;

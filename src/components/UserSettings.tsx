@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { NotFound } from "./NotFound";
+import NotFoundPage from "../pages/NotFoundPage";
 import { Button, Card, Typography } from "./ui";
 import { NicknameSection } from "./UserSettings/NicknameSection/NicknameSection";
 import { AvatarSection } from "./UserSettings/AvatarSection/AvatarSection";
@@ -10,7 +10,7 @@ export const UserSettings = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   if (!currentSession) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   const closeDialog = () => {

@@ -1,7 +1,7 @@
 import { CreatePost } from "../components/CreatePost";
 import { Typography } from "../components/ui";
 
-export const CreatePostPage = () => {
+const CreatePostPage = () => {
   return (
     <div>
       <Typography.Header>Create new post</Typography.Header>
@@ -9,3 +9,5 @@ export const CreatePostPage = () => {
     </div>
   );
 };
+
+export default CreatePostPage;

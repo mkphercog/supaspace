@@ -1,53 +1,51 @@
-import { Route, Routes } from "react-router";
+import { Suspense, lazy } from "react";
+import { Route, Routes, useLocation } from "react-router";
 import { ToastContainer } from "react-toastify";
-import {
-  AppInfoPage,
-  CommunitiesPage,
-  CommunityPage,
-  CreateCommunityPage,
-  CreatePostPage,
-  HomePage,
-  PostDetailsPage,
-  UserSettingsPage,
-} from "./pages";
 import { AnimatedBackground, Sidebar, Topbar } from "./components/layout";
-import { Overlay, Typography } from "./components/ui";
-import { Loader } from "./components/Loader";
-import { NotFound } from "./components/NotFound";
 import { useAuth } from "./context/AuthContext";
+import { FullPageLoader } from "./components/FullPageLoader";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const CreatePostPage = lazy(() => import("./pages/CreatePostPage"));
+const PostDetailsPage = lazy(() => import("./pages/PostDetailsPage"));
+const CreateCommunityPage = lazy(() => import("./pages/CreateCommunityPage"));
+const CommunitiesPage = lazy(() => import("./pages/CommunitiesPage"));
+const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+const UserSettingsPage = lazy(() => import("./pages/UserSettingsPage"));
+const AppInfoPage = lazy(() => import("./pages/AppInfoPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
+  const location = useLocation();
   const { isDeleteUserWithDataPending } = useAuth();
 
   return (
     <div className="flex overflow-hidden">
       <Sidebar />
 
-      <div className="h-screen overflow-y-auto w-full grow text-gray-100 relative">
+      <div className="h-dvh overflow-y-auto w-full grow text-gray-100 relative">
         <Topbar />
 
         <div className="max-w-7xl mx-auto px-3 py-16">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/create" element={<CreatePostPage />} />
-            <Route path="/post/:id" element={<PostDetailsPage />} />
-            <Route path="/community/create" element={<CreateCommunityPage />} />
-            <Route path="/communities" element={<CommunitiesPage />} />
-            <Route path="/community/:id" element={<CommunityPage />} />
-            <Route path="/settings" element={<UserSettingsPage />} />
-            <Route path="/info" element={<AppInfoPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<FullPageLoader />} key={location.key}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/create" element={<CreatePostPage />} />
+              <Route path="/post/:id" element={<PostDetailsPage />} />
+              <Route
+                path="/community/create"
+                element={<CreateCommunityPage />}
+              />
+              <Route path="/communities" element={<CommunitiesPage />} />
+              <Route path="/community/:id" element={<CommunityPage />} />
+              <Route path="/settings" element={<UserSettingsPage />} />
+              <Route path="/info" element={<AppInfoPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
         </div>
 
         {isDeleteUserWithDataPending && (
-          <Overlay>
-            <Typography.Header as="h2">
-              Your account is deleting, please wait...
-            </Typography.Header>
-
-            <Loader />
-          </Overlay>
+          <FullPageLoader message="Your account is deleting, please wait..." />
         )}
       </div>
 

@@ -20,7 +20,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
               ? "h-auto hover:scale-110"
               : "h-[40px] hover:scale-105"
           }
-              `}
+        `}
       >
         {sidebarStatus !== "hidden" && <Image />}
         {sidebarStatus === "show" && <Name />}

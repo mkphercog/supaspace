@@ -7,7 +7,7 @@ import { LikeButton } from "./LikeButton";
 import { CommentsSection } from "./CommentsSection/CommentsSection";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
-import { NotFound } from "./NotFound";
+import NotFoundPage from "../pages/NotFoundPage";
 import { Card, Typography } from "./ui";
 import PostPlaceholderImage from "../assets/images/postPlaceholder.jpg";
 
@@ -23,7 +23,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
   }
 
   if (error) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
 
   return (

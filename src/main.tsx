@@ -27,3 +27,5 @@ createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </StrictMode>
 );
+
+document.getElementById("boot-loader")?.remove();

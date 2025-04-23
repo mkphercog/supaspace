@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { CommunityDisplay } from "../components/CommunityDisplay";
 
-export const CommunityPage = () => {
+const CommunityPage = () => {
   const { id } = useParams<{ id: string }>();
 
   return (
@@ -10,3 +10,5 @@ export const CommunityPage = () => {
     </div>
   );
 };
+
+export default CommunityPage;

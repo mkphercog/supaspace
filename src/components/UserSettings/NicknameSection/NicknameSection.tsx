@@ -6,12 +6,12 @@ import {
   FormTextInput,
   Typography,
   useBaseForm,
+  RequiredHint,
 } from "../../ui";
 import {
   useDeleteNicknameMutation,
   useSetNicknameMutation,
 } from "../../../api/users";
-import { RequiredHint } from "../../ui/Form/RequiredHint/RequiredHint";
 import { useAuth } from "../../../context/AuthContext";
 import {
   NICKNAME_MAX_LENGTH,
@@ -19,10 +19,11 @@ import {
   getValidationSchema,
 } from "./validationSchema";
 import { DeleteNicknameButton } from "./DeleteNicknameButton";
-import { InfoIcon } from "../../../assets/icons";
-import { ONE_DAY_IN_MS } from "../../../constants";
+import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
+import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 
 export const NicknameSection = () => {
+  const { canChange } = useCanChangeField("nickname");
   const { dbUserData, isUserDataFetching } = useAuth();
   const { setNewUserNickname, isSetNewUserNicknameLoading } =
     useSetNicknameMutation();
@@ -65,12 +66,6 @@ export const NicknameSection = () => {
 
   const newNicknameValue = formParams.watch("userNickname");
 
-  const lastNicknameChangeInMs = dbUserData.nickname_updated_at
-    ? new Date(dbUserData.nickname_updated_at).getTime()
-    : Date.now() - ONE_DAY_IN_MS;
-  const timeAfterLastChange = Date.now() - lastNicknameChangeInMs;
-  const canChangeNickname = timeAfterLastChange >= ONE_DAY_IN_MS;
-
   return (
     <Card
       isLoading={
@@ -102,24 +97,7 @@ export const NicknameSection = () => {
         />
         <RequiredHint />
 
-        <Typography.Text
-          className="flex items-center gap-2 mt-5"
-          size="sm"
-          color="blue"
-        >
-          <InfoIcon className="h-5 w-5" />
-          You can change your nickname only once every 24 hours.
-        </Typography.Text>
-
-        <Typography.Text size="xs" color={canChangeNickname ? "lime" : "blue"}>
-          {`Next change: ${
-            canChangeNickname
-              ? "Available"
-              : new Date(
-                  lastNicknameChangeInMs + ONE_DAY_IN_MS
-                ).toLocaleString()
-          }`}
-        </Typography.Text>
+        <NextChangeAbility dataType="nickname" />
 
         <div className="flex gap-4 justify-end">
           <DeleteNicknameButton deleteUserNickname={deleteUserNickname} />
@@ -129,7 +107,7 @@ export const NicknameSection = () => {
             disabled={
               !!formParams.formState.errors.userNickname ||
               !newNicknameValue ||
-              !canChangeNickname
+              !canChange
             }
             className="self-end"
           >

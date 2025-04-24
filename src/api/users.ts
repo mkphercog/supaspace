@@ -93,6 +93,7 @@ export const insertUserDataToDb = async (
     avatar_url: publicUrl,
     full_name_from_auth_provider: userData.user_metadata.full_name,
     nickname_updated_at: null,
+    avatar_url_updated_at: null,
   };
 
   const { error } = await supabaseClient.from("users").insert(newDbUserData);
@@ -273,6 +274,15 @@ export const useEditUserAvatarMutation = () => {
       if (updateAvatarUrlError) {
         toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(updateAvatarUrlError.message);
+      }
+
+      const { error: avatarUrlUpdatedAtError } = await supabaseClient
+        .from("users")
+        .update({ avatar_url_updated_at: new Date().toISOString() })
+        .eq("id", userId);
+
+      if (avatarUrlUpdatedAtError) {
+        throw new Error(avatarUrlUpdatedAtError.message);
       }
     },
     onSuccess: () => {

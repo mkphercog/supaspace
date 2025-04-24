@@ -16,7 +16,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
   const location = useLocation();
-  const { isDeleteUserWithDataPending } = useAuth();
+  const { isDeleteUserWithDataLoading } = useAuth();
 
   return (
     <div className="flex overflow-hidden">
@@ -44,12 +44,12 @@ const App = () => {
           </Suspense>
         </div>
 
-        {isDeleteUserWithDataPending && (
-          <FullPageLoader message="Your account is deleting, please wait..." />
+        {isDeleteUserWithDataLoading && (
+          <FullPageLoader message="Deleting account, please wait..." />
         )}
       </div>
 
-      <ToastContainer theme="dark" position="top-center" />
+      <ToastContainer theme="dark" position="top-center" newestOnTop={true} />
       <AnimatedBackground />
     </div>
   );

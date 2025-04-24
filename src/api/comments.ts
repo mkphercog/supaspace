@@ -56,9 +56,11 @@ export const useFetchComments = (post_id: CommentFromDbType["post_id"]) => {
 export const useDeleteCommentsMutation = (postId: number) => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (
-      commentId: CommentFromDbType["id"],
-    ) => {
+    mutationFn: async ({
+      commentId,
+    }: {
+      commentId: CommentFromDbType["id"];
+    }) => {
       const { error } = await supabaseClient
         .from("comments")
         .delete()

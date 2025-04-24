@@ -1,72 +1,41 @@
-import { Id, toast } from "react-toastify";
-import { Button, Typography } from "../../ui";
-import { useDeleteNicknameMutation } from "../../../api/users";
+import { Button } from "../../ui";
 import { useAuth } from "../../../context/AuthContext";
+import { FC } from "react";
+import { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { useDeleteWarnToast } from "../../../hooks/useDeleteWarnToast";
 
-const toastCloseReasons = new Map<Id, "user-cancelled">();
+type DeleteNicknameButtonProps = {
+  deleteUserNickname: UseMutateAsyncFunction<
+    void,
+    Error,
+    {
+      userId: string;
+      nickname: string;
+    },
+    unknown
+  >;
+};
 
-export const DeleteNicknameButton = () => {
+export const DeleteNicknameButton: FC<DeleteNicknameButtonProps> = ({
+  deleteUserNickname,
+}) => {
   const { dbUserData } = useAuth();
-  const { deleteUserNickname } = useDeleteNicknameMutation();
+  const { startDeletingProcess } = useDeleteWarnToast({
+    subjectName: "Nickname",
+    realDeleteFn: async () => {
+      if (!dbUserData) return;
+
+      await deleteUserNickname({
+        userId: dbUserData.id,
+        nickname: dbUserData.full_name_from_auth_provider,
+      });
+    },
+  });
 
   if (!dbUserData) return null;
 
-  const realNicknameDelete = async () => {
-    toast.promise(
-      async () =>
-        await deleteUserNickname({
-          userId: dbUserData.id,
-          nickname: dbUserData.full_name_from_auth_provider,
-        }),
-      {
-        pending: `🚀 Deleting nickname: ${dbUserData.nickname}`,
-        success: `Nickname deleted successfully!`,
-        error: `Oops! Something went wrong. Please try again later.`,
-      }
-    );
-  };
-
-  const startDeletingProcess = () => {
-    const toastId = toast.warn(
-      () => (
-        <div className="flex flex-col gap-4">
-          <Typography.Text className="font-bold" color="red">
-            Deleting nickname
-          </Typography.Text>
-          <Typography.Text size="sm">
-            If you want to stop this action, click "Cancel".
-          </Typography.Text>
-          <Button
-            onClick={() => {
-              toastCloseReasons.set(toastId, "user-cancelled");
-              toast.dismiss(toastId);
-            }}
-            variant="primary"
-          >
-            Cancel
-          </Button>
-        </div>
-      ),
-      {
-        onClose: () => {
-          const reason = toastCloseReasons.get(toastId);
-          if (reason === "user-cancelled") {
-            toast.info(
-              <Typography.Text size="sm">
-                Your nickname stays with you! 😊
-              </Typography.Text>
-            );
-          } else {
-            realNicknameDelete();
-          }
-          toastCloseReasons.delete(toastId);
-        },
-      }
-    );
-  };
-
   const isNicknameSameAsFullName =
-    dbUserData?.nickname === dbUserData?.full_name_from_auth_provider;
+    dbUserData.nickname === dbUserData.full_name_from_auth_provider;
 
   return (
     <Button

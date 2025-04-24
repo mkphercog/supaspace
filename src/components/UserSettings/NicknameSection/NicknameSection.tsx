@@ -23,10 +23,11 @@ import { InfoIcon } from "../../../assets/icons";
 import { ONE_DAY_IN_MS } from "../../../constants";
 
 export const NicknameSection = () => {
-  const { dbUserData } = useAuth();
+  const { dbUserData, isUserDataFetching } = useAuth();
   const { setNewUserNickname, isSetNewUserNicknameLoading } =
     useSetNicknameMutation();
-  const { isDeleteNicknameLoading } = useDeleteNicknameMutation();
+  const { deleteUserNickname, isDeleteNicknameLoading } =
+    useDeleteNicknameMutation();
 
   const validationSchema = getValidationSchema(
     dbUserData?.full_name_from_auth_provider || "",
@@ -71,7 +72,13 @@ export const NicknameSection = () => {
   const canChangeNickname = timeAfterLastChange >= ONE_DAY_IN_MS;
 
   return (
-    <Card isLoading={isSetNewUserNicknameLoading || isDeleteNicknameLoading}>
+    <Card
+      isLoading={
+        isSetNewUserNicknameLoading ||
+        isDeleteNicknameLoading ||
+        isUserDataFetching
+      }
+    >
       <Typography.Header as="h4" color="gray">
         Set nickname
       </Typography.Header>
@@ -115,7 +122,7 @@ export const NicknameSection = () => {
         </Typography.Text>
 
         <div className="flex gap-4 justify-end">
-          <DeleteNicknameButton />
+          <DeleteNicknameButton deleteUserNickname={deleteUserNickname} />
 
           <Button
             type="submit"

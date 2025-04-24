@@ -6,6 +6,7 @@ import { QUERY_KEYS } from "./queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { NICKNAME_MAX_LENGTH } from "../components/UserSettings/NicknameSection/validationSchema";
+import { AuthContextType } from "../context/AuthContext/AuthContext";
 
 type FetchUserDataErrorsType =
   | "NO_LOGGED_USER"
@@ -13,9 +14,13 @@ type FetchUserDataErrorsType =
   | "USER_IN_AUTH_BUT_NO_IN_USERS_TABLE";
 
 export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
-  return useQuery<DbUserDataType | FetchUserDataErrorsType>({
+  const { data, isFetching } = useQuery<
+    DbUserDataType | FetchUserDataErrorsType
+  >({
     queryFn: async () => {
-      if (!userId) return "NO_LOGGED_USER";
+      if (!userId) {
+        return "NO_LOGGED_USER";
+      }
 
       const { data: userAuth, error: authUserError } = await supabaseClient.auth
         .getUser();
@@ -45,12 +50,18 @@ export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
     },
     queryKey: [QUERY_KEYS.me, userId],
     retry: false,
+    enabled: !!userId,
   });
+
+  return {
+    userData: data,
+    isUserDataFetching: isFetching,
+  };
 };
 
 export const insertUserDataToDb = async (
   userData: User | null,
-  setDbUserData: Dispatch<React.SetStateAction<DbUserDataType | null>>,
+  setDbUserData: Dispatch<React.SetStateAction<AuthContextType["dbUserData"]>>,
   signOut: () => void,
 ) => {
   if (!userData) throw new Error("---- No user data. ----");
@@ -95,10 +106,11 @@ export const insertUserDataToDb = async (
 export const useDeleteUserWithData = (
   { onSuccess }: { onSuccess: () => void },
 ) => {
-  return useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async () => {
       const session = await supabaseClient.auth.getSession();
-      await supabaseClient.functions.invoke(
+
+      const { error } = await supabaseClient.functions.invoke(
         "delete-user-with-data",
         {
           headers: {
@@ -106,23 +118,29 @@ export const useDeleteUserWithData = (
           },
         },
       );
-    },
-    onError: () => {
-      alert("An error occurred while deleting your account and user data.");
+
+      if (error) throw new Error();
     },
     onSuccess,
   });
+
+  return {
+    deleteUserWithData: mutateAsync,
+    isDeleteUserWithDataLoading: isPending,
+  };
 };
 
 export const useSetNicknameMutation = () => {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (data: { userId: string; nickname: string }) => {
+    mutationFn: async (
+      { userId, nickname }: { userId: string; nickname: string },
+    ) => {
       const { error } = await supabaseClient
         .from("users")
-        .update({ nickname: data.nickname, nickname_updated_at: new Date() })
-        .eq("id", data.userId);
+        .update({ nickname })
+        .eq("id", userId);
 
       if (error?.code === "23505") {
         toast.error("This nickname is already taken.");
@@ -149,11 +167,13 @@ export const useSetNicknameMutation = () => {
 export const useDeleteNicknameMutation = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (data: { userId: string; nickname: string }) => {
+    mutationFn: async (
+      { userId, nickname }: { userId: string; nickname: string },
+    ) => {
       const { error } = await supabaseClient
         .from("users")
-        .update({ nickname: data.nickname })
-        .eq("id", data.userId);
+        .update({ nickname })
+        .eq("id", userId);
 
       if (error) throw new Error();
     },

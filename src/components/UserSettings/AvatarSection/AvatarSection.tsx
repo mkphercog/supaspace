@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 const FILE_MAX_SIZE_IN_kB = 200;
 
 export const AvatarSection = () => {
-  const { dbUserData } = useAuth();
+  const { dbUserData, isUserDataFetching } = useAuth();
   const avatarEditorCardRef = useClickOutside<HTMLElement>(() => {
     clearAvatarChangeState();
   });
@@ -113,7 +113,13 @@ export const AvatarSection = () => {
   const isCorrectFileSize = newAvatartFileSize > FILE_MAX_SIZE_IN_kB;
 
   return (
-    <Card isLoading={isEditUserAvatarLoading || isDeleteUserAvatarLoading}>
+    <Card
+      isLoading={
+        isEditUserAvatarLoading ||
+        isDeleteUserAvatarLoading ||
+        isUserDataFetching
+      }
+    >
       <Typography.Header as="h4" color="gray">
         Avatar
       </Typography.Header>

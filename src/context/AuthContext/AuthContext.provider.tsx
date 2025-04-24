@@ -8,31 +8,34 @@ import {
   useDeleteUserWithData,
   useFetchUserData,
 } from "../../api/users";
-import { DbUserDataType } from "../../types/users";
 import { QUERY_KEYS } from "../../api/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [dbUserData, setDbUserData] = useState<DbUserDataType | null>(null);
+  const [dbUserData, setDbUserData] =
+    useState<AuthContextType["dbUserData"]>(null);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const { data: loggedUserData } = useFetchUserData(currentSession?.user.id);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { userData, isUserDataFetching } = useFetchUserData(
+    currentSession?.user.id
+  );
 
-  const { mutate: deleteUserWithData, isPending: isDeleteUserWithDataPending } =
+  const { deleteUserWithData, isDeleteUserWithDataLoading } =
     useDeleteUserWithData({
       onSuccess: () => {
         signOut();
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
-        alert("Your account and data deleted successfully.");
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.posts],
+        });
       },
     });
 
   useEffect(() => {
-    switch (loggedUserData) {
+    switch (userData) {
       case "NO_LOGGED_USER":
       case undefined:
         break;
@@ -50,12 +53,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         break;
 
       default:
-        if (dbUserData === loggedUserData) return;
-        setDbUserData(loggedUserData);
+        if (JSON.stringify(dbUserData) === JSON.stringify(userData)) return;
+        setDbUserData(userData);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSession, loggedUserData]);
+  }, [currentSession, userData]);
 
   useEffect(() => {
     const {
@@ -104,23 +107,24 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const signOut = async () => {
+    setDbUserData(null);
     if (currentSession) {
       await supabaseClient.auth.signOut();
     }
     setCurrentSession(null);
-    setDbUserData(null);
-    setIsAdmin(false);
     navigate({ pathname: "/" });
+    setIsAdmin(false);
   };
 
   const value: AuthContextType = {
     dbUserData,
     currentSession,
     isAdmin,
+    isDeleteUserWithDataLoading,
+    isUserDataFetching,
     signInWithGoogle,
     signOut,
     deleteUserWithData,
-    isDeleteUserWithDataPending,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

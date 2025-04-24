@@ -11,14 +11,12 @@ import { ChevronUpIcon } from "../../assets/icons";
 import { UserAvatar } from "../UserAvatar";
 import { Button, Typography } from "../ui";
 import MDEditor from "@uiw/react-md-editor";
-import { Id, toast } from "react-toastify";
 import { getReplyStyleColor } from "./comments.utils";
+import { useDeleteWarnToast } from "../../hooks/useDeleteWarnToast";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;
 };
-
-const toastCloseReasons = new Map<Id, "user-cancelled">();
 
 export const CommentItem: FC<Props> = ({ post_id, comment }) => {
   const [showReply, setShowReply] = useState(false);
@@ -26,6 +24,18 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
   const [replyText, setReplyText] = useState("");
   const queryClient = useQueryClient();
   const { dbUserData } = useAuth();
+
+  const { deleteComment } = useDeleteCommentsMutation(post_id);
+  const { startDeletingProcess } = useDeleteWarnToast({
+    subjectName: "Comment",
+    realDeleteFn: async () => {
+      if (!dbUserData) return;
+
+      await deleteComment({
+        commentId: comment.id,
+      });
+    },
+  });
 
   const {
     mutate: createReplyCommentMutation,
@@ -43,8 +53,6 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
     },
   });
 
-  const { deleteComment } = useDeleteCommentsMutation(post_id);
-
   const handleReplySubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -54,53 +62,6 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
       content: replyText,
       parent_comment_id: comment.id,
     });
-  };
-
-  const realCommentDelete = async () => {
-    toast.promise(async () => await deleteComment(comment.id), {
-      pending: `🚀 Deleting comment`,
-      success: `Comment deleted successfully!`,
-      error: `Oops! Something went wrong. Please try again later.`,
-    });
-  };
-
-  const startDeletingProcess = () => {
-    const toastId = toast.warn(
-      () => (
-        <div className="flex flex-col gap-4">
-          <Typography.Text className="font-bold" color="red">
-            Deleting comment
-          </Typography.Text>
-          <Typography.Text size="sm">
-            If you want to stop this action, click "Cancel".
-          </Typography.Text>
-          <Button
-            onClick={() => {
-              toastCloseReasons.set(toastId, "user-cancelled");
-              toast.dismiss(toastId);
-            }}
-            variant="primary"
-          >
-            Cancel
-          </Button>
-        </div>
-      ),
-      {
-        onClose: () => {
-          const reason = toastCloseReasons.get(toastId);
-          if (reason === "user-cancelled") {
-            toast.info(
-              <Typography.Text size="sm">
-                Your comment stays with you! 😊
-              </Typography.Text>
-            );
-          } else {
-            realCommentDelete();
-          }
-          toastCloseReasons.delete(toastId);
-        },
-      }
-    );
   };
 
   const isParentComment = comment.parent_comment_id === null;

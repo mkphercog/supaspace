@@ -3,6 +3,7 @@ import { PostListItemFromDbType } from "../../types/post.type";
 import { Card, Typography } from "../ui";
 import PostPlaceholderImage from "../../assets/images/postPlaceholder.jpg";
 import { PostStats } from "./PostStats";
+import { ROUTES } from "../../routes/routes";
 
 type PostItemProps = {
   post: PostListItemFromDbType;
@@ -21,7 +22,7 @@ export const PostItem: FC<PostItemProps> = ({
   },
 }) => {
   return (
-    <Typography.Link to={`/post/${id}`}>
+    <Typography.Link to={ROUTES.post.details(id)}>
       <Card withHover>
         <div className="flex flex-col gap-3 w-64 sm:w-72 md:w-80">
           <Typography.Text size="xs" className="text-right font-normal">

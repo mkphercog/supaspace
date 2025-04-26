@@ -3,10 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useCreateNewPost } from "../api/posts";
 import { useFetchCommunities } from "../api/community";
 import { Button, Card, Typography } from "./ui";
-import MDEditor, { RefMDEditor, commands } from "@uiw/react-md-editor";
-import NotFoundPage from "../pages/NotFoundPage";
-
-const COMMANDS_TO_HIDE = ["image", "comment"];
+import MDEditor, { RefMDEditor } from "@uiw/react-md-editor";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -16,15 +13,11 @@ export const CreatePost = () => {
     null
   );
   const [communityId, setCommunityId] = useState<number | null>(null);
-  const { dbUserData, currentSession } = useAuth();
+  const { dbUserData } = useAuth();
 
   const { data: communities } = useFetchCommunities();
   const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
   const MDEditorRef = useRef<RefMDEditor>(null);
-
-  if (!currentSession) {
-    return <NotFoundPage />;
-  }
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -107,11 +100,6 @@ export const CreatePost = () => {
               name: "postContent",
             }}
             ref={MDEditorRef}
-            commands={commands
-              .getCommands()
-              .filter(
-                (command) => !COMMANDS_TO_HIDE.includes(command.name || "")
-              )}
             value={content}
             onChange={setContent}
             className="transition-colors duration-300 border border-gray-500 hover:border hover:border-purple-600"

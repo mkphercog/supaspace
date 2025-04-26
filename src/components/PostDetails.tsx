@@ -7,9 +7,10 @@ import { LikeButton } from "./LikeButton";
 import { CommentsSection } from "./CommentsSection/CommentsSection";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
-import NotFoundPage from "../pages/NotFoundPage";
+import { NotFoundPage } from "../pages/NotFoundPage";
 import { Card, Typography } from "./ui";
 import PostPlaceholderImage from "../assets/images/postPlaceholder.jpg";
+import { ROUTES } from "../routes/routes";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];
@@ -54,7 +55,10 @@ export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
       </div>
 
       {data?.community ? (
-        <Typography.Link to={`/community/${data.community.id}`} color="lime">
+        <Typography.Link
+          to={ROUTES.community.details(data.community.id)}
+          color="lime"
+        >
           #{data.community.name}
         </Typography.Link>
       ) : (

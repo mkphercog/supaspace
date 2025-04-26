@@ -2,12 +2,11 @@ import { FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCreateNewCommunity } from "../api/community";
 import { Button, Card, Typography } from "./ui";
-import NotFoundPage from "../pages/NotFoundPage";
 
 export const CreateCommunity = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const { dbUserData, currentSession } = useAuth();
+  const { dbUserData } = useAuth();
 
   const { mutate, isPending, isError } = useCreateNewCommunity();
 
@@ -15,10 +14,6 @@ export const CreateCommunity = () => {
     e.preventDefault();
     mutate({ name, description });
   };
-
-  if (!currentSession) {
-    return <NotFoundPage />;
-  }
 
   return (
     <Card className="max-w-2xl mx-auto">

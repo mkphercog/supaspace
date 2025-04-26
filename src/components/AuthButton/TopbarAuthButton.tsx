@@ -4,6 +4,8 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 import { Button, Typography } from "../ui";
 import { SignInIcon, SignOutIcon, SettingsIcon } from "../../assets/icons";
 import { UserAvatar } from "../UserAvatar";
+import { useNavigate } from "react-router";
+import { ROUTES } from "../../routes/routes";
 
 export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,
@@ -12,10 +14,10 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   toggleAvatarMenu,
   closeAvatarMenu,
   goToSettings,
-  signInWithGoogle,
   signOut,
 }) => {
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
+  const navigate = useNavigate();
 
   if (!dbUserData) {
     return (
@@ -23,7 +25,7 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
         <Button
           className="flex gap-2"
           variant="ghost"
-          onClick={signInWithGoogle}
+          onClick={() => navigate(ROUTES.auth.signIn())}
         >
           <SignInIcon />
           <Typography.Text

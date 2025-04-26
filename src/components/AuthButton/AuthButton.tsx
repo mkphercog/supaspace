@@ -5,6 +5,7 @@ import { useSidebar } from "../../context/SidebarContext";
 import { AuthButtonsProps } from "./AuthButton.types";
 import { SidebarAuthButton } from "./SidebarAuthButton";
 import { TopbarAuthButton } from "./TopbarAuthButton";
+import { ROUTES } from "../../routes/routes";
 
 type AuthButtonProps = {
   isInSidebar?: boolean;
@@ -29,7 +30,7 @@ export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
       setStatusOfSidebar("iconsToShow");
     }
     closeAvatarMenu();
-    navigate({ pathname: "/settings" });
+    navigate(ROUTES.settings());
   };
 
   const props: AuthButtonsProps = {

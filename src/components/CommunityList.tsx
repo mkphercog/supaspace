@@ -1,4 +1,5 @@
 import { useFetchCommunities } from "../api/community";
+import { ROUTES } from "../routes/routes";
 import { Loader } from "./Loader";
 import { Card, Typography } from "./ui";
 
@@ -24,7 +25,10 @@ export const CommunityList = () => {
   return (
     <div className="max-w-3xl mx-auto flex flex-col gap-y-6">
       {data?.map((community) => (
-        <Typography.Link key={community.id} to={`/community/${community.id}`}>
+        <Typography.Link
+          key={community.id}
+          to={ROUTES.community.details(community.id)}
+        >
           <Card withHover>
             <Typography.Header as="h4" color="lime" className="mb-0!">
               #{community.name}

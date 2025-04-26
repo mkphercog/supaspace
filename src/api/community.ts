@@ -4,6 +4,7 @@ import { CommunityFromDbType, NewCommunityType } from "../types/community.type";
 import { PostListItemFromDbType } from "../types/post.type";
 import { QUERY_KEYS } from "./queryKeys";
 import { useNavigate } from "react-router";
+import { ROUTES } from "../routes/routes";
 
 export const useCreateNewCommunity = () => {
   const queryClient = useQueryClient();
@@ -22,7 +23,7 @@ export const useCreateNewCommunity = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.communities] });
-      navigate("/communities");
+      navigate(ROUTES.community.list());
     },
   });
 };
@@ -54,7 +55,9 @@ export const useFetchCommunityPosts = (
         { comm_id: community_id },
       );
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        throw new Error(error.message);
+      }
 
       return data as PostListItemFromDbType[];
     },

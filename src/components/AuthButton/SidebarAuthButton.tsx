@@ -4,6 +4,8 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 import { SidebarItem } from "../layout/Sidebar/SidebarItem";
 import { SignInIcon, SignOutIcon, SettingsIcon } from "../../assets/icons";
 import { UserAvatar } from "../UserAvatar";
+import { useNavigate } from "react-router";
+import { ROUTES } from "../../routes/routes";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,
@@ -12,10 +14,10 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   toggleAvatarMenu,
   closeAvatarMenu,
   goToSettings,
-  signInWithGoogle,
   signOut,
 }) => {
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
+  const navigate = useNavigate();
 
   if (!dbUserData) {
     return (
@@ -24,7 +26,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
         text="Sign in"
         icon={<SignInIcon />}
         isVisible={true}
-        onClick={signInWithGoogle}
+        onClick={() => navigate(ROUTES.auth.signIn())}
       />
     );
   }

@@ -9,6 +9,7 @@ import {
 import { QUERY_KEYS } from "./queryKeys";
 import { useNavigate } from "react-router";
 import { DbUserDataType } from "../types/users";
+import { ROUTES } from "../routes/routes";
 
 export const useCreateNewPost = (user_id?: DbUserDataType["id"]) => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export const useCreateNewPost = (user_id?: DbUserDataType["id"]) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
-      navigate("/");
+      navigate(ROUTES.root());
     },
   });
 };

@@ -9,6 +9,7 @@ export type AuthContextType = {
   isAdmin: boolean | null;
   isDeleteUserWithDataLoading: boolean;
   isUserDataFetching: boolean;
+  isAuthLoading: boolean;
   signInWithGoogle: () => void;
   signOut: () => void;
   deleteUserWithData: UseMutateAsyncFunction<void, Error, void, unknown>;

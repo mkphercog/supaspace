@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { PostDetails } from "../components/PostDetails";
 
-const PostDetailsPage = () => {
+export const PostDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
 
   return (
@@ -10,5 +10,3 @@ const PostDetailsPage = () => {
     </div>
   );
 };
-
-export default PostDetailsPage;

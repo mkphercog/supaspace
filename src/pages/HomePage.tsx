@@ -1,7 +1,7 @@
 import { PostList } from "../components/PostList";
 import { Typography } from "../components/ui";
 
-const HomePage = () => {
+export const HomePage = () => {
   return (
     <div>
       <Typography.Header>Recent posts</Typography.Header>
@@ -9,5 +9,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;

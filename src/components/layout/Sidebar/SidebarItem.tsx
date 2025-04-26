@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Button, Typography } from "../../ui";
 import { useSidebar } from "../../../context/SidebarContext";
+import { ROUTES } from "../../../routes/routes";
 
 export type SidebarItemBaseProps = {
   text: ReactNode;
@@ -66,7 +67,10 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       onClick={onClick}
       className={`${isSidebarOpen ? "w-full" : "w-auto"} list-none!`}
     >
-      <Typography.Link to={restProps.path || "/"} className="font-semibold">
+      <Typography.Link
+        to={restProps.path || ROUTES.root()}
+        className="font-semibold"
+      >
         {({ isActive }) => (
           <div
             className={`

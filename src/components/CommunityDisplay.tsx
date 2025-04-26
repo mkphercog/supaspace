@@ -3,6 +3,7 @@ import { CommunityFromDbType } from "../types/community.type";
 import { useFetchCommunityPosts } from "../api/community";
 import { Loader } from "./Loader";
 import { Typography } from "./ui";
+import { NotFoundPage } from "../pages/NotFoundPage";
 
 type Props = {
   community_id: CommunityFromDbType["id"];
@@ -15,12 +16,7 @@ export const CommunityDisplay = ({ community_id }: Props) => {
     return <Loader />;
   }
 
-  if (error)
-    return (
-      <div className="text-center text-red-500 py-4">
-        Error: {error.message}
-      </div>
-    );
+  if (error || !data?.length) return <NotFoundPage />;
 
   return (
     <div>

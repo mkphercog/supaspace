@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useSidebar } from "../context/SidebarContext/SidebarContext.hook";
 import { Typography } from "./ui";
 import { LogoIcon } from "../assets/icons";
+import { ROUTES } from "../routes/routes";
 
 type LogoProps = {
   isInSidebar?: boolean;
@@ -13,7 +14,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
   if (isInSidebar) {
     return (
       <Typography.Link
-        to="/"
+        to={ROUTES.root()}
         className={`self-start flex items-center gap-2
           ${
             sidebarStatus.includes("icon")
@@ -30,7 +31,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
 
   return (
     <Typography.Link
-      to="/"
+      to={ROUTES.root()}
       className="px-3 py-1 h-full flex items-center gap-2 hover:scale-105"
     >
       {sidebarStatus === "hidden" && <Image />}

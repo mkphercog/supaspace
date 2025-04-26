@@ -5,6 +5,7 @@ import {
   InfoIcon,
   PostIcon,
 } from "../../../assets/icons";
+import { ROUTES } from "../../../routes/routes";
 import { useAuth } from "../../../context/AuthContext";
 import { useSidebar } from "../../../context/SidebarContext";
 import {
@@ -12,6 +13,7 @@ import {
   SidebarItemBaseProps,
   SidebarLinkItemProps,
 } from "./SidebarItem";
+import { useScreenSize } from "../../../hooks/useScreenSize";
 
 type SidebarItemType = Omit<SidebarItemBaseProps, "isSidebarOpen"> & {
   path: SidebarLinkItemProps["path"];
@@ -19,10 +21,11 @@ type SidebarItemType = Omit<SidebarItemBaseProps, "isSidebarOpen"> & {
 
 export const SidebarNavItemsList = () => {
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
+  const { isMdUp } = useScreenSize();
   const { currentSession, isAdmin } = useAuth();
-
+  console.log(isMdUp);
   const setIconsToShowStatus = () => {
-    if (sidebarStatus === "show") {
+    if (sidebarStatus === "show" && !isMdUp) {
       setStatusOfSidebar("iconsToShow");
     }
   };
@@ -30,35 +33,35 @@ export const SidebarNavItemsList = () => {
   const SIDEBAR_ITEMS: SidebarItemType[] = [
     {
       text: "Dashboard",
-      path: "/",
+      path: ROUTES.root(),
       icon: <DashboardIcon />,
       isVisible: true,
       onClick: setIconsToShowStatus,
     },
     {
       text: "New post",
-      path: "/create",
+      path: ROUTES.post.create(),
       icon: <PostIcon />,
       isVisible: !!currentSession,
       onClick: setIconsToShowStatus,
     },
     {
       text: "Communities",
-      path: "/communities",
+      path: ROUTES.community.list(),
       icon: <CommunityIcon />,
       isVisible: true,
       onClick: setIconsToShowStatus,
     },
     {
       text: "New community",
-      path: "/community/create",
+      path: ROUTES.community.create(),
       icon: <CreateCommunityIcon />,
       isVisible: !!isAdmin,
       onClick: setIconsToShowStatus,
     },
     {
       text: "Info",
-      path: "/info",
+      path: ROUTES.appInfo(),
       icon: <InfoIcon />,
       isVisible: true,
       onClick: setIconsToShowStatus,

@@ -10,10 +10,12 @@ import {
 } from "../../api/users";
 import { QUERY_KEYS } from "../../api/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
+import { ROUTES } from "../../routes/routes";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [dbUserData, setDbUserData] =
     useState<AuthContextType["dbUserData"]>(null);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
@@ -57,6 +59,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         setDbUserData(userData);
         break;
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSession, userData]);
 
@@ -64,6 +67,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      if (!session) {
+        setIsAuthLoading(false);
+      } else {
+        setIsAuthLoading(true);
+      }
+
       if (event === "SIGNED_OUT") {
         console.info("---- 👋🏼 User signed out correctly. ----");
         signOut();
@@ -86,6 +95,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         setCurrentSession(newSession);
         setIsAdmin(newSession.user.id === ADMIN_ID);
         console.info("---- ✅ Refreshed session - correct. ----");
+        setIsAuthLoading(false);
       }
     });
 
@@ -112,7 +122,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       await supabaseClient.auth.signOut();
     }
     setCurrentSession(null);
-    navigate({ pathname: "/" });
+    navigate(ROUTES.root());
     setIsAdmin(false);
   };
 
@@ -122,6 +132,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     isAdmin,
     isDeleteUserWithDataLoading,
     isUserDataFetching,
+    isAuthLoading,
     signInWithGoogle,
     signOut,
     deleteUserWithData,

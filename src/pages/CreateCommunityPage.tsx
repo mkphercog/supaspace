@@ -1,7 +1,7 @@
 import { CreateCommunity } from "../components/CreateCommunity";
 import { Typography } from "../components/ui";
 
-const CreateCommunityPage = () => {
+export const CreateCommunityPage = () => {
   return (
     <div>
       <Typography.Header>Create new community</Typography.Header>
@@ -9,5 +9,3 @@ const CreateCommunityPage = () => {
     </div>
   );
 };
-
-export default CreateCommunityPage;

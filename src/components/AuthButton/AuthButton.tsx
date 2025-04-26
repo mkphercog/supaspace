@@ -6,6 +6,7 @@ import { AuthButtonsProps } from "./AuthButton.types";
 import { SidebarAuthButton } from "./SidebarAuthButton";
 import { TopbarAuthButton } from "./TopbarAuthButton";
 import { ROUTES } from "../../routes/routes";
+import { useScreenSize } from "../../hooks/useScreenSize";
 
 type AuthButtonProps = {
   isInSidebar?: boolean;
@@ -15,6 +16,7 @@ export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
   const { dbUserData, signInWithGoogle, signOut } = useAuth();
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
+  const { isMdUp } = useScreenSize();
   const navigate = useNavigate();
 
   const closeAvatarMenu = () => {
@@ -26,7 +28,7 @@ export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
   };
 
   const goToSettings = () => {
-    if (sidebarStatus === "show") {
+    if (sidebarStatus === "show" && !isMdUp) {
       setStatusOfSidebar("iconsToShow");
     }
     closeAvatarMenu();

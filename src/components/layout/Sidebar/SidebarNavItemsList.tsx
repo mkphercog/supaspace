@@ -23,7 +23,7 @@ export const SidebarNavItemsList = () => {
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
   const { isMdUp } = useScreenSize();
   const { currentSession, isAdmin } = useAuth();
-  console.log(isMdUp);
+
   const setIconsToShowStatus = () => {
     if (sidebarStatus === "show" && !isMdUp) {
       setStatusOfSidebar("iconsToShow");

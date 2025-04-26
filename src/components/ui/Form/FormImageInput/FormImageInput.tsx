@@ -37,6 +37,7 @@ export const FormImageInput: FC<FormImageInputProps> = ({
         <input
           id={name}
           type="file"
+          accept="image/*"
           className={`
             w-full text-sm rounded-md p-2 block         
             border border-gray-500 hover:border-purple-600 focus:outline-none

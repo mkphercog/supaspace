@@ -95,6 +95,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         setCurrentSession(newSession);
         setIsAdmin(newSession.user.id === ADMIN_ID);
         console.info("---- ✅ Refreshed session - correct. ----");
+      } else {
         setIsAuthLoading(false);
       }
     });

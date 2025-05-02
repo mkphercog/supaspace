@@ -22,7 +22,7 @@ type SidebarItemType = Omit<SidebarItemBaseProps, "isSidebarOpen"> & {
 export const SidebarNavItemsList = () => {
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
   const { isMdUp } = useScreenSize();
-  const { currentSession, isAdmin } = useAuth();
+  const { currentSession } = useAuth();
 
   const setIconsToShowStatus = () => {
     if (sidebarStatus === "show" && !isMdUp) {
@@ -56,7 +56,7 @@ export const SidebarNavItemsList = () => {
       text: "New community",
       path: ROUTES.community.create(),
       icon: <CreateCommunityIcon />,
-      isVisible: !!isAdmin,
+      isVisible: !!currentSession,
       onClick: setIconsToShowStatus,
     },
     {

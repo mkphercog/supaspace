@@ -4,7 +4,7 @@ import { Typography } from "../components/ui";
 export const CreatePostPage = () => {
   return (
     <div>
-      <Typography.Header>Create new post</Typography.Header>
+      <Typography.Header>Create post</Typography.Header>
       <CreatePost />
     </div>
   );

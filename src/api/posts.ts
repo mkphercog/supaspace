@@ -55,9 +55,11 @@ export const useFetchPostById = (post_id: PostFromDbType["id"]) => {
     queryFn: async () => {
       const { data, error } = await supabaseClient
         .from("posts")
-        .select(
-          "*, community:communities(id, name), author:users(id, nickname, avatar_url)",
-        )
+        .select(`
+          *,
+          community:communities(id, name),
+          author:users(id, nickname, avatar_url)
+        `)
         .eq("id", post_id)
         .single();
 

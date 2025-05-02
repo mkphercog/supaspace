@@ -15,7 +15,7 @@ export const CreatePost = () => {
   const [communityId, setCommunityId] = useState<number | null>(null);
   const { dbUserData } = useAuth();
 
-  const { data: communities } = useFetchCommunities();
+  const { communityList } = useFetchCommunities();
   const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
   const MDEditorRef = useRef<RefMDEditor>(null);
 
@@ -123,7 +123,7 @@ export const CreatePost = () => {
             onChange={handleCommunityChange}
           >
             <option value=""> -- Choose a community -- </option>
-            {communities?.map((community) => (
+            {communityList?.map((community) => (
               <option key={community.id} value={community.id}>
                 {community.name}
               </option>
@@ -157,7 +157,7 @@ export const CreatePost = () => {
         </div>
 
         <Button className="self-end" type="submit" disabled={isSubmitDisabled}>
-          {isPending ? "Creating..." : "Create Post"}
+          {isPending ? "Creating..." : "Create post"}
         </Button>
 
         {isError && (

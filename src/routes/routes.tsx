@@ -68,7 +68,7 @@ const communityRoutes: RouteObject[] = [
       );
 
       const Component = () => (
-        <ProtectedRoute mustBeAdmin>
+        <ProtectedRoute>
           <CreateCommunityPage />
         </ProtectedRoute>
       );

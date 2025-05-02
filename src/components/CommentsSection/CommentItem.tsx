@@ -105,17 +105,15 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           {dbUserData && <hr className="text-gray-500" />}
           <div className="self-end">
             {dbUserData && (
-              <>
-                <Button
-                  onClick={() => setShowReply((prev) => !prev)}
-                  variant="ghost"
-                  className="col-span-2 justify-self-end text-blue-500!"
-                >
-                  <Typography.Text size="sm" className="text-inherit">
-                    {showReply ? "Cancel" : "Reply"}
-                  </Typography.Text>
-                </Button>
-              </>
+              <Button
+                onClick={() => setShowReply((prev) => !prev)}
+                variant="ghost"
+                className="col-span-2 justify-self-end text-blue-500!"
+              >
+                <Typography.Text size="sm" className="text-inherit">
+                  {showReply ? "Cancel" : "Reply"}
+                </Typography.Text>
+              </Button>
             )}
 
             {dbUserData?.id === comment.user_id && (

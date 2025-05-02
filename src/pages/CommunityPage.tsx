@@ -4,9 +4,5 @@ import { CommunityDisplay } from "../components/CommunityDisplay";
 export const CommunityPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  return (
-    <div>
-      <CommunityDisplay community_id={Number(id)} />
-    </div>
-  );
+  return <CommunityDisplay id={Number(id)} />;
 };

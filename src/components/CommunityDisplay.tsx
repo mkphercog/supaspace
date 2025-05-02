@@ -1,16 +1,16 @@
 import { PostItem } from "./PostItem";
-import { CommunityFromDbType } from "../types/community.type";
+import { Community } from "../types/community.type";
 import { useFetchCommunityPosts } from "../api/community";
 import { Loader } from "./Loader";
 import { Typography } from "./ui";
 import { NotFoundPage } from "../pages/NotFoundPage";
 
 type Props = {
-  community_id: CommunityFromDbType["id"];
+  id: Community["id"];
 };
 
-export const CommunityDisplay = ({ community_id }: Props) => {
-  const { data, error, isLoading } = useFetchCommunityPosts(community_id);
+export const CommunityDisplay = ({ id }: Props) => {
+  const { data, error, isLoading } = useFetchCommunityPosts(id);
 
   if (isLoading) {
     return <Loader />;

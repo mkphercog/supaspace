@@ -1,10 +1,10 @@
-import { Button, Card, Typography } from "src/components/ui";
 import { FILE_MAX_SIZE_IN_kB } from "src/constants";
+import { UserAvatar } from "src/shared/components";
+import { Button, Card, Typography } from "src/shared/UI";
 
 import { AvatarCropper } from "./AvatarCropper";
 import { DeleteAvatarButton } from "./DeleteAvatarButton";
 import { useAvatarSection } from "./useAvatarSection";
-import { UserAvatar } from "../../UserAvatar";
 import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
 
 export const AvatarSection = () => {

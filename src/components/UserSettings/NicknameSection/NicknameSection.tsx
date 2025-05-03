@@ -4,6 +4,8 @@ import {
   useDeleteNicknameMutation,
   useSetNicknameMutation,
 } from "src/api/users";
+import { NICKNAME_MAX_LENGTH } from "src/constants";
+import { useAuth } from "src/context";
 import {
   BaseForm,
   Button,
@@ -12,9 +14,7 @@ import {
   Typography,
   useBaseForm,
   RequiredHint,
-} from "src/components/ui";
-import { NICKNAME_MAX_LENGTH } from "src/constants";
-import { useAuth } from "src/context";
+} from "src/shared/UI";
 
 import { DeleteNicknameButton } from "./DeleteNicknameButton";
 import { NewNicknameFormType, getValidationSchema } from "./validationSchema";

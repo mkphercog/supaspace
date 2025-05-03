@@ -4,11 +4,9 @@ import { FC } from "react";
 import { QUERY_KEYS } from "src/api";
 import { useCreateVote, useFetchVotes } from "src/api/votes";
 import { LikeIcon, DislikeIcon } from "src/assets/icons";
-import { Button, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
+import { Loader, Button, Typography } from "src/shared/UI";
 import { PostFromDbType } from "src/types";
-
-import { Loader } from "./Loader";
 
 type Props = {
   post_id: PostFromDbType["id"];

@@ -1,4 +1,4 @@
-import { Typography } from "src/components/ui";
+import { Typography } from "src/shared/UI";
 
 import { UserSettings } from "../components/UserSettings/UserSettings";
 

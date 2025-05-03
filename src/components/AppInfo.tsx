@@ -1,9 +1,7 @@
 import MDEditor from "@uiw/react-md-editor";
 import { useEffect, useState } from "react";
 
-import { Card } from "src/components/ui";
-
-import { Loader } from "./Loader";
+import { Card, Loader } from "src/shared/UI";
 
 export const AppInfo = () => {
   const [appInfoText, setAppInfoText] = useState<string | null>(null);

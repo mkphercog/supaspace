@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { InfoIcon } from "src/assets/icons";
-import { Typography } from "src/components/ui";
+import { Typography } from "src/shared/UI";
 
 import { UserDataType, useCanChangeField } from "./useNextChangeAbility";
 

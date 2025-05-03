@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, Ref } from "react";
 
-import { Loader } from "../Loader";
+import { Loader } from "src/shared/UI";
 
 type CardProps = {
   ref?: Ref<HTMLElement>;

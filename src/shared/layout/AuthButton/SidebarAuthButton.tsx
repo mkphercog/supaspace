@@ -2,12 +2,12 @@ import { FC } from "react";
 import { useNavigate } from "react-router";
 
 import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
+import { UserAvatar } from "src/shared/components/UserAvatar";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
 
 import { AuthButtonsProps } from "./AuthButton.types";
-import { SidebarItem } from "../layout/Sidebar/SidebarItem";
-import { UserAvatar } from "../UserAvatar";
+import { SidebarItem } from "../Sidebar/SidebarItem";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,

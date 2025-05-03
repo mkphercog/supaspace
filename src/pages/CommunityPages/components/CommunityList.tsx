@@ -1,6 +1,5 @@
 import { useFetchCommunities } from "src/api/community";
-import { Loader } from "src/components";
-import { Typography } from "src/components/ui";
+import { Loader, Typography } from "src/shared/UI";
 
 import { CommunityListItem } from "./CommunityListItem";
 

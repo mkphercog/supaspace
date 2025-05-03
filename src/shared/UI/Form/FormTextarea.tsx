@@ -1,9 +1,9 @@
-import { FC, InputHTMLAttributes } from "react";
+import { FC, TextareaHTMLAttributes } from "react";
 import { useController } from "react-hook-form";
 
-import { Typography } from "src/components/ui";
+import { Typography } from "src/shared/UI";
 
-type FromTextInputProps = InputHTMLAttributes<HTMLInputElement> & {
+type FromTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   labelText: string;
   name: string;
   maxLength?: number;
@@ -12,7 +12,7 @@ type FromTextInputProps = InputHTMLAttributes<HTMLInputElement> & {
   isLoading?: boolean;
 };
 
-export const FormTextInput: FC<FromTextInputProps> = ({
+export const FormTextarea: FC<FromTextareaProps> = ({
   labelText,
   name,
   className,
@@ -41,9 +41,8 @@ export const FormTextInput: FC<FromTextInputProps> = ({
             )}
           </div>
         </label>
-        <input
+        <textarea
           id={name}
-          type="text"
           className={`
             w-full text-sm rounded-md p-2 block         
             border border-gray-500 hover:border-purple-600 focus:outline-none
@@ -63,6 +62,7 @@ export const FormTextInput: FC<FromTextInputProps> = ({
           }}
           maxLength={maxLength ? ++maxLength : undefined}
           value={value || field.value}
+          rows={5}
           {...restProps}
         />
       </div>

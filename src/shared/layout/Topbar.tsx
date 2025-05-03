@@ -1,7 +1,7 @@
 import { useSidebar } from "src/context";
+import { Logo } from "src/shared/components";
 
-import { AuthButton } from "../../AuthButton";
-import { Logo } from "../../Logo";
+import { AuthButton } from "./AuthButton";
 
 export const Topbar = () => {
   const { sidebarStatus } = useSidebar();

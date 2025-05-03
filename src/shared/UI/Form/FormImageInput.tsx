@@ -1,27 +1,29 @@
-import { FC, TextareaHTMLAttributes } from "react";
+import { ChangeEventHandler, FC } from "react";
 import { useController } from "react-hook-form";
 
-import { Typography } from "src/components/ui";
+import { Typography } from "src/shared/UI";
 
-type FromTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type FormImageInputProps = {
   labelText: string;
   name: string;
-  maxLength?: number;
+  className?: string;
   isRequired?: boolean;
-  showCounter?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
+  value?: string | number | readonly string[] | undefined;
   isLoading?: boolean;
+  placeholder?: string;
 };
 
-export const FormTextarea: FC<FromTextareaProps> = ({
+export const FormImageInput: FC<FormImageInputProps> = ({
   labelText,
   name,
   className,
-  maxLength,
   isRequired = false,
-  showCounter = true,
   onChange,
+  disabled,
   value,
-  ...restProps
+  placeholder,
 }) => {
   const { field, fieldState } = useController({ name });
 
@@ -29,44 +31,31 @@ export const FormTextarea: FC<FromTextareaProps> = ({
     <div className={`flex flex-col gap-2 ${className}`}>
       <div>
         <label htmlFor={name} className="block mb-1">
-          <div className="flex justify-between items-end">
-            <Typography.Text size="sm" className="font-semibold">
-              {labelText} {isRequired && "*"}
-            </Typography.Text>
-
-            {showCounter && maxLength && (
-              <Typography.Text size="xs">{`${
-                field?.value?.length ?? 0
-              }/${maxLength}`}</Typography.Text>
-            )}
-          </div>
+          <Typography.Text size="sm">
+            {labelText} {isRequired && "*"}
+          </Typography.Text>
         </label>
-        <textarea
+        <input
           id={name}
+          type="file"
+          accept="image/*"
           className={`
             w-full text-sm rounded-md p-2 block         
             border border-gray-500 hover:border-purple-600 focus:outline-none
             bg-transparent focus:border-purple-600
             transition-colors duration-300
-            hover:cursor-text
-            ${
-              fieldState.error
-                ? "border-red-400 focus:border-red-400 hover:border-red-400"
-                : ""
-            }
+            hover:cursor-pointer file:hidden
           `}
           {...field}
           onChange={(event) => {
             field.onChange(event);
             onChange?.(event);
           }}
-          maxLength={maxLength ? ++maxLength : undefined}
           value={value || field.value}
-          rows={5}
-          {...restProps}
+          disabled={disabled}
+          placeholder={placeholder}
         />
       </div>
-
       {!!fieldState.error && (
         <Typography.Text size="xs" color="red">
           {fieldState.error.message}

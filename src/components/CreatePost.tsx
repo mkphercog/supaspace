@@ -3,8 +3,8 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
 import { useFetchCommunities } from "src/api/community";
 import { useCreateNewPost } from "src/api/posts";
-import { Button, Card, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
+import { Button, Card, Typography } from "src/shared/UI";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");

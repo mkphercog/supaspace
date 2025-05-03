@@ -1,8 +1,7 @@
 import { Navigate, RouteObject, createBrowserRouter } from "react-router";
 
-import { FullPageLoader } from "../components/FullPageLoader";
-import { AppLayout } from "../components/layout/AppLayout";
-import { ProtectedRoute } from "../components/ProtectedRoute";
+import { ProtectedRoute } from "src/shared/components";
+import { AppLayout, FullPageLoader } from "src/shared/layout";
 
 export const ROUTES = {
   root: () => "/",

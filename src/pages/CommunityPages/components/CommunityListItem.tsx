@@ -2,11 +2,11 @@ import { FC, useState } from "react";
 
 import { useDeleteCommunityMutation } from "src/api/community";
 import { ChevronUpIcon, InfoIcon } from "src/assets/icons";
-import { UserAvatar } from "src/components";
-import { Button, Card, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
 import { ROUTES } from "src/routes";
+import { UserAvatar } from "src/shared/components";
+import { Button, Card, Typography } from "src/shared/UI";
 import { Community } from "src/types";
 
 type CommunityListItemProps = Community;

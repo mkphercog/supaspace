@@ -3,16 +3,15 @@ import { FC } from "react";
 import { PhotoView } from "react-photo-view";
 
 import { useFetchPostById } from "src/api/posts";
-import PostPlaceholderImage from "src/assets/images/postPlaceholder.jpg";
-import { Card, Typography } from "src/components/ui";
+import { PostPlaceholderImage } from "src/assets/images";
 import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
+import { UserAvatar } from "src/shared/components";
+import { Card, Typography, Loader } from "src/shared/UI";
 import { PostFromDbType } from "src/types";
 
 import { CommentsSection } from "./CommentsSection/CommentsSection";
 import { LikeButton } from "./LikeButton";
-import { Loader } from "./Loader";
-import { UserAvatar } from "./UserAvatar";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];

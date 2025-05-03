@@ -8,13 +8,13 @@ import {
   useDeleteCommentsMutation,
 } from "src/api/comments";
 import { ChevronUpIcon } from "src/assets/icons";
-import { Button, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
+import { UserAvatar } from "src/shared/components";
+import { Button, Typography } from "src/shared/UI";
 import { CommentFromDbType, CommentTreeType } from "src/types";
 
 import { getReplyStyleColor } from "./comments.utils";
-import { UserAvatar } from "../UserAvatar";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;

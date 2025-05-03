@@ -2,6 +2,11 @@ import { toast } from "react-toastify";
 
 import { useCreateCommunity } from "src/api/community";
 import {
+  COMMUNITY_DESC_MAX_LENGTH,
+  COMMUNITY_TITLE_MAX_LENGTH,
+} from "src/constants";
+import { useAuth } from "src/context";
+import {
   BaseForm,
   Button,
   Card,
@@ -9,12 +14,7 @@ import {
   FormTextInput,
   RequiredHint,
   useBaseForm,
-} from "src/components/ui";
-import {
-  COMMUNITY_DESC_MAX_LENGTH,
-  COMMUNITY_TITLE_MAX_LENGTH,
-} from "src/constants";
-import { useAuth } from "src/context";
+} from "src/shared/UI";
 
 import {
   INITIAL_FORM_STATE,

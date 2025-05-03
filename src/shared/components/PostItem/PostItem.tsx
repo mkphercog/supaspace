@@ -1,8 +1,8 @@
 import { FC } from "react";
 
-import PostPlaceholderImage from "src/assets/images/postPlaceholder.jpg";
-import { Card, Typography } from "src/components/ui";
+import { PostPlaceholderImage } from "src/assets/images";
 import { ROUTES } from "src/routes";
+import { Card, Typography } from "src/shared/UI";
 import { PostListItemFromDbType } from "src/types";
 
 import { PostStats } from "./PostStats";

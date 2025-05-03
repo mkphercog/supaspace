@@ -1,8 +1,6 @@
 import { useFetchPosts } from "src/api/posts";
-import { Typography } from "src/components/ui";
-
-import { Loader } from "./Loader";
-import { PostItem } from "./PostItem";
+import { PostItem } from "src/shared/components";
+import { Loader, Typography } from "src/shared/UI";
 
 export const PostList = () => {
   const { data, error, isLoading } = useFetchPosts();

@@ -1,12 +1,12 @@
 import { Outlet, useNavigation } from "react-router";
 import { ToastContainer } from "react-toastify";
 
-import { FullPageLoader } from "src/components";
 import { useAuth, SidebarProvider, AuthProvider } from "src/context";
 
 import { AnimatedBackground } from "./AnimatedBackground";
+import { FullPageLoader } from "./FullPageLoader";
 import { Sidebar } from "./Sidebar";
-import { Topbar } from "./Topbar/Topbar";
+import { Topbar } from "./Topbar";
 
 export const AppLayout = () => {
   return (

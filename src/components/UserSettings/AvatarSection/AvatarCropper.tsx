@@ -9,7 +9,7 @@ import {
   FormImageInput,
   Typography,
   useBaseForm,
-} from "src/components/ui";
+} from "src/shared/UI";
 
 import { UseAvatarSectionReturnType } from "./useAvatarSection";
 

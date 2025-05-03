@@ -3,13 +3,12 @@ import { FC, FormEvent, useState } from "react";
 
 import { QUERY_KEYS } from "src/api";
 import { useCreateNewComment, useFetchComments } from "src/api/comments";
-import { Button, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
+import { Button, Loader, Typography } from "src/shared/UI";
 import { CommentFromDbType } from "src/types";
 
 import { CommentItem } from "./CommentItem";
 import { buildFlatCommentsTree } from "./comments.utils";
-import { Loader } from "../Loader";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 

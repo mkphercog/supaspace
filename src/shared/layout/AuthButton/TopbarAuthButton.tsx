@@ -2,12 +2,12 @@ import { FC } from "react";
 import { useNavigate } from "react-router";
 
 import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
-import { Button, Typography } from "src/components/ui";
+import { UserAvatar } from "src/shared/components/UserAvatar";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
+import { Button, Typography } from "src/shared/UI";
 
 import { AuthButtonsProps } from "./AuthButton.types";
-import { UserAvatar } from "../UserAvatar";
 
 export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,

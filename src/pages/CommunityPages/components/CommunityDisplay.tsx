@@ -1,6 +1,6 @@
 import { useFetchCommunityPosts } from "src/api/community";
-import { PostItem, Loader } from "src/components";
-import { Typography } from "src/components/ui";
+import { PostItem } from "src/shared/components";
+import { Loader, Typography } from "src/shared/UI";
 import { Community } from "src/types";
 
 import { NotFoundPage } from "../../NotFoundPage";

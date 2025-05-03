@@ -1,6 +1,6 @@
 import { NoRocketIcon } from "src/assets/icons";
-import { Card, Typography } from "src/components/ui";
 import { ROUTES } from "src/routes";
+import { Card, Typography } from "src/shared/UI";
 
 export const NotFoundPage = () => {
   return (

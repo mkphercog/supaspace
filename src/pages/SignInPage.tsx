@@ -1,6 +1,6 @@
 import { GoogleLogoIcon } from "src/assets/icons";
-import { Button, Card, Typography } from "src/components/ui";
 import { useAuth } from "src/context";
+import { Button, Card, Typography } from "src/shared/UI";
 
 export const SignInPage = () => {
   const { signInWithGoogle } = useAuth();

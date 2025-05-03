@@ -3,17 +3,17 @@ import { PostItem } from "src/shared/components";
 import { Loader, Typography } from "src/shared/UI";
 
 export const PostList = () => {
-  const { data, error, isLoading } = useFetchPosts();
+  const { posts, arePostsLoading, postsError } = useFetchPosts();
 
-  if (isLoading) {
+  if (arePostsLoading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (postsError) {
+    return <div>Error: {postsError.message}</div>;
   }
 
-  if (!data?.length) {
+  if (!posts?.length) {
     return (
       <Typography.Text className="text-md text-center mt-2">
         No posts found
@@ -23,7 +23,7 @@ export const PostList = () => {
 
   return (
     <ul className="flex flex-wrap gap-6 justify-center">
-      {data?.map((post) => (
+      {posts?.map((post) => (
         <PostItem key={post.id} post={post} />
       ))}
     </ul>

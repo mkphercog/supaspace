@@ -15,7 +15,7 @@ type AuthButtonProps = {
 
 export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
-  const { dbUserData, signInWithGoogle, signOut } = useAuth();
+  const { userData, signInWithGoogle, signOut } = useAuth();
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
   const { isMdUp } = useScreenSize();
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
   };
 
   const props: AuthButtonsProps = {
-    dbUserData,
+    userData,
     sidebarStatus,
     isAvatarMenuOpen,
     toggleAvatarMenu,

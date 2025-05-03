@@ -2,15 +2,15 @@ import { FC } from "react";
 import { useNavigate } from "react-router";
 
 import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
-import { UserAvatar } from "src/shared/components/UserAvatar";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
+import { UserAvatar } from "src/shared/components";
 
 import { AuthButtonsProps } from "./AuthButton.types";
 import { SidebarItem } from "../Sidebar/SidebarItem";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
-  dbUserData,
+  userData,
   sidebarStatus,
   isAvatarMenuOpen,
   toggleAvatarMenu,
@@ -21,7 +21,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
   const navigate = useNavigate();
 
-  if (!dbUserData) {
+  if (!userData) {
     return (
       <SidebarItem
         as="button"
@@ -41,14 +41,14 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
       <div className="w-full flex items-center">
         <SidebarItem
           as="button"
-          text={dbUserData.nickname}
+          text={userData.nickname}
           icon={
             <UserAvatar
               size={sidebarStatus === "show" ? "md" : "xs"}
-              avatarUrl={dbUserData?.avatar_url}
+              avatarUrl={userData.avatarUrl}
             />
           }
-          isVisible={!!dbUserData}
+          isVisible={!!userData}
           onClick={toggleAvatarMenu}
         />
       </div>
@@ -72,7 +72,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
           as="button"
           text="Settings"
           icon={<SettingsIcon />}
-          isVisible={!!dbUserData}
+          isVisible={!!userData}
           onClick={goToSettings}
         />
 
@@ -80,7 +80,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
           as="button"
           text="Sign out"
           icon={<SignOutIcon />}
-          isVisible={!!dbUserData}
+          isVisible={!!userData}
           onClick={signOut}
         />
       </div>

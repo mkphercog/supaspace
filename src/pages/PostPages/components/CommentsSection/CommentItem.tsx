@@ -1,10 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
 import { FC, FormEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import {
-  useCreateNewComment,
+  useCreateCommentMutation,
   useDeleteCommentsMutation,
 } from "src/api/comments";
 import { ChevronUpIcon } from "src/assets/icons";
@@ -12,61 +13,66 @@ import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
 import { UserAvatar } from "src/shared/components";
 import { Button, Typography } from "src/shared/UI";
-import { CommentFromDbType, CommentTreeType } from "src/types";
+import { Comment, CommentTreeType } from "src/types";
 
 import { getReplyStyleColor } from "./comments.utils";
 
-type Props = Pick<CommentFromDbType, "post_id"> & {
+type Props = Pick<Comment, "postId"> & {
   comment: CommentTreeType;
 };
 
-export const CommentItem: FC<Props> = ({ post_id, comment }) => {
+export const CommentItem: FC<Props> = ({ postId, comment }) => {
   const [showReply, setShowReply] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [replyText, setReplyText] = useState("");
   const queryClient = useQueryClient();
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
-  const { deleteComment } = useDeleteCommentsMutation(post_id);
+  const { deleteComment } = useDeleteCommentsMutation(postId);
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Comment",
     realDeleteFn: async () => {
-      if (!dbUserData) return;
+      if (!userData) return;
 
       await deleteComment({
-        commentId: comment.id,
+        id: comment.id,
       });
     },
   });
 
-  const {
-    mutate: createReplyCommentMutation,
-    isPending,
-    isError,
-  } = useCreateNewComment({
-    user_id: dbUserData?.id,
-    post_id,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.comments, post_id],
-      });
-      setReplyText("");
-      setShowReply(false);
-    },
-  });
+  const { createComment, isCreateCommentLoading, createCommentError } =
+    useCreateCommentMutation({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.comments, postId],
+        });
+        setReplyText("");
+        setShowReply(false);
+      },
+    });
 
   const handleReplySubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!replyText) return;
+    if (!replyText || !userData) return;
 
-    createReplyCommentMutation({
-      content: replyText,
-      parent_comment_id: comment.id,
-    });
+    toast.promise(
+      async () => {
+        await createComment({
+          userId: userData.id,
+          postId,
+          content: replyText,
+          parentCommentId: comment.id,
+        });
+      },
+      {
+        pending: `🚀 Sending your comment!`,
+        success: `Comment added successfully!`,
+      }
+    );
   };
 
-  const isParentComment = comment.parent_comment_id === null;
+  const isParentComment = comment.parentCommentId === null;
   const childrenCommentsGroupedByReplyStyle = Object.values(
     comment.children.reduce((acc, child) => {
       const key = child.replyStyle;
@@ -89,7 +95,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           bg-gray-500/20 rounded-xl
         `}
       >
-        <UserAvatar avatarUrl={comment.author.avatar_url} size="md" />
+        <UserAvatar avatarUrl={comment.author.avatarUrl} size="md" />
         <div className={`grow flex flex-col gap-1 rounded-xl`}>
           <Typography.Text size="sm" className="font-bold text-blue-400!">
             {comment.author.nickname}
@@ -101,12 +107,12 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           />
 
           <Typography.Text size="xxs" className="self-end text-gray-500">
-            {new Date(comment.created_at).toLocaleString()}
+            {new Date(comment.createdAt).toLocaleString()}
           </Typography.Text>
 
-          {dbUserData && <hr className="text-gray-500" />}
+          {userData && <hr className="text-gray-500" />}
           <div className="self-end">
-            {dbUserData && (
+            {userData && (
               <Button
                 onClick={() => setShowReply((prev) => !prev)}
                 variant="ghost"
@@ -118,7 +124,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
               </Button>
             )}
 
-            {dbUserData?.id === comment.user_id && (
+            {userData?.id === comment.userId && (
               <Button
                 className="self-end"
                 variant="ghost"
@@ -133,7 +139,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
         </div>
       </div>
 
-      {showReply && dbUserData && (
+      {showReply && userData && (
         <form onSubmit={handleReplySubmit} className="flex flex-col mt-2 gap-3">
           <textarea
             id={`commentReplyTo-${comment.id}`}
@@ -152,12 +158,12 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
           <Button
             type="submit"
             className="self-end"
-            disabled={isPending || !dbUserData || !replyText}
+            disabled={isCreateCommentLoading || !userData || !replyText}
           >
-            {isPending ? "Posting..." : "Post reply"}
+            {isCreateCommentLoading ? "Posting..." : "Post reply"}
           </Button>
 
-          {isError && (
+          {createCommentError && (
             <Typography.Text color="red">Error posting reply.</Typography.Text>
           )}
         </form>
@@ -196,7 +202,7 @@ export const CommentItem: FC<Props> = ({ post_id, comment }) => {
                         <CommentItem
                           key={child.id}
                           comment={child}
-                          post_id={post_id}
+                          postId={postId}
                         />
                       ))}
                     </div>

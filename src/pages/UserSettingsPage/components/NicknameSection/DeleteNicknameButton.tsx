@@ -20,23 +20,23 @@ type DeleteNicknameButtonProps = {
 export const DeleteNicknameButton: FC<DeleteNicknameButtonProps> = ({
   deleteUserNickname,
 }) => {
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Nickname",
     realDeleteFn: async () => {
-      if (!dbUserData) return;
+      if (!userData) return;
 
       await deleteUserNickname({
-        userId: dbUserData.id,
-        nickname: dbUserData.full_name_from_auth_provider,
+        userId: userData.id,
+        nickname: userData.fullNameFromAuthProvider,
       });
     },
   });
 
-  if (!dbUserData) return null;
+  if (!userData) return null;
 
   const isNicknameSameAsFullName =
-    dbUserData.nickname === dbUserData.full_name_from_auth_provider;
+    userData.nickname === userData.fullNameFromAuthProvider;
 
   return (
     <Button

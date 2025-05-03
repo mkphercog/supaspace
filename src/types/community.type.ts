@@ -1,29 +1,31 @@
-import { DbUserDataType } from "./users.type";
+import { Author, DbAuthor, UserData } from "./users.type";
 
-export type DbCommunity = {
+type CommunityCommon = {
   id: number;
-  created_at: string;
   name: string;
   description: string;
-  user_id: DbUserDataType["id"];
-  author: Pick<DbUserDataType, "id" | "nickname" | "avatar_url">;
+};
+
+export type DbCommunity = CommunityCommon & {
+  created_at: string;
   post_count: [{ count: number }];
+  user_id: UserData["id"];
+  author: DbAuthor;
+};
+
+export type Community = CommunityCommon & {
+  createdAt: string;
+  postCount: number;
+  userId: UserData["id"];
+  author: Author;
 };
 
 export type CreateCommunityInput = Pick<
+  Community,
+  "name" | "description" | "userId"
+>;
+
+export type CreateDbCommunityInput = Pick<
   DbCommunity,
   "name" | "description" | "user_id"
 >;
-
-export type Community = {
-  id: number;
-  createdAt: string;
-  name: string;
-  description: string;
-  author: {
-    id: string;
-    nickname: string;
-    avatarUrl: string;
-  };
-  postCount: number;
-};

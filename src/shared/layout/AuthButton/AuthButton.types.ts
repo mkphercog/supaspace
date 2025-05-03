@@ -1,8 +1,8 @@
 import { SidebarStatusType } from "src/context";
-import { DbUserDataType } from "src/types";
+import { UserData } from "src/types";
 
 export type AuthButtonsProps = {
-  dbUserData: DbUserDataType | null;
+  userData: UserData | null;
   sidebarStatus: SidebarStatusType;
   isAvatarMenuOpen: boolean;
   toggleAvatarMenu: () => void;

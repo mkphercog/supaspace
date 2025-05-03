@@ -8,66 +8,70 @@ import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
 import { Card, Typography, Loader } from "src/shared/UI";
-import { PostFromDbType } from "src/types";
+import { Post } from "src/types";
 
 import { CommentsSection } from "./CommentsSection";
 import { LikeButton } from "./LikeButton";
 
 type PostDetailsProps = {
-  post_id: PostFromDbType["id"];
+  postId: Post["id"];
 };
 
-export const PostDetails: FC<PostDetailsProps> = ({ post_id }) => {
-  const { data, error, isLoading } = useFetchPostById(post_id);
+export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
+  const { postDetails, isPostDetailsLoading, postDetailsError } =
+    useFetchPostById(postId);
 
-  if (isLoading) {
+  if (isPostDetailsLoading) {
     return <Loader />;
   }
 
-  if (error) {
+  if (postDetailsError) {
     return <NotFoundPage />;
   }
 
   return (
     <Card>
-      <Typography.Header>{data?.title}</Typography.Header>
+      <Typography.Header>{postDetails.title}</Typography.Header>
 
-      <PhotoView src={data?.image_url || PostPlaceholderImage}>
+      <PhotoView src={postDetails.imageUrl || PostPlaceholderImage}>
         <img
-          src={data?.image_url || PostPlaceholderImage}
-          alt={data?.title}
+          src={postDetails.imageUrl || PostPlaceholderImage}
+          alt={postDetails.title}
           className="mt-4 rounded object-cover w-full h-64"
         />
       </PhotoView>
 
-      <MDEditor.Markdown source={data?.content} className="bg-transparent!" />
+      <MDEditor.Markdown
+        source={postDetails.content}
+        className="bg-transparent!"
+      />
 
       <div className="flex items-center gap-2.5">
-        <UserAvatar avatarUrl={data?.author.avatar_url} size="lg" />
+        <UserAvatar avatarUrl={postDetails.author.avatarUrl} size="lg" />
 
         <div className="flex flex-col">
           <Typography.Text size="lg" className="font-bold">
-            {data?.author.nickname}
+            {postDetails.author.nickname}
           </Typography.Text>
           <Typography.Text size="sm">
-            {`posted ${new Date(data!.created_at).toLocaleString()}`}
+            {`posted ${new Date(postDetails.createdAt).toLocaleString()}`}
           </Typography.Text>
         </div>
       </div>
 
-      {data?.community ? (
+      {postDetails?.community ? (
         <Typography.Link
-          to={ROUTES.community.details(data.community.id)}
+          to={ROUTES.community.details(postDetails.community.id)}
           color="lime"
         >
-          #{data.community.name}
+          #{postDetails.community.name}
         </Typography.Link>
       ) : (
         <Typography.Text className="font-bold">#No community</Typography.Text>
       )}
 
-      <LikeButton post_id={post_id} />
-      <CommentsSection post_id={post_id} />
+      <LikeButton postId={postId} />
+      <CommentsSection postId={postId} />
     </Card>
   );
 };

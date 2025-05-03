@@ -1,6 +1,6 @@
 import { ONE_DAY_IN_MS } from "src/constants";
 import { useAuth } from "src/context";
-import { DbUserDataType } from "src/types";
+import { UserData } from "src/types";
 
 export type UserDataType = "avatar" | "nickname";
 
@@ -9,25 +9,25 @@ const DATA_TYPE_CONTENT: Record<
   {
     text: UserDataType;
     dbFieldName: keyof Pick<
-      DbUserDataType,
-      "avatar_url_updated_at" | "nickname_updated_at"
+      UserData,
+      "avatarUrlUpdatedAt" | "nicknameUpdatedAt"
     >;
   }
 > = {
   avatar: {
     text: "avatar",
-    dbFieldName: "avatar_url_updated_at",
+    dbFieldName: "avatarUrlUpdatedAt",
   },
   nickname: {
     text: "nickname",
-    dbFieldName: "nickname_updated_at",
+    dbFieldName: "nicknameUpdatedAt",
   },
 };
 
 export const useCanChangeField = (dataType: UserDataType) => {
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
-  const updatedAtValue = dbUserData?.[DATA_TYPE_CONTENT[dataType].dbFieldName];
+  const updatedAtValue = userData?.[DATA_TYPE_CONTENT[dataType].dbFieldName];
 
   const lastChangeInMs = updatedAtValue
     ? new Date(updatedAtValue).getTime()

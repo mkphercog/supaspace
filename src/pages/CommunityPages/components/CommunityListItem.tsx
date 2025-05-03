@@ -19,13 +19,13 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
   author,
   postCount,
 }) => {
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { deleteCommunity } = useDeleteCommunityMutation();
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Community",
     realDeleteFn: async () => {
-      if (!dbUserData) return;
+      if (!userData) return;
 
       await deleteCommunity({ id });
     },
@@ -78,7 +78,7 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
             </Typography.Text>
           </div>
 
-          {dbUserData?.id === author.id && (
+          {userData?.id === author.id && (
             <div className="flex justify-between items-center gap-10">
               <Typography.Text
                 className="flex items-start gap-1 text-justify"

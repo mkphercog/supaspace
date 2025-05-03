@@ -6,11 +6,12 @@ import { useNavigate } from "react-router";
 import { QUERY_KEYS } from "src/api";
 import {
   insertUserDataToDb,
-  useDeleteUserWithData,
+  useDeleteUserWithDataMutation,
   useFetchUserData,
-} from "src/api/users";
+} from "src/api/user";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
+import { UserData } from "src/types";
 
 import { AuthContext, AuthContextType } from "./AuthContext";
 
@@ -18,18 +19,16 @@ const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [dbUserData, setDbUserData] =
-    useState<AuthContextType["dbUserData"]>(null);
+  const [userData, setUserData] = useState<AuthContextType["userData"]>(null);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { userData, isUserDataFetching } = useFetchUserData(
+  const { mappedUserData, isUserDataFetching } = useFetchUserData(
     currentSession?.user.id
   );
-
   const { deleteUserWithData, isDeleteUserWithDataLoading } =
-    useDeleteUserWithData({
+    useDeleteUserWithDataMutation({
       onSuccess: () => {
         signOut();
         queryClient.invalidateQueries({
@@ -39,7 +38,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     });
 
   useEffect(() => {
-    switch (userData) {
+    switch (mappedUserData) {
       case "NO_LOGGED_USER":
       case undefined:
         break;
@@ -51,19 +50,19 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       case "USER_IN_AUTH_BUT_NO_IN_USERS_TABLE":
         insertUserDataToDb(
           currentSession?.user || null,
-          setDbUserData,
+          (userData: UserData) => setUserData(userData),
           signOut
         );
         break;
 
       default:
-        if (JSON.stringify(dbUserData) === JSON.stringify(userData)) return;
-        setDbUserData(userData);
+        if (JSON.stringify(userData) === JSON.stringify(mappedUserData)) return;
+        setUserData(mappedUserData);
         break;
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSession, userData]);
+  }, [currentSession, mappedUserData]);
 
   useEffect(() => {
     const {
@@ -120,7 +119,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const signOut = async () => {
-    setDbUserData(null);
+    setUserData(null);
     if (currentSession) {
       await supabaseClient.auth.signOut();
     }
@@ -130,7 +129,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const value: AuthContextType = {
-    dbUserData,
+    userData,
     currentSession,
     isAdmin,
     isDeleteUserWithDataLoading,

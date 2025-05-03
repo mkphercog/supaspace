@@ -2,11 +2,9 @@ import { FC } from "react";
 
 import { ChartIcon, CommentsIcon } from "src/assets/icons";
 import { Typography } from "src/shared/UI";
+import { Post } from "src/types";
 
-type PostStatsType = {
-  likeCount: number;
-  commentCount: number;
-};
+type PostStatsType = Pick<Post, "commentCount" | "likeCount">;
 
 export const PostStats: FC<PostStatsType> = ({ likeCount, commentCount }) => {
   return (

@@ -2,15 +2,15 @@ import { FC } from "react";
 import { useNavigate } from "react-router";
 
 import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
-import { UserAvatar } from "src/shared/components/UserAvatar";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
+import { UserAvatar } from "src/shared/components";
 import { Button, Typography } from "src/shared/UI";
 
 import { AuthButtonsProps } from "./AuthButton.types";
 
 export const TopbarAuthButton: FC<AuthButtonsProps> = ({
-  dbUserData,
+  userData,
   sidebarStatus,
   isAvatarMenuOpen,
   toggleAvatarMenu,
@@ -21,7 +21,7 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
   const navigate = useNavigate();
 
-  if (!dbUserData) {
+  if (!userData) {
     return (
       <div className="self-end">
         <Button
@@ -51,9 +51,9 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
           onClick={toggleAvatarMenu}
           variant="ghost"
         >
-          <UserAvatar avatarUrl={dbUserData.avatar_url} />
+          <UserAvatar avatarUrl={userData.avatarUrl} />
           <Typography.Text className="font-semibold text-inherit">
-            {dbUserData.nickname}
+            {userData.nickname}
           </Typography.Text>
         </Button>
       </div>

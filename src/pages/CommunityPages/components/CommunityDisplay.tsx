@@ -10,23 +10,26 @@ type Props = {
 };
 
 export const CommunityDisplay = ({ id }: Props) => {
-  const { data, error, isLoading } = useFetchCommunityPosts(id);
+  const { communityPosts, communityPostsError, isCommunityPostsLoading } =
+    useFetchCommunityPosts(id);
 
-  if (isLoading) {
+  if (isCommunityPostsLoading) {
     return <Loader />;
   }
 
-  if (error || !data?.length) return <NotFoundPage />;
+  if (communityPostsError || !communityPosts?.length) {
+    return <NotFoundPage />;
+  }
 
   return (
     <div>
       <Typography.Header color="lime">
-        #{data?.[0].community.name}
+        #{communityPosts?.[0].community.name}
       </Typography.Header>
 
-      {data?.[0].id ? (
+      {communityPosts?.[0].id ? (
         <div className="flex flex-wrap gap-6 justify-center">
-          {data.map((post) => (
+          {communityPosts.map((post) => (
             <PostItem key={post.id} post={post} />
           ))}
         </div>

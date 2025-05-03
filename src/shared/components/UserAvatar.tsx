@@ -2,11 +2,12 @@ import { FC, useEffect, useState } from "react";
 import { PhotoView } from "react-photo-view";
 
 import { DefaultAvatarIcon } from "src/assets/icons";
+import { UserData } from "src/types";
 
 type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 
 type UserAvatarProps = {
-  avatarUrl?: string;
+  avatarUrl: UserData["avatarUrl"];
   size?: AvatarSize;
   isPhotoView?: boolean;
   className?: string;

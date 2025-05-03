@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-import { useCreateCommunity } from "src/api/community";
+import { useCreateCommunityMutation } from "src/api/community";
 import {
   COMMUNITY_DESC_MAX_LENGTH,
   COMMUNITY_TITLE_MAX_LENGTH,
@@ -23,9 +23,10 @@ import {
 } from "./validationSchema";
 
 export const CreateCommunity = () => {
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
-  const { createCommunity, isCreateCommunityLoading } = useCreateCommunity();
+  const { createCommunity, isCreateCommunityLoading } =
+    useCreateCommunityMutation();
   const formParams = useBaseForm({
     validationSchema,
     defaultValues: INITIAL_FORM_STATE,
@@ -35,7 +36,7 @@ export const CreateCommunity = () => {
     communityName,
     communityDescription,
   }: CreateCommunityForm) => {
-    if (!dbUserData) return;
+    if (!userData) return;
 
     toast
       .promise(
@@ -43,7 +44,7 @@ export const CreateCommunity = () => {
           await createCommunity({
             name: communityName,
             description: communityDescription,
-            user_id: dbUserData.id,
+            userId: userData.id,
           }),
         {
           pending: `🚀 Creating community #${communityName}`,

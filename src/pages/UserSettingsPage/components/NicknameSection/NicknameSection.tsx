@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import {
   useDeleteNicknameMutation,
   useSetNicknameMutation,
-} from "src/api/users";
+} from "src/api/user";
 import { NICKNAME_MAX_LENGTH } from "src/constants";
 import { useAuth } from "src/context";
 import {
@@ -23,15 +23,15 @@ import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 
 export const NicknameSection = () => {
   const { canChange } = useCanChangeField("nickname");
-  const { dbUserData, isUserDataFetching } = useAuth();
+  const { userData, isUserDataFetching } = useAuth();
   const { setNewUserNickname, isSetNewUserNicknameLoading } =
     useSetNicknameMutation();
   const { deleteUserNickname, isDeleteNicknameLoading } =
     useDeleteNicknameMutation();
 
   const validationSchema = getValidationSchema(
-    dbUserData?.full_name_from_auth_provider || "",
-    dbUserData?.nickname || ""
+    userData?.fullNameFromAuthProvider || "",
+    userData?.nickname || ""
   );
 
   const formParams = useBaseForm({
@@ -41,7 +41,7 @@ export const NicknameSection = () => {
     },
   });
 
-  if (!dbUserData) return null;
+  if (!userData) return null;
 
   const handleSubmit = async ({ userNickname }: NewNicknameFormType) => {
     const trimmedNickname = userNickname.trim();
@@ -50,7 +50,7 @@ export const NicknameSection = () => {
       .promise(
         async () =>
           await setNewUserNickname({
-            userId: dbUserData.id,
+            userId: userData.id,
             nickname: trimmedNickname,
           }),
         {
@@ -86,9 +86,9 @@ export const NicknameSection = () => {
           labelText="New nickname"
           name="userNickname"
           placeholder={
-            dbUserData?.full_name_from_auth_provider === dbUserData?.nickname
+            userData?.fullNameFromAuthProvider === userData?.nickname
               ? "No nick name"
-              : dbUserData?.nickname
+              : userData?.nickname
           }
           showCounter
           maxLength={NICKNAME_MAX_LENGTH}

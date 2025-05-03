@@ -1,8 +1,9 @@
 import MDEditor, { RefMDEditor } from "@uiw/react-md-editor";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 import { useFetchCommunities } from "src/api/community";
-import { useCreateNewPost } from "src/api/posts";
+import { useCreatePostMutation } from "src/api/posts";
 import { useAuth } from "src/context";
 import { Button, Card, Typography } from "src/shared/UI";
 
@@ -14,26 +15,34 @@ export const CreatePost = () => {
     null
   );
   const [communityId, setCommunityId] = useState<number | null>(null);
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
   const { communityList } = useFetchCommunities();
-  const { mutate, isPending, isError } = useCreateNewPost(dbUserData?.id);
+  const { createPost, createPostError, isCreatePostLoading } =
+    useCreatePostMutation();
   const MDEditorRef = useRef<RefMDEditor>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!selectedFile || !dbUserData || !content) return;
+    if (!selectedFile || !userData || !content) return;
 
-    mutate({
-      postData: {
-        title,
-        content,
-        community_id: communityId,
-        user_id: dbUserData.id,
-      },
-      imageFile: selectedFile,
-    });
+    toast.promise(
+      async () =>
+        await createPost({
+          postData: {
+            title,
+            content,
+            userId: userData.id,
+            communityId: communityId,
+          },
+          imageFile: selectedFile,
+        }),
+      {
+        pending: `🚀 Creating post ${title}`,
+        success: `Post created successfully!`,
+      }
+    );
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +62,7 @@ export const CreatePost = () => {
   };
 
   const isSubmitDisabled =
-    isPending || !dbUserData || !title || !content || !selectedFile;
+    isCreatePostLoading || !userData || !title || !content || !selectedFile;
 
   return (
     <Card className="max-w-2xl mx-auto">
@@ -158,10 +167,10 @@ export const CreatePost = () => {
         </div>
 
         <Button className="self-end" type="submit" disabled={isSubmitDisabled}>
-          {isPending ? "Creating..." : "Create post"}
+          {isCreatePostLoading ? "Creating..." : "Create post"}
         </Button>
 
-        {isError && (
+        {createPostError && (
           <Typography.Text color="red">Error creating post.</Typography.Text>
         )}
       </form>

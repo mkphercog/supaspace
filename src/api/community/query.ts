@@ -3,14 +3,18 @@ import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { supabaseClient } from "src/supabase-client";
-import { DbCommunity, PostListItemFromDbType } from "src/types";
+import { Community, DbCommunity, DbPost } from "src/types";
 
-import { mapDbCommunityToCommunity } from "./helpers";
+import { mapDbCommunityToCommunity } from "./utils";
+import { mapDbPostsToPosts } from "../posts/utils";
 
 export const useFetchCommunityPosts = (
-  id: DbCommunity["id"],
+  id: Community["id"],
 ) => {
-  return useQuery<PostListItemFromDbType[], Error>({
+  const { data, error, isLoading } = useQuery<
+    DbPost[],
+    Error
+  >({
     queryKey: [QUERY_KEYS.communityPost, id],
     queryFn: async () => {
       const { data, error } = await supabaseClient.rpc(
@@ -19,12 +23,19 @@ export const useFetchCommunityPosts = (
       );
 
       if (error) {
+        toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(error.message);
       }
 
-      return data as PostListItemFromDbType[];
+      return data;
     },
   });
+
+  return {
+    communityPosts: mapDbPostsToPosts(data || []),
+    isCommunityPostsLoading: isLoading,
+    communityPostsError: error,
+  };
 };
 
 export const useFetchCommunities = () => {

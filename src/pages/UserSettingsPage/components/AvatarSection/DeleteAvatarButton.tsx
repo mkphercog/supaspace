@@ -19,27 +19,27 @@ type DeleteAvatarButtonProps = {
 export const DeleteAvatarButton: FC<DeleteAvatarButtonProps> = ({
   deleteUserAvatar,
 }) => {
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Avatar",
     realDeleteFn: async () => {
-      if (!dbUserData) return;
+      if (!userData) return;
 
       await deleteUserAvatar({
-        userId: dbUserData.id,
+        userId: userData.id,
       });
     },
   });
 
-  if (!dbUserData) return null;
+  if (!userData) return null;
 
   return (
     <Button
       type="button"
       variant="destructive"
       onClick={startDeletingProcess}
-      disabled={!dbUserData.avatar_url}
+      disabled={!userData.avatarUrl}
     >
       Delete avatar
     </Button>

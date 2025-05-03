@@ -4,44 +4,44 @@ import { useAuth } from "src/context";
 import { Card, Typography } from "src/shared/UI";
 
 export const AccountInfoSection = () => {
-  const { dbUserData, isUserDataFetching } = useAuth();
+  const { userData, isUserDataFetching } = useAuth();
 
   const isNickNameSameAsFullName = useMemo(() => {
-    if (!dbUserData) return true;
+    if (!userData) return true;
 
-    return dbUserData.nickname === dbUserData.full_name_from_auth_provider;
-  }, [dbUserData]);
+    return userData.nickname === userData.fullNameFromAuthProvider;
+  }, [userData]);
 
   const userInfoList = useMemo(() => {
-    if (!dbUserData) return [];
+    if (!userData) return [];
 
     return [
       {
         title: "Full name:",
-        value: dbUserData.full_name_from_auth_provider,
+        value: userData.fullNameFromAuthProvider,
         isVisible: true,
       },
       {
         title: "Nickname:",
-        value: dbUserData.nickname,
+        value: userData.nickname,
         isVisible: !isNickNameSameAsFullName,
       },
       {
         title: "E-mail:",
-        value: dbUserData.email,
+        value: userData.email,
         isVisible: true,
       },
       {
         title: "Account created at:",
-        value: dbUserData.created_at
-          ? new Date(dbUserData.created_at).toLocaleString()
+        value: userData.createdAt
+          ? new Date(userData.createdAt).toLocaleString()
           : "Unknown",
         isVisible: true,
       },
     ];
-  }, [dbUserData, isNickNameSameAsFullName]);
+  }, [userData, isNickNameSameAsFullName]);
 
-  if (!dbUserData) return null;
+  if (!userData) return null;
 
   return (
     <Card isLoading={isUserDataFetching}>

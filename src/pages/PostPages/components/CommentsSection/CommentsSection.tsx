@@ -1,49 +1,66 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FC, FormEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { useCreateNewComment, useFetchComments } from "src/api/comments";
+import { useCreateCommentMutation, useFetchComments } from "src/api/comments";
 import { useAuth } from "src/context";
 import { Button, Loader, Typography } from "src/shared/UI";
-import { CommentFromDbType } from "src/types";
+import { Comment } from "src/types";
 
 import { CommentItem } from "./CommentItem";
 import { buildFlatCommentsTree } from "./comments.utils";
 
-type Props = Pick<CommentFromDbType, "post_id">;
+type Props = Pick<Comment, "postId">;
 
-export const CommentsSection: FC<Props> = ({ post_id }) => {
+export const CommentsSection: FC<Props> = ({ postId }) => {
   const [newCommentText, setNewCommentText] = useState("");
   const queryClient = useQueryClient();
-  const { dbUserData } = useAuth();
+  const { userData } = useAuth();
 
-  const { data: comments, isLoading, error } = useFetchComments(post_id);
+  const { comments, areCommentsLoading, commentsError } =
+    useFetchComments(postId);
 
-  const { mutate, isPending, isError } = useCreateNewComment({
-    user_id: dbUserData?.id,
-    post_id,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.comments, post_id],
-      });
-    },
-  });
+  const { createComment, createCommentError, isCreateCommentLoading } =
+    useCreateCommentMutation({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.comments, postId],
+        });
+      },
+    });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!newCommentText) return;
+    if (!newCommentText || !userData) return;
 
-    mutate({ content: newCommentText, parent_comment_id: null });
-    setNewCommentText("");
+    toast
+      .promise(
+        async () => {
+          await createComment({
+            content: newCommentText,
+            parentCommentId: null,
+            userId: userData.id,
+            postId,
+          });
+        },
+        {
+          pending: `🚀 Sending your comment!`,
+          success: `Comment added successfully!`,
+        }
+      )
+      .then(() => {
+        setNewCommentText("");
+      });
   };
 
-  if (isLoading) {
+  if (areCommentsLoading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (commentsError) {
+    return <div>Error: {commentsError.message}</div>;
   }
 
   const commentTree = comments ? buildFlatCommentsTree(comments) : [];
@@ -54,7 +71,7 @@ export const CommentsSection: FC<Props> = ({ post_id }) => {
         Comments section
       </Typography.Header>
 
-      {dbUserData ? (
+      {userData ? (
         <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="commentContent" className="block mb-1 font-medium">
@@ -79,12 +96,12 @@ export const CommentsSection: FC<Props> = ({ post_id }) => {
           <Button
             type="submit"
             className="self-end"
-            disabled={!newCommentText || isPending}
+            disabled={!newCommentText || isCreateCommentLoading}
           >
-            {isPending ? "Posting..." : "Post comment"}
+            {isCreateCommentLoading ? "Posting..." : "Post comment"}
           </Button>
 
-          {isError && (
+          {createCommentError && (
             <Typography.Text className="mt-2" color="red">
               Error posting comment.
             </Typography.Text>
@@ -99,7 +116,7 @@ export const CommentsSection: FC<Props> = ({ post_id }) => {
       {commentTree.length ? (
         <div className="space-y-8">
           {commentTree?.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} post_id={post_id} />
+            <CommentItem key={comment.id} comment={comment} postId={postId} />
           ))}
         </div>
       ) : (

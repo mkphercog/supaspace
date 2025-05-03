@@ -1,33 +1,44 @@
-import { DbUserDataType } from "./users.type";
+import { Community } from "./community.type";
+import { Author, DbAuthor, UserData } from "./users.type";
 
-export type PostFromDbType = {
+type PostCommon = {
   id: number;
-  created_at: string;
   title: string;
   content: string;
-  image_url: string;
-  user_id: string;
-  like_count: number;
-  comment_count: number;
-  community_id?: number | null;
-  community: {
-    id: number;
-    name: string;
-  };
-  author: Pick<DbUserDataType, "id" | "nickname" | "avatar_url">;
+  community: Pick<Community, "id" | "name">;
 };
 
-export type PostListItemFromDbType = Omit<
-  PostFromDbType,
-  "community_id" | "user_id"
+export type DbPost = PostCommon & {
+  created_at: string;
+  image_url: string;
+  user_id: UserData["id"];
+  like_count: number;
+  comment_count: number;
+  community_id?: Community["id"] | null;
+  author: DbAuthor;
+};
+
+export type Post = PostCommon & {
+  createdAt: string;
+  imageUrl: string;
+  userId: UserData["id"];
+  likeCount: number;
+  commentCount: number;
+  communityId?: Community["id"] | null;
+  author: Author;
+};
+
+export type CreatePost = Pick<
+  Post,
+  "title" | "content" | "communityId" | "userId"
 >;
 
-export type NewPostType = Pick<
-  PostFromDbType,
-  "title" | "content" | "community_id" | "user_id"
+export type CreateDbPost = Pick<
+  DbPost,
+  "title" | "content" | "community_id" | "user_id" | "image_url"
 >;
 
-export type PostDetailsFromDbType = Omit<
-  PostFromDbType,
-  "like_count" | "comment_count"
+export type PostDetails = Omit<
+  Post,
+  "likeCount" | "commentCount"
 >;

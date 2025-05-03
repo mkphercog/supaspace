@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import {
   useDeleteAvatarMutation,
   useEditUserAvatarMutation,
-} from "src/api/users";
+} from "src/api/user";
 import { FILE_MAX_SIZE_IN_kB } from "src/constants";
 import { useAuth } from "src/context";
 import { useClickOutside } from "src/hooks";
@@ -16,7 +16,7 @@ import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 const INITIAL_CROP_STATE: Pick<Area, "x" | "y"> = { x: 0, y: 0 };
 
 export const useAvatarSection = () => {
-  const { dbUserData, isUserDataFetching } = useAuth();
+  const { userData, isUserDataFetching } = useAuth();
   const { canChange } = useCanChangeField("avatar");
   const { editUserAvatar, isEditUserAvatarLoading } =
     useEditUserAvatarMutation();
@@ -42,7 +42,7 @@ export const useAvatarSection = () => {
     setZoom(1);
     setCroppedImageUrl("");
     cleanupUrl();
-    setImageSrc(dbUserData?.avatar_url || "");
+    setImageSrc(userData?.avatarUrl || "");
   };
 
   const avatarEditorCardRef = useClickOutside<HTMLElement>(
@@ -50,9 +50,9 @@ export const useAvatarSection = () => {
   );
 
   useEffect(() => {
-    if (!dbUserData) return;
-    setImageSrc(dbUserData.avatar_url);
-  }, [dbUserData]);
+    if (!userData) return;
+    setImageSrc(userData.avatarUrl || "");
+  }, [userData]);
 
   useEffect(() => {
     return () => {
@@ -88,13 +88,13 @@ export const useAvatarSection = () => {
   };
 
   const handleSubmitNewAvatar = async () => {
-    if (!selectedFileAfterCropp || !dbUserData) return;
+    if (!selectedFileAfterCropp || !userData) return;
 
     toast
       .promise(
         async () =>
           await editUserAvatar({
-            userId: dbUserData.id,
+            userId: userData.id,
             file: selectedFileAfterCropp,
           }),
         {

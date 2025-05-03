@@ -1,4 +1,4 @@
-import { CommentFromDbType, CommentTreeType } from "src/types";
+import { Comment, CommentTreeType } from "src/types";
 
 const REPLY_STYLE_COLORS: Record<number, string> = {
   0: "bg-gray-600/5 border-gray-300/20",
@@ -17,14 +17,14 @@ export const getReplyStyleColor = (replyStyle: number) => {
 };
 
 export const buildFlatCommentsTree = (
-  flatComments: CommentFromDbType[],
+  flatComments: Comment[],
 ): CommentTreeType[] => {
   const replyStyleCounters = new Map<number, number>();
   const map = new Map<number, CommentTreeType>();
   const roots: CommentTreeType[] = [];
 
   const mappedComments: CommentTreeType[] = flatComments.map((comment) => ({
-    ...(comment as CommentFromDbType),
+    ...(comment as Comment),
     children: [],
     replyStyle: 0,
   }));
@@ -34,7 +34,7 @@ export const buildFlatCommentsTree = (
   });
 
   mappedComments.forEach((comment) => {
-    const parentId = comment.parent_comment_id;
+    const parentId = comment.parentCommentId;
 
     if (!parentId) {
       roots.push(map.get(comment.id)!);
@@ -76,12 +76,12 @@ const sortChildsByReplyStyle = (roots: CommentTreeType[]) => {
 };
 
 function findTopLevelAncestor(
-  comment: CommentFromDbType,
+  comment: Comment,
   map: Map<number, CommentTreeType>,
 ): CommentTreeType | null {
   let current = comment;
-  while (current.parent_comment_id) {
-    const parent = map.get(current.parent_comment_id);
+  while (current.parentCommentId) {
+    const parent = map.get(current.parentCommentId);
     if (!parent) break;
     current = parent;
   }

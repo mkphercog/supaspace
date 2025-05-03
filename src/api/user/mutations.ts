@@ -1,68 +1,21 @@
 import { User } from "@supabase/supabase-js";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Dispatch } from "react";
+import {
+  MutateOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { NICKNAME_MAX_LENGTH } from "src/constants";
-import { AuthContextType } from "src/context";
 import { supabaseClient } from "src/supabase-client";
-import { DbUserDataType } from "src/types";
+import { CreateDbUserData, DbUserData, UserData } from "src/types";
 
-type FetchUserDataErrorsType =
-  | "NO_LOGGED_USER"
-  | "NO_USER_IN_AUTH"
-  | "USER_IN_AUTH_BUT_NO_IN_USERS_TABLE";
-
-export const useFetchUserData = (userId: DbUserDataType["id"] | undefined) => {
-  const { data, isFetching } = useQuery<
-    DbUserDataType | FetchUserDataErrorsType
-  >({
-    queryFn: async () => {
-      if (!userId) {
-        return "NO_LOGGED_USER";
-      }
-
-      const { data: userAuth, error: authUserError } = await supabaseClient.auth
-        .getUser();
-
-      if (!userAuth.user || authUserError) {
-        console.info("---- ℹ️ There is no user in auth db ----");
-        return "NO_USER_IN_AUTH";
-      }
-
-      const { data, error } = await supabaseClient
-        .from("users")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      if (!data || error) {
-        console.info(
-          "---- ⚙️ No user in the DB, starting the process of adding.  ----",
-        );
-        return "USER_IN_AUTH_BUT_NO_IN_USERS_TABLE";
-      }
-
-      console.info(
-        "---- ℹ️ The user already exists in the DB, no action needed. ----",
-      );
-      return data as DbUserDataType;
-    },
-    queryKey: [QUERY_KEYS.me, userId],
-    retry: false,
-    enabled: !!userId,
-  });
-
-  return {
-    userData: data,
-    isUserDataFetching: isFetching,
-  };
-};
+import { mapDbUserDataToUserData } from "./utils";
 
 export const insertUserDataToDb = async (
   userData: User | null,
-  setDbUserData: Dispatch<React.SetStateAction<AuthContextType["dbUserData"]>>,
+  callback: (userData: UserData) => void,
   signOut: () => void,
 ) => {
   if (!userData) throw new Error("---- No user data. ----");
@@ -86,27 +39,29 @@ export const insertUserDataToDb = async (
     data: { publicUrl },
   } = supabaseClient.storage.from("avatars").getPublicUrl(filePath);
 
-  const newDbUserData: DbUserDataType = {
+  const dbUserData: DbUserData = {
     id: userData.id,
-    created_at: userData.created_at,
-    nickname: userData.user_metadata.full_name,
     email: userData.email || "",
-    avatar_url: publicUrl,
     full_name_from_auth_provider: userData.user_metadata.full_name,
-    nickname_updated_at: null,
+    avatar_url: publicUrl,
     avatar_url_updated_at: null,
+    nickname: userData.user_metadata.full_name,
+    nickname_updated_at: null,
+    created_at: userData.created_at,
   };
 
-  const { error } = await supabaseClient.from("users").insert(newDbUserData);
+  const { error } = await supabaseClient.from("users").insert<CreateDbUserData>(
+    dbUserData,
+  );
 
   if (error) throw new Error(`❌ ${error.message}`);
   console.info("---- ✅ User DATA saved in DB correctly. ----");
 
-  setDbUserData(newDbUserData);
+  callback(mapDbUserDataToUserData(dbUserData));
 };
 
-export const useDeleteUserWithData = (
-  { onSuccess }: { onSuccess: () => void },
+export const useDeleteUserWithDataMutation = (
+  { onSuccess }: Pick<MutateOptions, "onSuccess">,
 ) => {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async () => {
@@ -132,6 +87,7 @@ export const useDeleteUserWithData = (
   };
 };
 
+// --------------------------------- BEGIN - NICKNAME ---------------------------------
 export const useSetNicknameMutation = () => {
   const queryClient = useQueryClient();
 
@@ -141,7 +97,7 @@ export const useSetNicknameMutation = () => {
     ) => {
       const { error } = await supabaseClient
         .from("users")
-        .update({ nickname })
+        .update<Pick<DbUserData, "nickname">>({ nickname })
         .eq("id", userId);
 
       if (error?.code === "23505") {
@@ -174,7 +130,7 @@ export const useDeleteNicknameMutation = () => {
     ) => {
       const { error } = await supabaseClient
         .from("users")
-        .update({ nickname })
+        .update<Pick<DbUserData, "nickname">>({ nickname })
         .eq("id", userId);
 
       if (error) throw new Error();
@@ -189,45 +145,9 @@ export const useDeleteNicknameMutation = () => {
     isDeleteNicknameLoading: isPending,
   };
 };
+// --------------------------------- END - NICKNAME ---------------------------------
 
-export const useDeleteAvatarMutation = () => {
-  const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: async ({ userId }: { userId: string }) => {
-      const { data, error } = await supabaseClient.storage
-        .from("avatars")
-        .list(userId);
-
-      if (error) throw new Error();
-
-      const userAvatarsPathsToDelete = data?.map((file) =>
-        `${userId}/${file.name}`
-      ) ?? [];
-
-      if (userAvatarsPathsToDelete.length) {
-        const { error: deleteAvatarError } = await supabaseClient.storage
-          .from("avatars")
-          .remove(userAvatarsPathsToDelete);
-
-        const { error: avatarErrorTable } = await supabaseClient
-          .from("users")
-          .update({ avatar_url: null })
-          .eq("id", userId);
-
-        if (deleteAvatarError || avatarErrorTable) throw new Error();
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
-    },
-  });
-
-  return {
-    deleteUserAvatar: mutateAsync,
-    isDeleteUserAvatarLoading: isPending,
-  };
-};
-
+// --------------------------------- BEGIN - AVATAR ---------------------------------
 export const useEditUserAvatarMutation = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
@@ -267,7 +187,7 @@ export const useEditUserAvatarMutation = () => {
 
       const { error: updateAvatarUrlError } = await supabaseClient
         .from("users")
-        .update({
+        .update<Pick<DbUserData, "avatar_url">>({
           avatar_url: publicUrl,
         })
         .eq("id", userId);
@@ -279,7 +199,9 @@ export const useEditUserAvatarMutation = () => {
 
       const { error: avatarUrlUpdatedAtError } = await supabaseClient
         .from("users")
-        .update({ avatar_url_updated_at: new Date().toISOString() })
+        .update<Pick<DbUserData, "avatar_url_updated_at">>({
+          avatar_url_updated_at: new Date().toISOString(),
+        })
         .eq("id", userId);
 
       if (avatarUrlUpdatedAtError) {
@@ -296,3 +218,42 @@ export const useEditUserAvatarMutation = () => {
     isEditUserAvatarLoading: isPending,
   };
 };
+
+export const useDeleteAvatarMutation = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async ({ userId }: { userId: string }) => {
+      const { data, error } = await supabaseClient.storage
+        .from("avatars")
+        .list(userId);
+
+      if (error) throw new Error();
+
+      const userAvatarsPathsToDelete = data?.map((file) =>
+        `${userId}/${file.name}`
+      ) ?? [];
+
+      if (userAvatarsPathsToDelete.length) {
+        const { error: deleteAvatarError } = await supabaseClient.storage
+          .from("avatars")
+          .remove(userAvatarsPathsToDelete);
+
+        const { error: avatarErrorTable } = await supabaseClient
+          .from("users")
+          .update<Pick<DbUserData, "avatar_url">>({ avatar_url: null })
+          .eq("id", userId);
+
+        if (deleteAvatarError || avatarErrorTable) throw new Error();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    deleteUserAvatar: mutateAsync,
+    isDeleteUserAvatarLoading: isPending,
+  };
+};
+// --------------------------------- END - AVATAR ---------------------------------

@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "createMdFiles": "cp mdsource.md public/appInfo.md && cp mdsource.md README.md && node scripts/replaceVersion.cjs",
+    "createMdFiles": "cp mdsource.md src/pages/AppInfoPage/content/appInfo.md && cp mdsource.md README.md && node scripts/updateMdFiles.cjs",
     "commitMdFiles": "git add . && git commit -m \"update md files\" || true",
     "gitPushWithMdFiles": "npm run createMdFiles && npm run commitMdFiles && git push"
   },

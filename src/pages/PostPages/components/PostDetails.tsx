@@ -10,7 +10,7 @@ import { UserAvatar } from "src/shared/components";
 import { Card, Typography, Loader } from "src/shared/UI";
 import { PostFromDbType } from "src/types";
 
-import { CommentsSection } from "./CommentsSection/CommentsSection";
+import { CommentsSection } from "./CommentsSection";
 import { LikeButton } from "./LikeButton";
 
 type PostDetailsProps = {

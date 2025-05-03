@@ -1,6 +1,6 @@
 import { Typography } from "src/shared/UI";
 
-import { CreatePost } from "../components/CreatePost";
+import { CreatePost } from "./components/CreatePost";
 
 export const CreatePostPage = () => {
   return (

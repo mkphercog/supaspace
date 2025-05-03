@@ -1,6 +1,6 @@
 import { Typography } from "src/shared/UI";
 
-import { AppInfo } from "../components/AppInfo";
+import { AppInfo } from "./components/AppInfo";
 
 export const AppInfoPage = () => {
   return (

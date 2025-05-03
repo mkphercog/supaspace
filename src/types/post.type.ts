@@ -1,4 +1,4 @@
-import { DbUserDataType } from "./users";
+import { DbUserDataType } from "./users.type";
 
 export type PostFromDbType = {
   id: number;

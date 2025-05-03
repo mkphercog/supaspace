@@ -34,7 +34,9 @@ const postRoutes: RouteObject[] = [
   {
     path: ROUTES.post.create(),
     lazy: async () => {
-      const { CreatePostPage } = await import("../pages/CreatePostPage");
+      const { CreatePostPage } = await import(
+        "../pages/PostPages/CreatePostPage"
+      );
 
       const Component = () => (
         <ProtectedRoute>
@@ -48,7 +50,9 @@ const postRoutes: RouteObject[] = [
   {
     path: ROUTES.post.detailsRoot(),
     lazy: async () => {
-      const { PostDetailsPage } = await import("../pages/PostDetailsPage");
+      const { PostDetailsPage } = await import(
+        "../pages/PostPages/PostDetailsPage"
+      );
 
       return { Component: PostDetailsPage };
     },
@@ -101,7 +105,7 @@ export const BROWSER_ROUTER = createBrowserRouter([
       {
         index: true,
         lazy: async () => {
-          const { HomePage } = await import("../pages/HomePage");
+          const { HomePage } = await import("../pages/HomePage/HomePage");
 
           return { Component: HomePage };
         },
@@ -126,7 +130,7 @@ export const BROWSER_ROUTER = createBrowserRouter([
         path: ROUTES.settings(),
         lazy: async () => {
           const { UserSettingsPage } = await import(
-            "../pages/UserSettingsPage"
+            "../pages/UserSettingsPage/UserSettingsPage"
           );
 
           const Component = () => (
@@ -141,7 +145,9 @@ export const BROWSER_ROUTER = createBrowserRouter([
       {
         path: ROUTES.appInfo(),
         lazy: async () => {
-          const { AppInfoPage } = await import("../pages/AppInfoPage");
+          const { AppInfoPage } = await import(
+            "../pages/AppInfoPage/AppInfoPage"
+          );
 
           return { Component: AppInfoPage };
         },

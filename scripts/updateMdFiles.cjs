@@ -4,7 +4,7 @@ const pkg = require("../package.json");
 
 const files = [
   path.resolve(__dirname, "../README.md"),
-  path.resolve(__dirname, "../public/appInfo.md"),
+  path.resolve(__dirname, "../src/pages/AppInfoPage/content/appInfo.md"),
 ];
 
 files.forEach((file) => {
@@ -20,5 +20,5 @@ files.forEach((file) => {
   }
 
   fs.writeFileSync(file, updated);
-  console.info(`---- ✅ Version ${pkg.version} changed in ${file} correctly.`);
+  console.info(`---- ✅ ${pkg.version} - ${file} - updated correctly.`);
 });

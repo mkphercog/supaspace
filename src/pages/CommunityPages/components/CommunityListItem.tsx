@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
-import { ROUTES } from "../routes/routes";
-import { Button, Card, Typography } from "./ui";
-import { UserAvatar } from "./UserAvatar";
-import { ChevronUpIcon, InfoIcon } from "../assets/icons";
-import { Community } from "../types/community.type";
-import { useAuth } from "../context/AuthContext";
-import { useDeleteCommunityMutation } from "../api/community";
-import { useDeleteWarnToast } from "../hooks/useDeleteWarnToast";
+
+import { useDeleteCommunityMutation } from "src/api/community";
+import { ChevronUpIcon, InfoIcon } from "src/assets/icons";
+import { UserAvatar } from "src/components";
+import { Button, Card, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
+import { useDeleteWarnToast } from "src/hooks";
+import { ROUTES } from "src/routes";
+import { Community } from "src/types";
 
 type CommunityListItemProps = Community;
 

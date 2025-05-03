@@ -1,7 +1,8 @@
 import { Navigate, RouteObject, createBrowserRouter } from "react-router";
-import { ProtectedRoute } from "../components/ProtectedRoute";
-import { AppLayout } from "../components/layout/AppLayout";
+
 import { FullPageLoader } from "../components/FullPageLoader";
+import { AppLayout } from "../components/layout/AppLayout";
+import { ProtectedRoute } from "../components/ProtectedRoute";
 
 export const ROUTES = {
   root: () => "/",
@@ -63,9 +64,7 @@ const communityRoutes: RouteObject[] = [
   {
     path: ROUTES.community.create(),
     lazy: async () => {
-      const { CreateCommunityPage } = await import(
-        "../pages/CreateCommunityPage"
-      );
+      const { CreateCommunityPage } = await import("../pages/CommunityPages");
 
       const Component = () => (
         <ProtectedRoute>
@@ -79,7 +78,7 @@ const communityRoutes: RouteObject[] = [
   {
     path: ROUTES.community.detailsRoot(),
     lazy: async () => {
-      const { CommunityPage } = await import("../pages/CommunityPage");
+      const { CommunityPage } = await import("../pages/CommunityPages");
 
       return { Component: CommunityPage };
     },
@@ -87,9 +86,9 @@ const communityRoutes: RouteObject[] = [
   {
     path: ROUTES.community.list(),
     lazy: async () => {
-      const { CommunitiesPage } = await import("../pages/CommunitiesPage");
+      const { CommunityListPage } = await import("../pages/CommunityPages");
 
-      return { Component: CommunitiesPage };
+      return { Component: CommunityListPage };
     },
   },
 ];

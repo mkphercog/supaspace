@@ -1,6 +1,8 @@
 import { FC } from "react";
+
+import { Overlay, Typography } from "src/components/ui";
+
 import { Loader } from "./Loader";
-import { Overlay, Typography } from "./ui";
 
 type FullPageLoaderProps = {
   message?: string;

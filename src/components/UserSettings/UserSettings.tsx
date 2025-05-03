@@ -1,7 +1,7 @@
 import { AccountInfoSection } from "./AccountInfoSection";
 import { AvatarSection } from "./AvatarSection/AvatarSection";
-import { NicknameSection } from "./NicknameSection/NicknameSection";
 import { DeleteAccountSection } from "./DeleteAccountSection";
+import { NicknameSection } from "./NicknameSection/NicknameSection";
 
 export const UserSettings = () => {
   return (

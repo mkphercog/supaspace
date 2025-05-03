@@ -1,16 +1,18 @@
+import MDEditor from "@uiw/react-md-editor";
 import { FC } from "react";
 import { PhotoView } from "react-photo-view";
-import MDEditor from "@uiw/react-md-editor";
-import { PostFromDbType } from "../types/post.type";
-import { useFetchPostById } from "../api/posts";
-import { LikeButton } from "./LikeButton";
+
+import { useFetchPostById } from "src/api/posts";
+import PostPlaceholderImage from "src/assets/images/postPlaceholder.jpg";
+import { Card, Typography } from "src/components/ui";
+import { NotFoundPage } from "src/pages/NotFoundPage";
+import { ROUTES } from "src/routes";
+import { PostFromDbType } from "src/types";
+
 import { CommentsSection } from "./CommentsSection/CommentsSection";
+import { LikeButton } from "./LikeButton";
 import { Loader } from "./Loader";
 import { UserAvatar } from "./UserAvatar";
-import { NotFoundPage } from "../pages/NotFoundPage";
-import { Card, Typography } from "./ui";
-import PostPlaceholderImage from "../assets/images/postPlaceholder.jpg";
-import { ROUTES } from "../routes/routes";
 
 type PostDetailsProps = {
   post_id: PostFromDbType["id"];

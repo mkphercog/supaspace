@@ -1,7 +1,8 @@
 import { FC, ReactNode } from "react";
-import { Button, Typography } from "../../ui";
-import { useSidebar } from "../../../context/SidebarContext";
-import { ROUTES } from "../../../routes/routes";
+
+import { Button, Typography } from "src/components/ui";
+import { useSidebar } from "src/context";
+import { ROUTES } from "src/routes";
 
 export type SidebarItemBaseProps = {
   text: ReactNode;

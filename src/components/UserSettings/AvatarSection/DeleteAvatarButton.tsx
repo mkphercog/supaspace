@@ -1,8 +1,9 @@
-import { Button } from "../../ui";
-import { useAuth } from "../../../context/AuthContext";
-import { FC } from "react";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
-import { useDeleteWarnToast } from "../../../hooks/useDeleteWarnToast";
+import { FC } from "react";
+
+import { Button } from "src/components/ui";
+import { useAuth } from "src/context";
+import { useDeleteWarnToast } from "src/hooks";
 
 type DeleteAvatarButtonProps = {
   deleteUserAvatar: UseMutateAsyncFunction<

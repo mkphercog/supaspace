@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Cropper from "react-easy-crop";
-import { CloseIcon } from "../../../assets/icons";
+
+import { CloseIcon } from "src/assets/icons";
 import {
   BaseForm,
   Button,
@@ -8,7 +9,8 @@ import {
   FormImageInput,
   Typography,
   useBaseForm,
-} from "../../ui";
+} from "src/components/ui";
+
 import { UseAvatarSectionReturnType } from "./useAvatarSection";
 
 type AvatarCropperProps = Pick<

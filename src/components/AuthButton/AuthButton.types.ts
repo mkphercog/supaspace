@@ -1,5 +1,5 @@
-import { SidebarStatusType } from "../../context/SidebarContext/SidebarContext";
-import { DbUserDataType } from "../../types/users";
+import { SidebarStatusType } from "src/context";
+import { DbUserDataType } from "src/types";
 
 export type AuthButtonsProps = {
   dbUserData: DbUserDataType | null;

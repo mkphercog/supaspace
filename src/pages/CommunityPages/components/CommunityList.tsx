@@ -1,6 +1,7 @@
-import { useFetchCommunities } from "../api/community";
-import { Loader } from "./Loader";
-import { Typography } from "./ui";
+import { useFetchCommunities } from "src/api/community";
+import { Loader } from "src/components";
+import { Typography } from "src/components/ui";
+
 import { CommunityListItem } from "./CommunityListItem";
 
 export const CommunityList = () => {

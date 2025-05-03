@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { supabase } from "../supabase-client.ts";
+
 import { corsHeaders } from "../cors.ts";
+import { supabase } from "../supabase-client.ts";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {

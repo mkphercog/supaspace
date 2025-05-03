@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { PhotoView } from "react-photo-view";
-import { DefaultAvatarIcon } from "../assets/icons";
+
+import { DefaultAvatarIcon } from "src/assets/icons";
 
 type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 

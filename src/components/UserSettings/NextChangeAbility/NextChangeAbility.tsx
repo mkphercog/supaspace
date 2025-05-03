@@ -1,7 +1,9 @@
-import { InfoIcon } from "../../../assets/icons";
-import { Typography } from "../../ui";
-import { UserDataType, useCanChangeField } from "./useNextChangeAbility";
 import { FC } from "react";
+
+import { InfoIcon } from "src/assets/icons";
+import { Typography } from "src/components/ui";
+
+import { UserDataType, useCanChangeField } from "./useNextChangeAbility";
 
 type NextChangeAbilityProps = {
   dataType: UserDataType;

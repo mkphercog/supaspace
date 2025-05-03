@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../../context/AuthContext";
-import { useSidebar } from "../../context/SidebarContext";
+
+import { useAuth, useSidebar } from "src/context";
+import { useScreenSize } from "src/hooks";
+import { ROUTES } from "src/routes";
+
 import { AuthButtonsProps } from "./AuthButton.types";
 import { SidebarAuthButton } from "./SidebarAuthButton";
 import { TopbarAuthButton } from "./TopbarAuthButton";
-import { ROUTES } from "../../routes/routes";
-import { useScreenSize } from "../../hooks/useScreenSize";
 
 type AuthButtonProps = {
   isInSidebar?: boolean;

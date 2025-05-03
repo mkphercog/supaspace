@@ -1,9 +1,10 @@
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useCreateNewPost } from "../api/posts";
-import { useFetchCommunities } from "../api/community";
-import { Button, Card, Typography } from "./ui";
 import MDEditor, { RefMDEditor } from "@uiw/react-md-editor";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+
+import { useFetchCommunities } from "src/api/community";
+import { useCreateNewPost } from "src/api/posts";
+import { Button, Card, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");

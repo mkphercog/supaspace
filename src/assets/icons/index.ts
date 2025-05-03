@@ -7,6 +7,7 @@ export * from "./CreateCommunityIcon";
 export * from "./DashboardIcon";
 export * from "./DefaultAvatarIcon";
 export * from "./DislikeIcon";
+export * from "./GoogleLogoIcon";
 export * from "./InfoIcon";
 export * from "./LikeIcon";
 export * from "./LogoIcon";

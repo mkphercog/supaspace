@@ -1,18 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, UseFormProps, UseFormReturn } from "react-hook-form";
-import type { AnyObjectSchema } from "yup";
-import type * as yup from "yup";
+import * as yup from "yup";
 
-export type UseBaseFormParams<T extends AnyObjectSchema> = UseFormProps<
-  yup.InferType<T>
-> & {
-  validationSchema?: T;
-};
+export type UseBaseFormParams<T extends yup.AnyObjectSchema> =
+  & UseFormProps<
+    yup.InferType<T>
+  >
+  & {
+    validationSchema?: T;
+  };
 
-export type UseBaseFormReturnedParams<T extends AnyObjectSchema> =
+export type UseBaseFormReturnedParams<T extends yup.AnyObjectSchema> =
   UseFormReturn<yup.Asserts<T>, object>;
 
-export const useBaseForm = <T extends AnyObjectSchema>({
+export const useBaseForm = <T extends yup.AnyObjectSchema>({
   mode = "onChange",
   defaultValues,
   validationSchema,

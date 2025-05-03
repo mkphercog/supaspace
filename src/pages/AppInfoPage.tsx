@@ -1,5 +1,6 @@
+import { Typography } from "src/components/ui";
+
 import { AppInfo } from "../components/AppInfo";
-import { Typography } from "../components/ui";
 
 export const AppInfoPage = () => {
   return (

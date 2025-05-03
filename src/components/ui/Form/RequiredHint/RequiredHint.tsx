@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Typography } from "../../Typography";
+
+import { Typography } from "src/components/ui";
 
 interface RequiredHintProps {
   message?: string;

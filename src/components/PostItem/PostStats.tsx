@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { Typography } from "../ui";
-import { ChartIcon, CommentsIcon } from "../../assets/icons";
+
+import { ChartIcon, CommentsIcon } from "src/assets/icons";
+import { Typography } from "src/components/ui";
 
 type PostStatsType = {
   likeCount: number;

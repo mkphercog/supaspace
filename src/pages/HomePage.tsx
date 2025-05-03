@@ -1,5 +1,6 @@
+import { Typography } from "src/components/ui";
+
 import { PostList } from "../components/PostList";
-import { Typography } from "../components/ui";
 
 export const HomePage = () => {
   return (

@@ -1,5 +1,6 @@
+import { Typography } from "src/components/ui";
+
 import { UserSettings } from "../components/UserSettings/UserSettings";
-import { Typography } from "../components/ui";
 
 export const UserSettingsPage = () => {
   return (

@@ -1,9 +1,11 @@
-import { Button, Card, Typography } from "../../ui";
-import { UserAvatar } from "../../UserAvatar";
-import { DeleteAvatarButton } from "./DeleteAvatarButton";
-import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
-import { FILE_MAX_SIZE_IN_kB, useAvatarSection } from "./useAvatarSection";
+import { Button, Card, Typography } from "src/components/ui";
+import { FILE_MAX_SIZE_IN_kB } from "src/constants";
+
 import { AvatarCropper } from "./AvatarCropper";
+import { DeleteAvatarButton } from "./DeleteAvatarButton";
+import { useAvatarSection } from "./useAvatarSection";
+import { UserAvatar } from "../../UserAvatar";
+import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
 
 export const AvatarSection = () => {
   const { api, cropper, editor, clearAvatarSectionStates, handleFileChange } =

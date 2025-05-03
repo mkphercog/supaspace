@@ -1,5 +1,6 @@
 import { RouterProvider } from "react-router";
-import { BROWSER_ROUTER } from "./routes/routes";
+
+import { BROWSER_ROUTER } from "src/routes";
 
 const App = () => {
   return <RouterProvider router={BROWSER_ROUTER} />;

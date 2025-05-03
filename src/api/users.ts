@@ -1,12 +1,13 @@
-import { Dispatch } from "react";
 import { User } from "@supabase/supabase-js";
-import { supabaseClient } from "../supabase-client";
-import { DbUserDataType } from "../types/users";
-import { QUERY_KEYS } from "./queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Dispatch } from "react";
 import { toast } from "react-toastify";
-import { NICKNAME_MAX_LENGTH } from "../components/UserSettings/NicknameSection/validationSchema";
-import { AuthContextType } from "../context/AuthContext/AuthContext";
+
+import { QUERY_KEYS } from "src/api";
+import { NICKNAME_MAX_LENGTH } from "src/constants";
+import { AuthContextType } from "src/context";
+import { supabaseClient } from "src/supabase-client";
+import { DbUserDataType } from "src/types";
 
 type FetchUserDataErrorsType =
   | "NO_LOGGED_USER"

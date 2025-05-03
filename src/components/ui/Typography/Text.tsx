@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+
 import { TYPOGRAPHY_COLOR, TypographyColors } from ".";
 
 type TextSizes = "xxs" | "xs" | "sm" | "md" | "lg";

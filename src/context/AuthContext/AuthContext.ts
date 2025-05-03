@@ -1,7 +1,8 @@
-import { createContext } from "react";
-import { DbUserDataType } from "../../types/users";
 import { Session } from "@supabase/supabase-js";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { createContext } from "react";
+
+import { DbUserDataType } from "src/types";
 
 export type AuthContextType = {
   dbUserData: DbUserDataType | null;

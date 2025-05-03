@@ -1,4 +1,4 @@
-import { CommentFromDbType, CommentTreeType } from "../../types/comment.type";
+import { CommentFromDbType, CommentTreeType } from "src/types";
 
 const REPLY_STYLE_COLORS: Record<number, string> = {
   0: "bg-gray-600/5 border-gray-300/20",

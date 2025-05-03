@@ -1,9 +1,9 @@
-import { PostItem } from "./PostItem";
-import { Community } from "../types/community.type";
-import { useFetchCommunityPosts } from "../api/community";
-import { Loader } from "./Loader";
-import { Typography } from "./ui";
-import { NotFoundPage } from "../pages/NotFoundPage";
+import { useFetchCommunityPosts } from "src/api/community";
+import { PostItem, Loader } from "src/components";
+import { Typography } from "src/components/ui";
+import { Community } from "src/types";
+
+import { NotFoundPage } from "../../NotFoundPage";
 
 type Props = {
   id: Community["id"];

@@ -1,7 +1,9 @@
 import * as yup from "yup";
 
-export const COMMUNITY_TITLE_MAX_LENGTH = 24;
-export const COMMUNITY_DESC_MAX_LENGTH = 512;
+import {
+  COMMUNITY_DESC_MAX_LENGTH,
+  COMMUNITY_TITLE_MAX_LENGTH,
+} from "src/constants";
 
 export const INITIAL_FORM_STATE: CreateCommunityForm = {
   communityName: "",

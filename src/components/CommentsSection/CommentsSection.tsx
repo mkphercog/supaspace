@@ -1,13 +1,15 @@
-import { FC, FormEvent, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
+import { FC, FormEvent, useState } from "react";
+
+import { QUERY_KEYS } from "src/api";
+import { useCreateNewComment, useFetchComments } from "src/api/comments";
+import { Button, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
+import { CommentFromDbType } from "src/types";
+
 import { CommentItem } from "./CommentItem";
-import { CommentFromDbType } from "../../types/comment.type";
-import { useCreateNewComment, useFetchComments } from "../../api/comments";
-import { QUERY_KEYS } from "../../api/queryKeys";
-import { Loader } from "../Loader";
-import { Button, Typography } from "../ui";
 import { buildFlatCommentsTree } from "./comments.utils";
+import { Loader } from "../Loader";
 
 type Props = Pick<CommentFromDbType, "post_id">;
 

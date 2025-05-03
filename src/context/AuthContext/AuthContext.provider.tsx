@@ -1,16 +1,18 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { supabaseClient } from "../../supabase-client";
 import { Session } from "@supabase/supabase-js";
-import { AuthContext, AuthContextType } from "./AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+
+import { QUERY_KEYS } from "src/api";
 import {
   insertUserDataToDb,
   useDeleteUserWithData,
   useFetchUserData,
-} from "../../api/users";
-import { QUERY_KEYS } from "../../api/queryKeys";
-import { useQueryClient } from "@tanstack/react-query";
-import { ROUTES } from "../../routes/routes";
+} from "src/api/users";
+import { ROUTES } from "src/routes";
+import { supabaseClient } from "src/supabase-client";
+
+import { AuthContext, AuthContextType } from "./AuthContext";
 
 const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
 

@@ -1,10 +1,12 @@
 import { FC, PropsWithChildren, useState } from "react";
+
+import { useScreenSize } from "src/hooks";
+
 import {
   SidebarContext,
   SidebarContextType,
   SidebarStatusType,
 } from "./SidebarContext";
-import { useScreenSize } from "../../hooks/useScreenSize";
 
 export const SidebarProvider: FC<PropsWithChildren> = ({ children }) => {
   const { isMdUp } = useScreenSize();

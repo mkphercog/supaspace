@@ -1,4 +1,5 @@
-import { useSidebar } from "../../../context/SidebarContext";
+import { useSidebar } from "src/context";
+
 import { AuthButton } from "../../AuthButton";
 import { Logo } from "../../Logo";
 

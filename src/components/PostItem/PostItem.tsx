@@ -1,9 +1,11 @@
 import { FC } from "react";
-import { PostListItemFromDbType } from "../../types/post.type";
-import { Card, Typography } from "../ui";
-import PostPlaceholderImage from "../../assets/images/postPlaceholder.jpg";
+
+import PostPlaceholderImage from "src/assets/images/postPlaceholder.jpg";
+import { Card, Typography } from "src/components/ui";
+import { ROUTES } from "src/routes";
+import { PostListItemFromDbType } from "src/types";
+
 import { PostStats } from "./PostStats";
-import { ROUTES } from "../../routes/routes";
 
 type PostItemProps = {
   post: PostListItemFromDbType;

@@ -1,8 +1,8 @@
-import { SidebarStatusType } from "../../../context/SidebarContext/SidebarContext";
-import { useSidebar } from "../../../context/SidebarContext/SidebarContext.hook";
-import { AuthButton } from "../../AuthButton";
-import { SidebarNavItemsList } from "./SidebarNavItemsList";
+import { SidebarStatusType, useSidebar } from "src/context";
+
 import { SidebarHeader } from "./SidebarHeader";
+import { SidebarNavItemsList } from "./SidebarNavItemsList";
+import { AuthButton } from "../../AuthButton";
 
 const SIDEBRAR_VISIBILITY_CLASSES: Record<SidebarStatusType, string> = {
   show: "p-3 w-full md:w-[250px]",

@@ -1,6 +1,6 @@
-import { ONE_DAY_IN_MS } from "../../../constants";
-import { useAuth } from "../../../context/AuthContext";
-import { DbUserDataType } from "../../../types/users";
+import { ONE_DAY_IN_MS } from "src/constants";
+import { useAuth } from "src/context";
+import { DbUserDataType } from "src/types";
 
 export type UserDataType = "avatar" | "nickname";
 

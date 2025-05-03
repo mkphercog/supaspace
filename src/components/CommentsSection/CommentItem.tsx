@@ -1,18 +1,20 @@
-import { FC, FormEvent, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { CommentFromDbType, CommentTreeType } from "../../types/comment.type";
-import { useAuth } from "../../context/AuthContext";
+import MDEditor from "@uiw/react-md-editor";
+import { FC, FormEvent, useState } from "react";
+
+import { QUERY_KEYS } from "src/api";
 import {
   useCreateNewComment,
   useDeleteCommentsMutation,
-} from "../../api/comments";
-import { QUERY_KEYS } from "../../api/queryKeys";
-import { ChevronUpIcon } from "../../assets/icons";
-import { UserAvatar } from "../UserAvatar";
-import { Button, Typography } from "../ui";
-import MDEditor from "@uiw/react-md-editor";
+} from "src/api/comments";
+import { ChevronUpIcon } from "src/assets/icons";
+import { Button, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
+import { useDeleteWarnToast } from "src/hooks";
+import { CommentFromDbType, CommentTreeType } from "src/types";
+
 import { getReplyStyleColor } from "./comments.utils";
-import { useDeleteWarnToast } from "../../hooks/useDeleteWarnToast";
+import { UserAvatar } from "../UserAvatar";
 
 type Props = Pick<CommentFromDbType, "post_id"> & {
   comment: CommentTreeType;

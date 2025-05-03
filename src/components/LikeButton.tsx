@@ -1,12 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
-import { useAuth } from "../context/AuthContext";
-import { PostFromDbType } from "../types/post.type";
-import { useCreateVote, useFetchVotes } from "../api/votes";
-import { QUERY_KEYS } from "../api/queryKeys";
+
+import { QUERY_KEYS } from "src/api";
+import { useCreateVote, useFetchVotes } from "src/api/votes";
+import { LikeIcon, DislikeIcon } from "src/assets/icons";
+import { Button, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
+import { PostFromDbType } from "src/types";
+
 import { Loader } from "./Loader";
-import { Button, Typography } from "./ui";
-import { LikeIcon, DislikeIcon } from "../assets/icons";
 
 type Props = {
   post_id: PostFromDbType["id"];

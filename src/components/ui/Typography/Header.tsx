@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+
 import { TYPOGRAPHY_COLOR, TypographyColors } from ".";
 
 type HeaderComponentTypes = "h1" | "h2" | "h3" | "h4";

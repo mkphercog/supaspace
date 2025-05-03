@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const NICKNAME_MAX_LENGTH = 24;
+import { NICKNAME_MAX_LENGTH } from "src/constants";
 
 export const getValidationSchema = (fullName: string, nickname: string) =>
   yup.object({

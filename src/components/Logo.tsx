@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { useSidebar } from "../context/SidebarContext/SidebarContext.hook";
-import { Typography } from "./ui";
-import { LogoIcon } from "../assets/icons";
-import { ROUTES } from "../routes/routes";
+
+import { LogoIcon } from "src/assets/icons";
+import { Typography } from "src/components/ui";
+import { useSidebar } from "src/context";
+import { ROUTES } from "src/routes";
 
 type LogoProps = {
   isInSidebar?: boolean;

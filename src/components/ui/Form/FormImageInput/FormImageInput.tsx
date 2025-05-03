@@ -1,6 +1,7 @@
 import { ChangeEventHandler, FC } from "react";
 import { useController } from "react-hook-form";
-import { Typography } from "../../Typography";
+
+import { Typography } from "src/components/ui";
 
 type FormImageInputProps = {
   labelText: string;

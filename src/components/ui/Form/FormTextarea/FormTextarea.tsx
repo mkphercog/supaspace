@@ -1,6 +1,7 @@
 import { FC, TextareaHTMLAttributes } from "react";
 import { useController } from "react-hook-form";
-import { Typography } from "../../Typography";
+
+import { Typography } from "src/components/ui";
 
 type FromTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   labelText: string;

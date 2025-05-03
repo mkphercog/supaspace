@@ -1,11 +1,13 @@
 import { FC } from "react";
-import { AuthButtonsProps } from "./AuthButton.types";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { SidebarItem } from "../layout/Sidebar/SidebarItem";
-import { SignInIcon, SignOutIcon, SettingsIcon } from "../../assets/icons";
-import { UserAvatar } from "../UserAvatar";
 import { useNavigate } from "react-router";
-import { ROUTES } from "../../routes/routes";
+
+import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
+import { useClickOutside } from "src/hooks";
+import { ROUTES } from "src/routes";
+
+import { AuthButtonsProps } from "./AuthButton.types";
+import { SidebarItem } from "../layout/Sidebar/SidebarItem";
+import { UserAvatar } from "../UserAvatar";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   dbUserData,

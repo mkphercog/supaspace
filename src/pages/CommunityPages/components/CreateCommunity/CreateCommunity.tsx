@@ -1,6 +1,6 @@
-import { useAuth } from "../../context/AuthContext";
-import { useCreateCommunity } from "../../api/community";
 import { toast } from "react-toastify";
+
+import { useCreateCommunity } from "src/api/community";
 import {
   BaseForm,
   Button,
@@ -9,10 +9,14 @@ import {
   FormTextInput,
   RequiredHint,
   useBaseForm,
-} from "../ui";
+} from "src/components/ui";
 import {
   COMMUNITY_DESC_MAX_LENGTH,
   COMMUNITY_TITLE_MAX_LENGTH,
+} from "src/constants";
+import { useAuth } from "src/context";
+
+import {
   INITIAL_FORM_STATE,
   CreateCommunityForm,
   validationSchema,

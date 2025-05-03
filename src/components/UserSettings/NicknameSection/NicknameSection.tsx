@@ -1,4 +1,9 @@
 import { toast } from "react-toastify";
+
+import {
+  useDeleteNicknameMutation,
+  useSetNicknameMutation,
+} from "src/api/users";
 import {
   BaseForm,
   Button,
@@ -7,18 +12,12 @@ import {
   Typography,
   useBaseForm,
   RequiredHint,
-} from "../../ui";
-import {
-  useDeleteNicknameMutation,
-  useSetNicknameMutation,
-} from "../../../api/users";
-import { useAuth } from "../../../context/AuthContext";
-import {
-  NICKNAME_MAX_LENGTH,
-  NewNicknameFormType,
-  getValidationSchema,
-} from "./validationSchema";
+} from "src/components/ui";
+import { NICKNAME_MAX_LENGTH } from "src/constants";
+import { useAuth } from "src/context";
+
 import { DeleteNicknameButton } from "./DeleteNicknameButton";
+import { NewNicknameFormType, getValidationSchema } from "./validationSchema";
 import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
 import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 

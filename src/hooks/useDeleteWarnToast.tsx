@@ -1,5 +1,6 @@
 import { Id, toast } from "react-toastify";
-import { Button, Typography } from "../components/ui";
+
+import { Button, Typography } from "src/components/ui";
 
 const deleteToastCloseReasons = new Map<Id, "user-cancelled">();
 

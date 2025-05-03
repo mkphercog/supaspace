@@ -4,16 +4,16 @@ import {
   DashboardIcon,
   InfoIcon,
   PostIcon,
-} from "../../../assets/icons";
-import { ROUTES } from "../../../routes/routes";
-import { useAuth } from "../../../context/AuthContext";
-import { useSidebar } from "../../../context/SidebarContext";
+} from "src/assets/icons";
+import { useAuth, useSidebar } from "src/context";
+import { useScreenSize } from "src/hooks";
+import { ROUTES } from "src/routes";
+
 import {
   SidebarItem,
   SidebarItemBaseProps,
   SidebarLinkItemProps,
 } from "./SidebarItem";
-import { useScreenSize } from "../../../hooks/useScreenSize";
 
 type SidebarItemType = Omit<SidebarItemBaseProps, "isSidebarOpen"> & {
   path: SidebarLinkItemProps["path"];

@@ -1,8 +1,8 @@
-import { ChevronUpIcon, CloseIcon } from "../../../assets/icons";
+import { ChevronUpIcon, CloseIcon } from "src/assets/icons";
+import { Button } from "src/components/ui";
+import { useSidebar } from "src/context";
 
-import { useSidebar } from "../../../context/SidebarContext";
 import { Logo } from "../../Logo";
-import { Button } from "../../ui";
 
 export const SidebarHeader = () => {
   const { sidebarStatus, setStatusOfSidebar, toggleSidebarStatus } =

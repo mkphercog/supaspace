@@ -1,6 +1,7 @@
 import { FC, InputHTMLAttributes } from "react";
 import { useController } from "react-hook-form";
-import { Typography } from "../../Typography";
+
+import { Typography } from "src/components/ui";
 
 type FromTextInputProps = InputHTMLAttributes<HTMLInputElement> & {
   labelText: string;

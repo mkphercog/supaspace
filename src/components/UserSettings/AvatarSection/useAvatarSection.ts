@@ -1,16 +1,18 @@
 import { ChangeEvent, useEffect, useState } from "react";
+import { Area } from "react-easy-crop";
+import { toast } from "react-toastify";
+
 import {
   useDeleteAvatarMutation,
   useEditUserAvatarMutation,
-} from "../../../api/users";
-import { useAuth } from "../../../context/AuthContext";
-import { toast } from "react-toastify";
+} from "src/api/users";
+import { FILE_MAX_SIZE_IN_kB } from "src/constants";
+import { useAuth } from "src/context";
+import { useClickOutside } from "src/hooks";
+
 import { getCroppedImg } from "./canvasUtils";
-import { Area } from "react-easy-crop";
-import { useClickOutside } from "../../../hooks/useClickOutside";
 import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 
-export const FILE_MAX_SIZE_IN_kB = 200;
 const INITIAL_CROP_STATE: Pick<Area, "x" | "y"> = { x: 0, y: 0 };
 
 export const useAvatarSection = () => {

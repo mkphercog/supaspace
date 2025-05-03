@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { NavLink, NavLinkProps } from "react-router";
+
 import { TYPOGRAPHY_COLOR, TypographyColors } from ".";
 
 type LinkProps = {

@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { supabaseClient } from "../supabase-client";
-import { VoteFromDbType, VoteType } from "../types/vote.type";
-import { QUERY_KEYS } from "./queryKeys";
+
+import { QUERY_KEYS } from "src/api";
+import { supabaseClient } from "src/supabase-client";
+import { VoteFromDbType, VoteType } from "src/types";
 
 type UseCreateVoteProps = {
   user_id?: string | null;

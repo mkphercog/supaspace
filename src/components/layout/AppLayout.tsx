@@ -1,12 +1,12 @@
 import { Outlet, useNavigation } from "react-router";
 import { ToastContainer } from "react-toastify";
+
+import { FullPageLoader } from "src/components";
+import { useAuth, SidebarProvider, AuthProvider } from "src/context";
+
+import { AnimatedBackground } from "./AnimatedBackground";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar/Topbar";
-import { AnimatedBackground } from "./AnimatedBackground";
-import { FullPageLoader } from "../FullPageLoader";
-import { useAuth } from "../../context/AuthContext";
-import { AuthProvider } from "../../context/AuthContext/AuthContext.provider";
-import { SidebarProvider } from "../../context/SidebarContext/SidebarContext.provider";
 
 export const AppLayout = () => {
   return (

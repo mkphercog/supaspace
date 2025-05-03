@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { Card, Typography } from "../ui";
+
+import { Card, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
 
 export const AccountInfoSection = () => {
   const { dbUserData, isUserDataFetching } = useAuth();

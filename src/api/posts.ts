@@ -1,15 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabaseClient } from "../supabase-client";
+import { useNavigate } from "react-router";
+
+import { QUERY_KEYS } from "src/api";
+import { ROUTES } from "src/routes";
+import { supabaseClient } from "src/supabase-client";
 import {
+  DbUserDataType,
   NewPostType,
   PostDetailsFromDbType,
   PostFromDbType,
   PostListItemFromDbType,
-} from "../types/post.type";
-import { QUERY_KEYS } from "./queryKeys";
-import { useNavigate } from "react-router";
-import { DbUserDataType } from "../types/users";
-import { ROUTES } from "../routes/routes";
+} from "src/types";
 
 export const useCreateNewPost = (user_id?: DbUserDataType["id"]) => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
-import { Button, Card, Typography } from "../ui";
-import { useAuth } from "../../context/AuthContext";
-import { useDeleteWarnToast } from "../../hooks/useDeleteWarnToast";
+import { Button, Card, Typography } from "src/components/ui";
+import { useAuth } from "src/context";
+import { useDeleteWarnToast } from "src/hooks";
 
 export const DeleteAccountSection = () => {
   const { deleteUserWithData, isUserDataFetching } = useAuth();

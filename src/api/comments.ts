@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabaseClient } from "../supabase-client";
-import { CommentFromDbType, CreateNewCommentType } from "../types/comment.type";
-import { QUERY_KEYS } from "./queryKeys";
+
+import { QUERY_KEYS } from "src/api";
+import { supabaseClient } from "src/supabase-client";
+import { CommentFromDbType, CreateNewCommentType } from "src/types";
 
 type UseCreateNewCommentProps = {
   post_id: CommentFromDbType["post_id"];

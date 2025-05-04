@@ -6,11 +6,11 @@ import {
   useDeleteAvatarMutation,
   useEditUserAvatarMutation,
 } from "src/api/user";
-import { FILE_MAX_SIZE_IN_kB } from "src/constants";
+import { AVATAR_MAX_FILE_SIZE_IN_kB } from "src/constants";
 import { useAuth } from "src/context";
 import { useClickOutside } from "src/hooks";
+import { getCroppedImg } from "src/utils";
 
-import { getCroppedImg } from "./canvasUtils";
 import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 
 const INITIAL_CROP_STATE: Pick<Area, "x" | "y"> = { x: 0, y: 0 };
@@ -63,10 +63,15 @@ export const useAvatarSection = () => {
   const handleSubmitAvatarPreview = async () => {
     if (!croppedAreaPixels) return;
     try {
-      const { blobUrl, cleanup, file } = await getCroppedImg(
+      const { blobUrl, cleanup, file } = await getCroppedImg({
         imageSrc,
-        croppedAreaPixels,
-      );
+        pixelCrop: croppedAreaPixels,
+        max: {
+          width: 500,
+          height: 500,
+        },
+        outputFilename: "userAvatar",
+      });
       setSelectedFileAfterCropp(file);
       cleanupUrl();
       setCleanupUrl(() => cleanup);
@@ -135,7 +140,7 @@ export const useAvatarSection = () => {
       croppedImageUrl,
       isPreviewMode: !!selectedFileAfterCropp,
       croppedFileSize: croppedFileSize.toFixed(2),
-      isCorrectFileSize: croppedFileSize > FILE_MAX_SIZE_IN_kB,
+      isCorrectFileSize: croppedFileSize > AVATAR_MAX_FILE_SIZE_IN_kB,
       canChange,
     },
     clearAvatarSectionStates,

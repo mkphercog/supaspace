@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbPost, CreatePost } from "src/types";
+import { sanitizeFilename } from "src/utils";
 
 export const useCreatePostMutation = () => {
   const navigate = useNavigate();
@@ -19,7 +21,9 @@ export const useCreatePostMutation = () => {
     ) => {
       if (!userId) throw new Error("You must be logged in to add new post");
 
-      const filePath = `${userId}/${imageFile.name}-${Date.now()}`;
+      const filePath = `${userId}/${
+        sanitizeFilename(imageFile.name)
+      }-${Date.now()}`;
 
       const { error: uploadError } = await supabaseClient.storage
         .from("post-images")
@@ -42,7 +46,7 @@ export const useCreatePostMutation = () => {
         });
 
       if (error) {
-        supabaseClient.auth.signOut();
+        toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(error.message);
       }
     },

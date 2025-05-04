@@ -34,9 +34,7 @@ const postRoutes: RouteObject[] = [
   {
     path: ROUTES.post.create(),
     lazy: async () => {
-      const { CreatePostPage } = await import(
-        "../pages/PostPages/CreatePostPage"
-      );
+      const { CreatePostPage } = await import("../pages/PostPages");
 
       const Component = () => (
         <ProtectedRoute>
@@ -50,9 +48,7 @@ const postRoutes: RouteObject[] = [
   {
     path: ROUTES.post.detailsRoot(),
     lazy: async () => {
-      const { PostDetailsPage } = await import(
-        "../pages/PostPages/PostDetailsPage"
-      );
+      const { PostDetailsPage } = await import("../pages/PostPages");
 
       return { Component: PostDetailsPage };
     },

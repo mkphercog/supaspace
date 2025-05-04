@@ -10,7 +10,6 @@ type FormImageInputProps = {
   isRequired?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
-  value?: string | number | readonly string[] | undefined;
   isLoading?: boolean;
   placeholder?: string;
 };
@@ -22,7 +21,6 @@ export const FormImageInput: FC<FormImageInputProps> = ({
   isRequired = false,
   onChange,
   disabled,
-  value,
   placeholder,
 }) => {
   const { field, fieldState } = useController({ name });
@@ -31,7 +29,7 @@ export const FormImageInput: FC<FormImageInputProps> = ({
     <div className={`flex flex-col gap-2 ${className}`}>
       <div>
         <label htmlFor={name} className="block mb-1">
-          <Typography.Text size="sm">
+          <Typography.Text size="sm" className="font-semibold">
             {labelText} {isRequired && "*"}
           </Typography.Text>
         </label>
@@ -45,13 +43,21 @@ export const FormImageInput: FC<FormImageInputProps> = ({
             bg-transparent focus:border-purple-600
             transition-colors duration-300
             hover:cursor-pointer file:hidden
+            ${
+              fieldState.error
+                ? "border-red-400 focus:border-red-400 hover:border-red-400"
+                : ""
+            }
           `}
-          {...field}
           onChange={(event) => {
-            field.onChange(event);
+            const file = event.target.files?.[0];
+            if (file) {
+              field.onChange(file);
+            } else {
+              field.onChange(undefined);
+            }
             onChange?.(event);
           }}
-          value={value || field.value}
           disabled={disabled}
           placeholder={placeholder}
         />

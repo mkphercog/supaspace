@@ -7,16 +7,27 @@ export const createImage = (url: string) =>
     image.src = url;
   });
 
-export async function getCroppedImg(
-  imageSrc: string,
+type GetCroppedImg = (props: {
+  imageSrc: string;
   pixelCrop: {
     x: number;
     y: number;
+    width: number | null;
+    height: number | null;
+  };
+  max: {
     width: number;
     height: number;
-  },
-): Promise<{ blobUrl: string; cleanup: () => void; file: File }> {
+  };
+  outputFilename: string;
+}) => Promise<{ blobUrl: string; cleanup: () => void; file: File }>;
+
+export const getCroppedImg: GetCroppedImg = async (
+  { imageSrc, pixelCrop, max, outputFilename },
+) => {
   const image = await createImage(imageSrc);
+  const pixelCropWidth = pixelCrop.width ? pixelCrop.width : image.width;
+  const pixelCropHeight = pixelCrop.height ? pixelCrop.height : image.height;
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -33,15 +44,14 @@ export async function getCroppedImg(
   const croppedCtx = croppedCanvas.getContext("2d");
   if (!croppedCtx) throw new Error("Could not get cropped canvas context");
 
-  const maxOutputSize = 500;
   const scale = Math.min(
-    maxOutputSize / pixelCrop.width,
-    maxOutputSize / pixelCrop.height,
+    max.width / pixelCropWidth,
+    max.height / pixelCropHeight,
     1,
   );
 
-  const outputWidth = pixelCrop.width * scale;
-  const outputHeight = pixelCrop.height * scale;
+  const outputWidth = pixelCropWidth * scale;
+  const outputHeight = pixelCropHeight * scale;
 
   croppedCanvas.width = outputWidth;
   croppedCanvas.height = outputHeight;
@@ -50,8 +60,8 @@ export async function getCroppedImg(
     canvas,
     pixelCrop.x,
     pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
+    pixelCropWidth,
+    pixelCropHeight,
     0,
     0,
     outputWidth,
@@ -70,10 +80,10 @@ export async function getCroppedImg(
         resolve({
           blobUrl,
           cleanup,
-          file: new File([blobFile], "userAvatar", { type: blobFile.type }),
+          file: new File([blobFile], outputFilename, { type: blobFile.type }),
         });
       },
       "image/jpeg",
     );
   });
-}
+};

@@ -21,6 +21,6 @@ export const getValidationSchema = (fullName: string, nickname: string) =>
       ),
   });
 
-export type NewNicknameFormType = yup.InferType<
+export type NicknameFormType = yup.InferType<
   ReturnType<typeof getValidationSchema>
 >;

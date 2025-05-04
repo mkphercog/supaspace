@@ -17,7 +17,7 @@ import {
 } from "src/shared/UI";
 
 import { DeleteNicknameButton } from "./DeleteNicknameButton";
-import { NewNicknameFormType, getValidationSchema } from "./validationSchema";
+import { NicknameFormType, getValidationSchema } from "./validationSchema";
 import { NextChangeAbility } from "../NextChangeAbility/NextChangeAbility";
 import { useCanChangeField } from "../NextChangeAbility/useNextChangeAbility";
 
@@ -43,7 +43,7 @@ export const NicknameSection = () => {
 
   if (!userData) return null;
 
-  const handleSubmit = async ({ userNickname }: NewNicknameFormType) => {
+  const handleSubmit = async ({ userNickname }: NicknameFormType) => {
     const trimmedNickname = userNickname.trim();
 
     toast
@@ -63,7 +63,7 @@ export const NicknameSection = () => {
       });
   };
 
-  const newNicknameValue = formParams.watch("userNickname");
+  const nicknameValue = formParams.watch("userNickname");
 
   return (
     <Card
@@ -105,7 +105,7 @@ export const NicknameSection = () => {
             type="submit"
             disabled={
               !!formParams.formState.errors.userNickname ||
-              !newNicknameValue ||
+              !nicknameValue ||
               !canChange
             }
             className="self-end"

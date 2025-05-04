@@ -2,7 +2,10 @@
 export const NICKNAME_MAX_LENGTH = 24;
 export const COMMUNITY_TITLE_MAX_LENGTH = 24;
 export const COMMUNITY_DESC_MAX_LENGTH = 512;
-export const FILE_MAX_SIZE_IN_kB = 200;
+export const AVATAR_MAX_FILE_SIZE_IN_kB = 200;
+export const POST_TITLE_MAX_LENGTH = 64;
+export const POST_CONTENT_MAX_LENGTH = 8_192;
+export const POST_MAX_FILE_SIZE_IN_kB = 300;
 
 // GENERAL
-export const ONE_DAY_IN_MS = 86400000;
+export const ONE_DAY_IN_MS = 86_400_000;

@@ -1,4 +1,4 @@
-import { FILE_MAX_SIZE_IN_kB } from "src/constants";
+import { AVATAR_MAX_FILE_SIZE_IN_kB } from "src/constants";
 import { UserAvatar } from "src/shared/components";
 import { Button, Card, Typography } from "src/shared/UI";
 
@@ -30,7 +30,7 @@ export const AvatarSection = () => {
                 size="sm"
               >
                 {`New avatar size: ${editor.croppedFileSize}
-              kB (max size ${FILE_MAX_SIZE_IN_kB} kB)`}
+              kB (max size ${AVATAR_MAX_FILE_SIZE_IN_kB} kB)`}
               </Typography.Text>
             </div>
           )}

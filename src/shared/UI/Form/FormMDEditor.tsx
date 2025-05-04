@@ -1,16 +1,19 @@
 import MDEditor, { RefMDEditor } from "@uiw/react-md-editor";
-import { FC, TextareaHTMLAttributes, useRef } from "react";
+import { ChangeEventHandler, FC, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import { Typography } from "src/shared/UI";
 
-type FromMDEditorProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type FromMDEditorProps = {
   labelText: string;
   name: string;
+  className?: string;
   maxLength?: number;
   isRequired?: boolean;
   showCounter?: boolean;
   isLoading?: boolean;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  value?: string | undefined;
 };
 
 export const FormMDEditor: FC<FromMDEditorProps> = ({

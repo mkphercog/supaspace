@@ -3,6 +3,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { supabaseClient } from "src/supabase-client";
@@ -30,7 +31,7 @@ export const useCreateCommentMutation = (
       });
 
       if (error) {
-        supabaseClient.auth.signOut();
+        toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(error.message);
       }
     },

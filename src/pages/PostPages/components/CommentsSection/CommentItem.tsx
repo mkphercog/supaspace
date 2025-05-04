@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
-import { FC, FormEvent, useState } from "react";
+import { FC, useState } from "react";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
@@ -9,13 +9,25 @@ import {
   useDeleteCommentsMutation,
 } from "src/api/comments";
 import { ChevronUpIcon } from "src/assets/icons";
+import { COMMENT_MAX_LENGTH } from "src/constants";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
 import { UserAvatar } from "src/shared/components";
-import { Button, Typography } from "src/shared/UI";
+import {
+  BaseForm,
+  Button,
+  FormTextarea,
+  Typography,
+  useBaseForm,
+} from "src/shared/UI";
 import { Comment, CommentTreeType } from "src/types";
 
 import { getReplyStyleColor } from "./comments.utils";
+import {
+  CommentFormType,
+  INITIAL_FORM_STATE,
+  validationSchema,
+} from "./validationSchema";
 
 type Props = Pick<Comment, "postId"> & {
   comment: CommentTreeType;
@@ -24,10 +36,12 @@ type Props = Pick<Comment, "postId"> & {
 export const CommentItem: FC<Props> = ({ postId, comment }) => {
   const [showReply, setShowReply] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [replyText, setReplyText] = useState("");
   const queryClient = useQueryClient();
   const { userData } = useAuth();
-
+  const formParams = useBaseForm({
+    validationSchema,
+    defaultValues: INITIAL_FORM_STATE,
+  });
   const { deleteComment } = useDeleteCommentsMutation(postId);
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Comment",
@@ -40,29 +54,25 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
     },
   });
 
-  const { createComment, isCreateCommentLoading, createCommentError } =
-    useCreateCommentMutation({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEYS.comments, postId],
-        });
-        setReplyText("");
-        setShowReply(false);
-      },
-    });
+  const { createComment, isCreateCommentLoading } = useCreateCommentMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.comments, postId],
+      });
+      setShowReply(false);
+    },
+  });
 
-  const handleReplySubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!replyText || !userData) return;
+  const handleSubmit = ({ commentContent }: CommentFormType) => {
+    if (!userData) return;
 
     toast.promise(
       async () => {
         await createComment({
+          content: commentContent,
+          parentCommentId: comment.id,
           userId: userData.id,
           postId,
-          content: replyText,
-          parentCommentId: comment.id,
         });
       },
       {
@@ -72,6 +82,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
     );
   };
 
+  const commentValue = formParams.watch("commentContent");
   const isParentComment = comment.parentCommentId === null;
   const childrenCommentsGroupedByReplyStyle = Object.values(
     comment.children.reduce((acc, child) => {
@@ -140,33 +151,29 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
       </div>
 
       {showReply && userData && (
-        <form onSubmit={handleReplySubmit} className="flex flex-col mt-2 gap-3">
-          <textarea
-            id={`commentReplyTo-${comment.id}`}
-            value={replyText}
-            onChange={(e) => setReplyText(e.target.value)}
-            className={`
-                w-full text-sm rounded-md p-2 block         
-                border border-gray-500 hover:border-purple-600 focus:outline-none
-                bg-transparent focus:border-purple-600
-                transition-colors duration-300
-                hover:cursor-text
-              `}
-            placeholder="Write a reply..."
+        <BaseForm
+          className="flex flex-col mt-2 gap-3"
+          formParams={formParams}
+          onSubmit={handleSubmit}
+        >
+          <FormTextarea
+            labelText="Reply comment"
+            name={"commentContent"}
+            placeholder="Write a reply comment..."
+            maxLength={COMMENT_MAX_LENGTH}
+            showCounter
+            isRequired
             rows={3}
           />
+
           <Button
             type="submit"
             className="self-end"
-            disabled={isCreateCommentLoading || !userData || !replyText}
+            disabled={!commentValue || isCreateCommentLoading}
           >
             {isCreateCommentLoading ? "Posting..." : "Post reply"}
           </Button>
-
-          {createCommentError && (
-            <Typography.Text color="red">Error posting reply.</Typography.Text>
-          )}
-        </form>
+        </BaseForm>
       )}
 
       {comment.children && comment.children.length > 0 && (

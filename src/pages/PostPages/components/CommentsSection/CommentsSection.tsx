@@ -1,58 +1,65 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { FC, FormEvent, useState } from "react";
+import { FC } from "react";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { useCreateCommentMutation, useFetchComments } from "src/api/comments";
+import { COMMENT_MAX_LENGTH } from "src/constants";
 import { useAuth } from "src/context";
-import { Button, Loader, Typography } from "src/shared/UI";
+import {
+  BaseForm,
+  Button,
+  FormTextarea,
+  Loader,
+  Typography,
+  useBaseForm,
+} from "src/shared/UI";
 import { Comment } from "src/types";
 
 import { CommentItem } from "./CommentItem";
 import { buildFlatCommentsTree } from "./comments.utils";
+import {
+  CommentFormType,
+  INITIAL_FORM_STATE,
+  validationSchema,
+} from "./validationSchema";
 
 type Props = Pick<Comment, "postId">;
 
 export const CommentsSection: FC<Props> = ({ postId }) => {
-  const [newCommentText, setNewCommentText] = useState("");
   const queryClient = useQueryClient();
   const { userData } = useAuth();
-
   const { comments, areCommentsLoading, commentsError } =
     useFetchComments(postId);
+  const { createComment, isCreateCommentLoading } = useCreateCommentMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.comments, postId],
+      });
+    },
+  });
+  const formParams = useBaseForm({
+    validationSchema,
+    defaultValues: INITIAL_FORM_STATE,
+  });
 
-  const { createComment, createCommentError, isCreateCommentLoading } =
-    useCreateCommentMutation({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEYS.comments, postId],
+  const handleSubmit = ({ commentContent }: CommentFormType) => {
+    if (!userData) return;
+
+    toast.promise(
+      async () => {
+        await createComment({
+          content: commentContent,
+          parentCommentId: null,
+          userId: userData.id,
+          postId,
         });
       },
-    });
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!newCommentText || !userData) return;
-
-    toast
-      .promise(
-        async () => {
-          await createComment({
-            content: newCommentText,
-            parentCommentId: null,
-            userId: userData.id,
-            postId,
-          });
-        },
-        {
-          pending: `🚀 Sending your comment!`,
-          success: `Comment added successfully!`,
-        }
-      )
-      .then(() => {
-        setNewCommentText("");
-      });
+      {
+        pending: `🚀 Sending your comment!`,
+        success: `Comment added successfully!`,
+      }
+    );
   };
 
   if (areCommentsLoading) {
@@ -63,6 +70,7 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
     return <div>Error: {commentsError.message}</div>;
   }
 
+  const commentValue = formParams.watch("commentContent");
   const commentTree = comments ? buildFlatCommentsTree(comments) : [];
 
   return (
@@ -72,41 +80,29 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
       </Typography.Header>
 
       {userData ? (
-        <form className="mb-4 flex flex-col gap-3" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="commentContent" className="block mb-1 font-medium">
-              New comment
-            </label>
-            <textarea
-              id="commentContent"
-              name="commentContent"
-              className={`
-                w-full text-sm rounded-md p-2 block         
-                border border-gray-500 hover:border-purple-600 focus:outline-none
-                bg-transparent focus:border-purple-600
-                transition-colors duration-300
-                hover:cursor-text
-              `}
-              value={newCommentText}
-              onChange={(e) => setNewCommentText(e.target.value)}
-              placeholder="Write a comment..."
-              rows={3}
-            />
-          </div>
+        <BaseForm
+          className="mb-4 flex flex-col gap-3"
+          formParams={formParams}
+          onSubmit={handleSubmit}
+        >
+          <FormTextarea
+            labelText="New comment"
+            name={"commentContent"}
+            placeholder="Write a comment..."
+            maxLength={COMMENT_MAX_LENGTH}
+            showCounter
+            isRequired
+            rows={3}
+          />
+
           <Button
             type="submit"
             className="self-end"
-            disabled={!newCommentText || isCreateCommentLoading}
+            disabled={!commentValue || isCreateCommentLoading}
           >
             {isCreateCommentLoading ? "Posting..." : "Post comment"}
           </Button>
-
-          {createCommentError && (
-            <Typography.Text className="mt-2" color="red">
-              Error posting comment.
-            </Typography.Text>
-          )}
-        </form>
+        </BaseForm>
       ) : (
         <Typography.Text size="lg" className="mb-4 text-center" color="purple">
           You must be logged in to post a comment.

@@ -11,7 +11,7 @@ import { Card, Typography, Loader } from "src/shared/UI";
 import { Post } from "src/types";
 
 import { CommentsSection } from "./CommentsSection";
-import { LikeButton } from "./LikeButton";
+import { PostVoteButtons } from "./PostVoteButtons";
 
 type PostDetailsProps = {
   postId: Post["id"];
@@ -70,7 +70,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
         <Typography.Text className="font-bold">#No community</Typography.Text>
       )}
 
-      <LikeButton postId={postId} />
+      <PostVoteButtons postId={postId} />
       <CommentsSection postId={postId} />
     </Card>
   );

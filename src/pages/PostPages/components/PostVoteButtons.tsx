@@ -11,7 +11,7 @@ type Props = {
   postId: Post["id"];
 };
 
-export const LikeButton: FC<Props> = ({ postId }) => {
+export const PostVoteButtons: FC<Props> = ({ postId }) => {
   const { userData } = useAuth();
 
   const { voteList, areVotesLoading, votesError } = useFetchVotes(postId);

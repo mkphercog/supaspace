@@ -21,6 +21,11 @@ export const ROUTES = {
     details: (id: number) => `/community/${id}`,
     list: () => "/community/list",
   },
+  profiles: {
+    root: () => "/profiles",
+    detailsRoot: () => "/profiles/:id",
+    details: (id: string) => `/profiles/${id}`,
+  },
   settings: () => "/settings",
   appInfo: () => "/app-info",
   notFound: () => "*",
@@ -92,6 +97,37 @@ const communityRoutes: RouteObject[] = [
   },
 ];
 
+const profilesRoutes: RouteObject[] = [
+  {
+    index: true,
+    lazy: async () => {
+      const { ProfilesListPage } = await import("../pages/ProfilesPages");
+
+      const Component = () => (
+        <ProtectedRoute>
+          <ProfilesListPage />
+        </ProtectedRoute>
+      );
+
+      return { Component };
+    },
+  },
+  {
+    path: ROUTES.profiles.detailsRoot(),
+    lazy: async () => {
+      const { ProfileDetailsPage } = await import("../pages/ProfilesPages");
+
+      const Component = () => (
+        <ProtectedRoute>
+          <ProfileDetailsPage />
+        </ProtectedRoute>
+      );
+
+      return { Component };
+    },
+  },
+];
+
 export const BROWSER_ROUTER = createBrowserRouter([
   {
     path: ROUTES.root(),
@@ -121,6 +157,10 @@ export const BROWSER_ROUTER = createBrowserRouter([
       {
         path: ROUTES.community.root(),
         children: communityRoutes,
+      },
+      {
+        path: ROUTES.profiles.root(),
+        children: profilesRoutes,
       },
       {
         path: ROUTES.settings(),

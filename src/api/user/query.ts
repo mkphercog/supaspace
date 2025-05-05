@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { supabaseClient } from "src/supabase-client";
-import { DbUserData, UserData } from "src/types";
+import { DbUserData, DbUserProfile, UserData } from "src/types";
 
-import { mapDbUserDataToUserDataWithErrors } from "./utils";
+import {
+  mapDbProfilesListToProfilesList,
+  mapDbUserDataToUserDataWithErrors,
+} from "./utils";
 
 export type FetchUserDataErrorsType =
   | "NO_LOGGED_USER"
@@ -44,7 +48,7 @@ export const useFetchUserData = (userId: UserData["id"] | undefined) => {
       console.info(
         "---- ℹ️ The user already exists in the DB, no action needed. ----",
       );
-      return data as DbUserData;
+      return data;
     },
     queryKey: [QUERY_KEYS.me, userId],
     retry: false,
@@ -54,5 +58,30 @@ export const useFetchUserData = (userId: UserData["id"] | undefined) => {
   return {
     mappedUserData: mapDbUserDataToUserDataWithErrors(data || "NO_LOGGED_USER"),
     isUserDataFetching: isFetching,
+  };
+};
+
+export const useFetchProfilesList = () => {
+  const { data, isFetching } = useQuery<DbUserProfile[]>({
+    queryFn: async () => {
+      const { data, error } = await supabaseClient
+        .from("users")
+        .select(
+          "id, avatar_url, nickname, created_at, postCount:posts(count)",
+        ).order("nickname", { ascending: true });
+
+      if (error) {
+        toast.error("Oops! Something went wrong. Please try again later.");
+        throw new Error();
+      }
+
+      return data;
+    },
+    queryKey: [QUERY_KEYS.usersList],
+  });
+
+  return {
+    mappedProfilesList: mapDbProfilesListToProfilesList(data || []),
+    isProfilesListFetching: isFetching,
   };
 };

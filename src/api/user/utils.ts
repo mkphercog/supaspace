@@ -1,4 +1,4 @@
-import { DbUserData, UserData } from "src/types";
+import { DbUserData, DbUserProfile, UserData, UserProfile } from "src/types";
 
 import { FetchUserDataErrorsType } from "./query";
 
@@ -39,3 +39,18 @@ export const mapDbUserDataToUserDataWithErrors: MapperWithErrors = (
 
   return mapDbUserDataToUserData(dbUserData);
 };
+
+type ProfileMapper = (
+  usersList: DbUserProfile[],
+) => UserProfile[];
+
+export const mapDbProfilesListToProfilesList: ProfileMapper = (
+  usersList,
+) =>
+  usersList.map(({ id, avatar_url, created_at, nickname, postCount }) => ({
+    id,
+    avatarUrl: avatar_url,
+    nickname,
+    createdAt: created_at,
+    postCount: postCount[0].count,
+  }));

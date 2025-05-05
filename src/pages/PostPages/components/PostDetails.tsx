@@ -1,12 +1,11 @@
 import MDEditor from "@uiw/react-md-editor";
 import { FC } from "react";
-import { PhotoView } from "react-photo-view";
 
 import { useFetchPostById } from "src/api/posts";
 import { PostPlaceholderImage } from "src/assets/images";
 import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
-import { UserAvatar } from "src/shared/components";
+import { ImageSkeleton, UserAvatar } from "src/shared/components";
 import { Card, Typography, Loader } from "src/shared/UI";
 import { Post } from "src/types";
 import { getFilePathToDeleteFromStorage } from "src/utils";
@@ -40,13 +39,12 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
     <Card>
       <Typography.Header>{postDetails.title}</Typography.Header>
 
-      <PhotoView src={postDetails.imageUrl || PostPlaceholderImage}>
-        <img
-          src={postDetails.imageUrl || PostPlaceholderImage}
-          alt={postDetails.title}
-          className="mt-4 rounded object-cover w-full h-64"
-        />
-      </PhotoView>
+      <ImageSkeleton
+        src={postDetails.imageUrl || PostPlaceholderImage}
+        alt={postDetails.title}
+        className="h-[200px] md:h-[400px]"
+        withPhotoView
+      />
 
       <MDEditor.Markdown
         source={postDetails.content}

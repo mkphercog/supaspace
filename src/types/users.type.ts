@@ -21,7 +21,23 @@ export type UserData = UserDataCommon & {
 };
 
 export type DbAuthor = Pick<DbUserData, "id" | "nickname" | "avatar_url">;
-
 export type Author = Pick<UserData, "id" | "nickname" | "avatarUrl">;
+
+export type DbUserProfile =
+  & Pick<
+    DbUserData,
+    "id" | "nickname" | "avatar_url" | "created_at"
+  >
+  & {
+    postCount: { count: number }[];
+  };
+export type UserProfile =
+  & Pick<
+    UserData,
+    "id" | "nickname" | "avatarUrl" | "createdAt"
+  >
+  & {
+    postCount: number;
+  };
 
 export type CreateDbUserData = DbUserData;

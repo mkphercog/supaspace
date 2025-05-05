@@ -13,6 +13,7 @@ export * from "./LikeIcon";
 export * from "./LogoIcon";
 export * from "./NoRocketIcon";
 export * from "./PostIcon";
+export * from "./ProfilesIcon";
 export * from "./SettingsIcon";
 export * from "./SignInIcon";
 export * from "./SignOutIcon";

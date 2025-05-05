@@ -6,6 +6,7 @@ import { Card, Typography } from "src/shared/UI";
 import { Post } from "src/types";
 
 import { PostStats } from "./PostStats";
+import { ImageSkeleton } from "../ImageSkeleton";
 
 type PostItemProps = {
   post: Post;
@@ -47,10 +48,10 @@ export const PostItem: FC<PostItemProps> = ({
           </div>
 
           <div className="flex-1">
-            <img
+            <ImageSkeleton
               src={imageUrl || PostPlaceholderImage}
               alt={title}
-              className="w-full h-full rounded-2xl object-cover max-h-[150px]"
+              className="h-[140px] md:h-[190px]"
             />
           </div>
 

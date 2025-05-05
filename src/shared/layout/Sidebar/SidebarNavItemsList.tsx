@@ -4,6 +4,7 @@ import {
   DashboardIcon,
   InfoIcon,
   PostIcon,
+  ProfilesIcon,
 } from "src/assets/icons";
 import { useAuth, useSidebar } from "src/context";
 import { useScreenSize } from "src/hooks";
@@ -56,6 +57,13 @@ export const SidebarNavItemsList = () => {
       text: "New community",
       path: ROUTES.community.create(),
       icon: <CreateCommunityIcon />,
+      isVisible: !!currentSession,
+      onClick: setIconsToShowStatus,
+    },
+    {
+      text: "Profiles",
+      path: ROUTES.profiles.root(),
+      icon: <ProfilesIcon />,
       isVisible: !!currentSession,
       onClick: setIconsToShowStatus,
     },

@@ -11,7 +11,7 @@ export const AppInfo = () => {
       <Card>
         <MDEditor.Markdown
           source={appInfoText}
-          className="pl-1 bg-transparent!"
+          className="pl-1 bg-transparent! text-slate-500"
         />
       </Card>
 

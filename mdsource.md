@@ -1,19 +1,19 @@
-# ![infoIcon](./src/assets/mdIcons/infoIcon.svg) About ![logoIcon](./src/assets/mdIcons/logoIcon.svg) Supa.space() — `v{{version}}`
+# ![infoIcon](/icons/infoIcon.svg) About ![logoIcon](/icons/logoIcon.svg) Supa.space() — `v{{version}}`
 
 **Supa.space()** is a lightweight, minimal social platform where you can freely share thoughts, ideas, and connect with others.
 
 ---
 
-### ![accountsIcon](./src/assets/mdIcons/accountsIcon.svg) Accounts
+### ![accountsIcon](/icons/accountsIcon.svg) Accounts
 
 - You can log in via your **Google account**
 - If you log in for the first time, a new account will be automatically created for you
 - You can **delete your account at any time** via the Settings page  
-  </br>![importantIcon](./src/assets/mdIcons/importantIcon.svg) _This action is permanent — all your posts, comments, and votes will be permanently deleted and cannot be recovered._
+  </br>![importantIcon](/icons/importantIcon.svg) _This action is permanent — all your posts, comments, and votes will be permanently deleted and cannot be recovered._
 
 ---
 
-### ![userSettingsIcon](./src/assets/mdIcons/userSettingsIcon.svg) Avatar & Full Name
+### ![userSettingsIcon](/icons/userSettingsIcon.svg) Avatar & Full Name
 
 - Your **avatar** and **full name** are imported from your Google profile by default
 - You can add a **nickname** to use across the platform
@@ -24,14 +24,14 @@
 
 ---
 
-### ![communityIcon](./src/assets/mdIcons/communityIcon.svg) Communities
+### ![communityIcon](/icons/communityIcon.svg) Communities
 
 - **Create** and **delete** communities
 - Deleting a community does **not** delete its posts — they will remain on the platform without a community tag
 
 ---
 
-### ![postIcon](./src/assets/mdIcons/postIcon.svg) Posting
+### ![postIcon](/icons/postIcon.svg) Posting
 
 - Share anything — thoughts, questions, ideas
 - You can **delete your posts** at any time
@@ -41,21 +41,21 @@
 
 ---
 
-### ![chartIcon](./src/assets/mdIcons/chartIcon.svg) Voting
+### ![chartIcon](/icons/chartIcon.svg) Voting
 
 - Posts can be **upvoted** or **downvoted**
 - Voting helps surface the most relevant content
 
 ---
 
-### ![commentsIcon](./src/assets/mdIcons/commentsIcon.svg) Comments
+### ![commentsIcon](/icons/commentsIcon.svg) Comments
 
 - Add **comments** to posts
 - You can **delete your own comments** at any time
 
 ---
 
-### ![privacyIcon](./src/assets/mdIcons/privacyIcon.svg) Privacy
+### ![privacyIcon](/icons/privacyIcon.svg) Privacy
 
 - **No third-party tracking** or analytics are used
 - Your data is **never shared** with external services
@@ -64,13 +64,13 @@
 
 ---
 
-### ![versionIcon](./src/assets/mdIcons/versionIcon.svg) Version
+### ![versionIcon](/icons/versionIcon.svg) Version
 
 Current version: `v{{version}}`
 
 ---
 
-### ![techStackIcon](./src/assets/mdIcons/techStackIcon.svg) Tech Stack
+### ![techStackIcon](/icons/techStackIcon.svg) Tech Stack
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white)](https://tanstack.com/query)
@@ -81,7 +81,7 @@ Current version: `v{{version}}`
 
 ---
 
-## ![authorIcon](./src/assets/mdIcons/MHIcon.ico) Author
+## ![authorIcon](/icons/MHIcon.ico) Author
 
 Made with ❤️ by [@MarcinHercog](https://marcin-hercog.netlify.app/)  
 This is a **portfolio project** — created as a way to learn and explore **Supabase** and **React** while building something real and useful.

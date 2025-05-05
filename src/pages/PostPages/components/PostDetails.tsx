@@ -9,8 +9,10 @@ import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
 import { Card, Typography, Loader } from "src/shared/UI";
 import { Post } from "src/types";
+import { getFilePathToDeleteFromStorage } from "src/utils";
 
 import { CommentsSection } from "./CommentsSection";
+import { PostDeleteButton } from "./PostDeleteButton";
 import { PostVoteButtons } from "./PostVoteButtons";
 
 type PostDetailsProps = {
@@ -28,6 +30,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
   if (postDetailsError) {
     return <NotFoundPage />;
   }
+
+  const postImagePathToDelete = getFilePathToDeleteFromStorage({
+    storagePrefix: "post-images/",
+    fullFileUrl: postDetails.imageUrl,
+  });
 
   return (
     <Card>
@@ -71,6 +78,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
       )}
 
       <PostVoteButtons postId={postId} />
+      <PostDeleteButton
+        postId={postId}
+        authorId={postDetails.author.id}
+        postImagePathToDelete={postImagePathToDelete}
+      />
       <CommentsSection postId={postId} />
     </Card>
   );

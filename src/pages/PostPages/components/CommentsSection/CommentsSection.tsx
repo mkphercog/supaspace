@@ -11,6 +11,7 @@ import {
   Button,
   FormTextarea,
   Loader,
+  RequiredHint,
   Typography,
   useBaseForm,
 } from "src/shared/UI";
@@ -94,6 +95,8 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
             isRequired
             rows={3}
           />
+
+          <RequiredHint />
 
           <Button
             type="submit"

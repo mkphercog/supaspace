@@ -219,32 +219,27 @@ export const useEditUserAvatarMutation = () => {
   };
 };
 
+type DeleteAvatarProps = {
+  userId: UserData["id"];
+  userAvatarPathToDelete: string;
+};
+
 export const useDeleteAvatarMutation = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async ({ userId }: { userId: string }) => {
-      const { data, error } = await supabaseClient.storage
+    mutationFn: async (
+      { userId, userAvatarPathToDelete }: DeleteAvatarProps,
+    ) => {
+      const { error: deleteAvatarError } = await supabaseClient.storage
         .from("avatars")
-        .list(userId);
+        .remove([userAvatarPathToDelete]);
 
-      if (error) throw new Error();
+      const { error: avatarErrorTable } = await supabaseClient
+        .from("users")
+        .update<Pick<DbUserData, "avatar_url">>({ avatar_url: null })
+        .eq("id", userId);
 
-      const userAvatarsPathsToDelete = data?.map((file) =>
-        `${userId}/${file.name}`
-      ) ?? [];
-
-      if (userAvatarsPathsToDelete.length) {
-        const { error: deleteAvatarError } = await supabaseClient.storage
-          .from("avatars")
-          .remove(userAvatarsPathsToDelete);
-
-        const { error: avatarErrorTable } = await supabaseClient
-          .from("users")
-          .update<Pick<DbUserData, "avatar_url">>({ avatar_url: null })
-          .eq("id", userId);
-
-        if (deleteAvatarError || avatarErrorTable) throw new Error();
-      }
+      if (deleteAvatarError || avatarErrorTable) throw new Error();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });

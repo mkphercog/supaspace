@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { QUERY_KEYS } from "src/api";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
-import { CreateDbPost, CreatePost } from "src/types";
+import { CreateDbPost, CreatePost, Post } from "src/types";
 import { sanitizeFilename } from "src/utils";
 
 export const useCreatePostMutation = () => {
@@ -61,5 +61,49 @@ export const useCreatePostMutation = () => {
     createPost: mutateAsync,
     isCreatePostLoading: isPending,
     createPostError: error,
+  };
+};
+
+type DeletePostProps = {
+  postId: Post["id"];
+  postImagePathToDelete: string;
+};
+
+export const useDeletePostMutation = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async ({ postId, postImagePathToDelete }: DeletePostProps) => {
+      const { error: postsTableError } = await supabaseClient
+        .from("posts")
+        .delete()
+        .eq("id", postId);
+
+      if (postsTableError) {
+        toast.error("Oops! Something went wrong. Please try again later.");
+        throw new Error();
+      }
+
+      const { error: deletePostImageError } = await supabaseClient.storage
+        .from("post-images")
+        .remove([postImagePathToDelete]);
+
+      if (deletePostImageError) {
+        toast.error("Oops! Something went wrong. Please try again later.");
+        throw new Error();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.posts],
+      });
+      navigate(ROUTES.root());
+    },
+  });
+
+  return {
+    deletePost: mutateAsync,
+    isDeletePostLoading: isPending,
   };
 };

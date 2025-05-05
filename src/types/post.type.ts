@@ -1,7 +1,7 @@
 import { Community } from "./community.type";
 import { Author, DbAuthor, UserData } from "./users.type";
 
-type PostCommon = {
+export type PostCommon = {
   id: number;
   title: string;
   content: string;

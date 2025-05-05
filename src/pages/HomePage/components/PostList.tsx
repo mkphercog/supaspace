@@ -1,6 +1,7 @@
 import { useFetchPosts } from "src/api/posts";
+import { NotFoundPage } from "src/pages/NotFoundPage";
 import { PostItem } from "src/shared/components";
-import { Loader, Typography } from "src/shared/UI";
+import { Loader } from "src/shared/UI";
 
 export const PostList = () => {
   const { posts, arePostsLoading, postsError } = useFetchPosts();
@@ -9,16 +10,8 @@ export const PostList = () => {
     return <Loader />;
   }
 
-  if (postsError) {
-    return <div>Error: {postsError.message}</div>;
-  }
-
-  if (!posts?.length) {
-    return (
-      <Typography.Text className="text-md text-center mt-2">
-        No posts found
-      </Typography.Text>
-    );
+  if (!posts?.length || postsError) {
+    return <NotFoundPage />;
   }
 
   return (

@@ -1,3 +1,9 @@
+import { useParams } from "react-router";
+
+import { ProfileDetails } from "./components/ProfileDetails";
+
 export const ProfileDetailsPage = () => {
-  return <div>User details page</div>;
+  const { id } = useParams<{ id: string }>();
+
+  return <ProfileDetails profileId={id} />;
 };

@@ -1,3 +1,5 @@
+import { PostCommon } from "./post.type";
+
 type UserDataCommon = {
   id: string;
   nickname: string;
@@ -39,5 +41,12 @@ export type UserProfile =
   & {
     postCount: number;
   };
+
+export type DbUserProfileDetails = Omit<DbUserProfile, "postCount"> & {
+  userPosts: Pick<PostCommon, "id" | "title">[];
+};
+export type UserProfileDetails = Omit<UserProfile, "postCount"> & {
+  userPosts: Pick<PostCommon, "id" | "title">[];
+};
 
 export type CreateDbUserData = DbUserData;

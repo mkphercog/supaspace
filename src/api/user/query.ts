@@ -3,9 +3,15 @@ import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { supabaseClient } from "src/supabase-client";
-import { DbUserData, DbUserProfile, UserData } from "src/types";
+import {
+  DbUserData,
+  DbUserProfile,
+  DbUserProfileDetails,
+  UserData,
+} from "src/types";
 
 import {
+  mapDbProfileDetailsToProfileDetails,
   mapDbProfilesListToProfilesList,
   mapDbUserDataToUserDataWithErrors,
 } from "./utils";
@@ -77,11 +83,40 @@ export const useFetchProfilesList = () => {
 
       return data;
     },
-    queryKey: [QUERY_KEYS.usersList],
+    queryKey: [QUERY_KEYS.profilesList],
   });
 
   return {
     mappedProfilesList: mapDbProfilesListToProfilesList(data || []),
     isProfilesListFetching: isFetching,
+  };
+};
+
+export const useFetchProfileDetails = (profileId: DbUserProfile["id"]) => {
+  const { data, error, isFetching } = useQuery<DbUserProfileDetails>({
+    queryFn: async () => {
+      const { data, error } = await supabaseClient
+        .from("users")
+        .select(
+          "id, avatar_url, nickname, created_at, userPosts:posts(id, title)",
+        )
+        .eq("id", profileId)
+        .single();
+
+      if (error) {
+        throw new Error();
+      }
+
+      return data;
+    },
+    queryKey: [QUERY_KEYS.profileDetails, profileId],
+    retry: false,
+    enabled: !!profileId,
+  });
+
+  return {
+    profileDetails: mapDbProfileDetailsToProfileDetails(data ? [data] : [])[0],
+    profileDetailsError: error,
+    isProfileDetailsFetching: isFetching,
   };
 };

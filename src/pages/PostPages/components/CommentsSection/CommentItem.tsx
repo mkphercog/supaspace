@@ -12,6 +12,7 @@ import { ChevronUpIcon } from "src/assets/icons";
 import { COMMENT_MAX_LENGTH } from "src/constants";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
+import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
 import {
   BaseForm,
@@ -38,7 +39,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
   const [showReply, setShowReply] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const queryClient = useQueryClient();
-  const { userData } = useAuth();
+  const { userData, currentSession } = useAuth();
   const formParams = useBaseForm({
     validationSchema,
     defaultValues: INITIAL_FORM_STATE,
@@ -109,9 +110,18 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
       >
         <UserAvatar avatarUrl={comment.author.avatarUrl} size="md" />
         <div className={`grow flex flex-col gap-1 rounded-xl`}>
-          <Typography.Text size="sm" className="font-bold text-blue-400!">
-            {comment.author.nickname}
-          </Typography.Text>
+          {currentSession ? (
+            <Typography.Link
+              to={ROUTES.profiles.details(comment.author.id)}
+              className="self-start font-bold text-blue-400! hover:underline"
+            >
+              {comment.author.nickname}
+            </Typography.Link>
+          ) : (
+            <Typography.Text size="sm" className="font-bold text-blue-400!">
+              {comment.author.nickname}
+            </Typography.Text>
+          )}
 
           <MDEditor.Markdown
             source={comment.content}

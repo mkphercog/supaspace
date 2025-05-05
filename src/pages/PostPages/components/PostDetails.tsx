@@ -3,6 +3,7 @@ import { FC } from "react";
 
 import { useFetchPostById } from "src/api/posts";
 import { PostPlaceholderImage } from "src/assets/images";
+import { useAuth } from "src/context";
 import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
 import { ImageSkeleton, UserAvatar } from "src/shared/components";
@@ -19,6 +20,7 @@ type PostDetailsProps = {
 };
 
 export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
+  const { currentSession } = useAuth();
   const { postDetails, isPostDetailsLoading, postDetailsError } =
     useFetchPostById(postId);
 
@@ -55,9 +57,18 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
         <UserAvatar avatarUrl={postDetails.author.avatarUrl} size="lg" />
 
         <div className="flex flex-col">
-          <Typography.Text size="lg" className="font-bold">
-            {postDetails.author.nickname}
-          </Typography.Text>
+          {currentSession ? (
+            <Typography.Link
+              to={ROUTES.profiles.details(postDetails.author.id)}
+              className="self-start text-base md:text-lg font-bold hover:underline"
+            >
+              {postDetails.author.nickname}
+            </Typography.Link>
+          ) : (
+            <Typography.Text size="lg" className="font-bold">
+              {postDetails.author.nickname}
+            </Typography.Text>
+          )}
           <Typography.Text size="sm">
             {`posted ${new Date(postDetails.createdAt).toLocaleString()}`}
           </Typography.Text>

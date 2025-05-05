@@ -1,4 +1,4 @@
-# ![infoIcon](/icons/infoIcon.svg) About ![logoIcon](/icons/logoIcon.svg) Supa.space() — `v1.0.0`
+# ![infoIcon](/icons/infoIcon.svg) About ![logoIcon](/icons/logoIcon.svg) Supa.space()
 
 **Supa.space()** is a lightweight, minimal social platform where you can freely share thoughts, ideas, and connect with others.
 
@@ -66,7 +66,7 @@
 
 ### ![versionIcon](/icons/versionIcon.svg) Version
 
-Current version: `v1.0.0`
+Current version: `v1.1.0`
 
 ---
 

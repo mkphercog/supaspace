@@ -62,7 +62,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, postId],
       });
-      setShowReply(false);
+      formParams.reset();
     },
   });
 

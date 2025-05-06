@@ -37,6 +37,7 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, postId],
       });
+      formParams.reset();
     },
   });
   const formParams = useBaseForm({

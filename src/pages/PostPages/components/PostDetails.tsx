@@ -1,5 +1,4 @@
-import MDEditor from "@uiw/react-md-editor";
-import { FC } from "react";
+import { FC, lazy } from "react";
 
 import { useFetchPostById } from "src/api/posts";
 import { PostPlaceholderImage } from "src/assets/images";
@@ -14,6 +13,8 @@ import { getFilePathToDeleteFromStorage } from "src/utils";
 import { CommentsSection } from "./CommentsSection";
 import { PostDeleteButton } from "./PostDeleteButton";
 import { PostVoteButtons } from "./PostVoteButtons";
+
+const MDPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 type PostDetailsProps = {
   postId: Post["id"];
@@ -48,10 +49,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
         withPhotoView
       />
 
-      <MDEditor.Markdown
-        source={postDetails.content}
-        className="bg-transparent!"
-      />
+      <MDPreview source={postDetails.content} className="bg-transparent!" />
 
       <div className="flex items-center gap-2.5">
         <UserAvatar avatarUrl={postDetails.author.avatarUrl} size="lg" />

@@ -1,8 +1,10 @@
-import MDEditor, { RefMDEditor } from "@uiw/react-md-editor";
-import { ChangeEventHandler, FC, useRef } from "react";
+import { RefMDEditor } from "@uiw/react-md-editor";
+import { ChangeEventHandler, FC, lazy, useRef } from "react";
 import { useController } from "react-hook-form";
 
 import { Typography } from "src/shared/UI";
+
+const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
 type FromMDEditorProps = {
   labelText: string;

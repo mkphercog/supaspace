@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import MDEditor from "@uiw/react-md-editor";
-import { FC, useState } from "react";
+import { FC, lazy, useState } from "react";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
@@ -30,6 +29,8 @@ import {
   INITIAL_FORM_STATE,
   validationSchema,
 } from "./validationSchema";
+
+const MDPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 type Props = Pick<Comment, "postId"> & {
   comment: CommentTreeType;
@@ -123,7 +124,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
             </Typography.Text>
           )}
 
-          <MDEditor.Markdown
+          <MDPreview
             source={comment.content}
             className="pl-1 bg-transparent!"
           />

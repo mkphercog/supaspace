@@ -10,3 +10,4 @@ export const COMMENT_MAX_LENGTH = 1024;
 
 // GENERAL
 export const ONE_DAY_IN_MS = 86_400_000;
+export const ONE_DAY_IN_SEC = 86_400;

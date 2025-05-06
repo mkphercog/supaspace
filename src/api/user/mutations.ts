@@ -7,7 +7,7 @@ import {
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { NICKNAME_MAX_LENGTH } from "src/constants";
+import { NICKNAME_MAX_LENGTH, ONE_DAY_IN_SEC } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbUserData, DbUserData, UserData } from "src/types";
 
@@ -20,7 +20,7 @@ export const insertUserDataToDb = async (
 ) => {
   if (!userData) throw new Error("---- No user data. ----");
 
-  const filePath = `${userData.id}/userAvatar-${Date.now()}`;
+  const filePath = `${userData.id}/userAvatar-${Date.now()}.webp`;
   const fetchedUserAvatar = await fetch(userData.user_metadata.avatar_url);
   if (!fetchedUserAvatar.ok) {
     signOut();
@@ -30,7 +30,11 @@ export const insertUserDataToDb = async (
 
   const { error: uploadError } = await supabaseClient.storage
     .from("avatars")
-    .upload(filePath, avatarBlob, { upsert: true });
+    .upload(filePath, avatarBlob, {
+      contentType: avatarBlob.type,
+      upsert: true,
+      cacheControl: `${ONE_DAY_IN_SEC}`,
+    });
 
   if (uploadError) throw new Error(`❌ ${uploadError.message}`);
   console.info("---- ✅ User AVATAR saved in DB correctly. ----");
@@ -152,7 +156,7 @@ export const useEditUserAvatarMutation = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ userId, file }: { userId: string; file: File }) => {
-      const filePath = `${userId}/userAvatar-${Date.now()}`;
+      const filePath = `${userId}/userAvatar-${Date.now()}.webp`;
       const { data: avatarsList } = await supabaseClient.storage
         .from("avatars")
         .list(userId);
@@ -174,7 +178,11 @@ export const useEditUserAvatarMutation = () => {
 
       const { error } = await supabaseClient.storage
         .from("avatars")
-        .upload(filePath, file, { upsert: true });
+        .upload(filePath, file, {
+          contentType: file.type,
+          upsert: true,
+          cacheControl: `${ONE_DAY_IN_SEC}`,
+        });
 
       if (error) {
         toast.error("Oops! Something went wrong. Please try again later.");

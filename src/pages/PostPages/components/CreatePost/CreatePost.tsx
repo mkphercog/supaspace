@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { PhotoView } from "react-photo-view";
 import { toast } from "react-toastify";
 
 import { useFetchCommunities } from "src/api/community";
 import { useCreatePostMutation } from "src/api/posts";
 import { POST_CONTENT_MAX_LENGTH, POST_TITLE_MAX_LENGTH } from "src/constants";
 import { useAuth } from "src/context";
+import { ImageSkeleton } from "src/shared/components";
 import {
   BaseForm,
   Button,
@@ -88,12 +88,11 @@ export const CreatePost = () => {
             y: 0,
           },
           max: {
-            width: 1200,
+            width: 1000,
             height: 500,
           },
           outputFilename: sanitizeFilename(file.name),
         });
-
         formParams.setValue("postImage", croppedFile);
         formParams.trigger("postImage");
         setLocalImageUrl(blobUrl);
@@ -164,9 +163,12 @@ export const CreatePost = () => {
         <Typography.Text className="font-semibold mb-2">
           Image preview
         </Typography.Text>
-        <PhotoView src={localImageUrl}>
-          <img src={localImageUrl} className="mx-auto" />
-        </PhotoView>
+
+        <ImageSkeleton
+          src={localImageUrl}
+          alt="Post image preview"
+          withPhotoView
+        />
       </div>
     </Card>
   );

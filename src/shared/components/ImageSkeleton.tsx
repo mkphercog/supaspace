@@ -1,8 +1,10 @@
 import { FC, useState } from "react";
 import { PhotoView } from "react-photo-view";
 
+import { PostPlaceholderImage } from "src/assets/images";
+
 type Props = {
-  src: string;
+  src?: string;
   alt: string;
   className?: string;
   withPhotoView?: boolean;
@@ -14,11 +16,18 @@ export const ImageSkeleton: FC<Props> = ({
   className,
   withPhotoView,
 }) => {
+  const [placeholderSrc, setPlaceholderSrc] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleImgError = () => {
+    setPlaceholderSrc(PostPlaceholderImage);
+  };
 
   const imageElement = (
     <img
-      src={src}
+      loading="lazy"
+      decoding="async"
+      src={placeholderSrc || src}
       alt={alt}
       onLoad={() => setIsLoaded(true)}
       className={`
@@ -26,6 +35,7 @@ export const ImageSkeleton: FC<Props> = ({
         transition-opacity duration-500 
         ${isLoaded ? "opacity-100" : "opacity-0"}
       `}
+      onError={handleImgError}
     />
   );
 

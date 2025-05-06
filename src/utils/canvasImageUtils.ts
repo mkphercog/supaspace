@@ -1,11 +1,12 @@
-export const createImage = (url: string) =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
+export const createImage = (url: string) => {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     image.onload = () => resolve(image);
     image.onerror = (error) => reject(error);
     image.crossOrigin = "Anonymous";
     image.src = url;
   });
+};
 
 type GetCroppedImg = (props: {
   imageSrc: string;
@@ -68,6 +69,7 @@ export const getCroppedImg: GetCroppedImg = async (
     outputHeight,
   );
 
+  const webpFormat = "image/webp";
   return new Promise((resolve, reject) => {
     croppedCanvas.toBlob(
       (blobFile) => {
@@ -80,10 +82,11 @@ export const getCroppedImg: GetCroppedImg = async (
         resolve({
           blobUrl,
           cleanup,
-          file: new File([blobFile], outputFilename, { type: blobFile.type }),
+          file: new File([blobFile], outputFilename, { type: webpFormat }),
         });
       },
-      "image/jpeg",
+      webpFormat,
+      0.8,
     );
   });
 };

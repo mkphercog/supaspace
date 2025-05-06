@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
+import { ONE_DAY_IN_SEC } from "src/constants";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbPost, CreatePost, Post } from "src/types";
@@ -23,11 +24,15 @@ export const useCreatePostMutation = () => {
 
       const filePath = `${userId}/${
         sanitizeFilename(imageFile.name)
-      }-${Date.now()}`;
+      }-${Date.now()}.webp`;
 
       const { error: uploadError } = await supabaseClient.storage
         .from("post-images")
-        .upload(filePath, imageFile);
+        .upload(filePath, imageFile, {
+          contentType: imageFile.type,
+          upsert: true,
+          cacheControl: `${ONE_DAY_IN_SEC}`,
+        });
 
       if (uploadError) throw new Error(uploadError.message);
 

@@ -2,6 +2,17 @@
 
 </br>
 
+## `v1.1.1`
+
+### Changes:
+
+- Convert images to .webp before uploading to storage for better loading performance
+- Improve app performance by lazy-loading MDEditor and MDPreview
+- Reduce API requests: data is now refetched only after at least 3 minutes
+- Fix an issue where the comment form was not cleared after submitting a comment
+
+</br>
+
 ## `v1.1.0`
 
 ### Changes:

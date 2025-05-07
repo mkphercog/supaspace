@@ -57,7 +57,6 @@ export const useFetchUserData = (userId: UserData["id"] | undefined) => {
       return data;
     },
     queryKey: [QUERY_KEYS.me, userId],
-    retry: false,
     enabled: !!userId,
   });
 
@@ -110,7 +109,6 @@ export const useFetchProfileDetails = (profileId: DbUserProfile["id"]) => {
       return data;
     },
     queryKey: [QUERY_KEYS.profileDetails, profileId],
-    retry: false,
     enabled: !!profileId,
   });
 

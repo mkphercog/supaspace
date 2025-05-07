@@ -26,7 +26,6 @@ export const useFetchPostById = (postId: Post["id"]) => {
 
       return data;
     },
-    retry: false,
   });
 
   return {

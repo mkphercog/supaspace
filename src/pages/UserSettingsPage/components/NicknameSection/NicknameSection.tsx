@@ -85,11 +85,7 @@ export const NicknameSection = () => {
         <FormTextInput
           labelText="New nickname"
           name="userNickname"
-          placeholder={
-            userData?.fullNameFromAuthProvider === userData?.nickname
-              ? "No nick name"
-              : userData?.nickname
-          }
+          placeholder={userData.nickname ? userData.nickname : " No nickname"}
           showCounter
           maxLength={NICKNAME_MAX_LENGTH}
           isRequired

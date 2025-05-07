@@ -22,7 +22,8 @@ export const mapDbCommunityToCommunity: Mapper = (
       createdAt: created_at,
       userId: user_id,
       author: {
-        ...author,
+        id: author.id,
+        displayName: author.nickname || author.full_name_from_auth_provider,
         avatarUrl: author.avatar_url,
       },
     }),

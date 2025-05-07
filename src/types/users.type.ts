@@ -2,7 +2,7 @@ import { PostCommon } from "./post.type";
 
 type UserDataCommon = {
   id: string;
-  nickname: string;
+  nickname: string | null;
   email: string;
 };
 
@@ -15,6 +15,7 @@ export type DbUserData = UserDataCommon & {
 };
 
 export type UserData = UserDataCommon & {
+  displayName: string;
   createdAt: string;
   nicknameUpdatedAt: string | null;
   avatarUrl: string | null;
@@ -22,13 +23,20 @@ export type UserData = UserDataCommon & {
   fullNameFromAuthProvider: string;
 };
 
-export type DbAuthor = Pick<DbUserData, "id" | "nickname" | "avatar_url">;
-export type Author = Pick<UserData, "id" | "nickname" | "avatarUrl">;
+export type DbAuthor = Pick<
+  DbUserData,
+  "id" | "nickname" | "full_name_from_auth_provider" | "avatar_url"
+>;
+export type Author = Pick<UserData, "id" | "displayName" | "avatarUrl">;
 
 export type DbUserProfile =
   & Pick<
     DbUserData,
-    "id" | "nickname" | "avatar_url" | "created_at"
+    | "id"
+    | "nickname"
+    | "full_name_from_auth_provider"
+    | "avatar_url"
+    | "created_at"
   >
   & {
     postCount: { count: number }[];
@@ -36,7 +44,7 @@ export type DbUserProfile =
 export type UserProfile =
   & Pick<
     UserData,
-    "id" | "nickname" | "avatarUrl" | "createdAt"
+    "id" | "displayName" | "avatarUrl" | "createdAt"
   >
   & {
     postCount: number;

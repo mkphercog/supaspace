@@ -41,7 +41,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
       <div className="w-full flex items-center">
         <SidebarItem
           as="button"
-          text={userData.nickname}
+          text={userData.displayName}
           icon={
             <UserAvatar
               size={sidebarStatus === "show" ? "md" : "xs"}

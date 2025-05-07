@@ -15,7 +15,7 @@ export const useFetchPostById = (postId: Post["id"]) => {
         .select(`
           *,
           community:communities(id, name),
-          author:users(id, nickname, avatar_url)
+          author:users(id, nickname, full_name_from_auth_provider, avatar_url)
         `)
         .eq("id", postId)
         .single();

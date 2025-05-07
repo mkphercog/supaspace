@@ -10,7 +10,7 @@ export const ProfilesList = () => {
     <Card className="max-w-2xl mx-auto" isLoading={isProfilesListFetching}>
       <div className="flex flex-col gap-3">
         {mappedProfilesList.map(
-          ({ id, avatarUrl, nickname, createdAt, postCount }) => {
+          ({ id, avatarUrl, displayName, createdAt, postCount }) => {
             return (
               <Typography.Link
                 key={id}
@@ -23,7 +23,7 @@ export const ProfilesList = () => {
 
                     <div className="flex flex-col">
                       <Typography.Text size="lg" className="font-bold">
-                        {nickname}
+                        {displayName}
                       </Typography.Text>
 
                       <Typography.Text size="sm" className="font-light">

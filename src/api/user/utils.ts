@@ -27,10 +27,11 @@ export const mapDbUserDataToUserData: Mapper = (
 ) => ({
   id,
   email,
+  nickname,
   fullNameFromAuthProvider: full_name_from_auth_provider,
+  displayName: nickname || full_name_from_auth_provider,
   avatarUrl: avatar_url,
   avatarUrlUpdatedAt: avatar_url_updated_at,
-  nickname,
   nicknameUpdatedAt: nickname_updated_at,
   createdAt: created_at,
 });
@@ -53,14 +54,24 @@ type ProfileMapper = (
 
 export const mapDbProfilesListToProfilesList: ProfileMapper = (
   usersList,
-) =>
-  usersList.map(({ id, avatar_url, created_at, nickname, postCount }) => ({
+) => {
+  return usersList.map((
+    {
+      id,
+      avatar_url,
+      created_at,
+      nickname,
+      full_name_from_auth_provider,
+      postCount,
+    },
+  ) => ({
     id,
     avatarUrl: avatar_url,
-    nickname,
+    displayName: nickname || full_name_from_auth_provider,
     createdAt: created_at,
     postCount: postCount[0].count,
   }));
+};
 
 type ProfileDetailsMapper = (
   usersList: DbUserProfileDetails[],
@@ -69,10 +80,19 @@ type ProfileDetailsMapper = (
 export const mapDbProfileDetailsToProfileDetails: ProfileDetailsMapper = (
   usersList,
 ) =>
-  usersList.map(({ id, avatar_url, created_at, nickname, userPosts }) => ({
+  usersList.map((
+    {
+      id,
+      avatar_url,
+      created_at,
+      nickname,
+      full_name_from_auth_provider,
+      userPosts,
+    },
+  ) => ({
     id,
     avatarUrl: avatar_url,
-    nickname,
+    displayName: nickname || full_name_from_auth_provider,
     createdAt: created_at,
     userPosts,
   }));

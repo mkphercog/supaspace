@@ -49,7 +49,7 @@ export const insertUserDataToDb = async (
     full_name_from_auth_provider: userData.user_metadata.full_name,
     avatar_url: publicUrl,
     avatar_url_updated_at: null,
-    nickname: userData.user_metadata.full_name,
+    nickname: null,
     nickname_updated_at: null,
     created_at: userData.created_at,
   };
@@ -130,11 +130,11 @@ export const useDeleteNicknameMutation = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async (
-      { userId, nickname }: { userId: string; nickname: string },
+      { userId }: { userId: string },
     ) => {
       const { error } = await supabaseClient
         .from("users")
-        .update<Pick<DbUserData, "nickname">>({ nickname })
+        .update<Pick<DbUserData, "nickname">>({ nickname: null })
         .eq("id", userId);
 
       if (error) throw new Error();

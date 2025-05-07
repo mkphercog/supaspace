@@ -6,12 +6,6 @@ import { Card, Typography } from "src/shared/UI";
 export const AccountInfoSection = () => {
   const { userData, isUserDataFetching } = useAuth();
 
-  const isNickNameSameAsFullName = useMemo(() => {
-    if (!userData) return true;
-
-    return userData.nickname === userData.fullNameFromAuthProvider;
-  }, [userData]);
-
   const userInfoList = useMemo(() => {
     if (!userData) return [];
 
@@ -24,7 +18,7 @@ export const AccountInfoSection = () => {
       {
         title: "Nickname:",
         value: userData.nickname,
-        isVisible: !isNickNameSameAsFullName,
+        isVisible: userData.nickname,
       },
       {
         title: "E-mail:",
@@ -39,7 +33,7 @@ export const AccountInfoSection = () => {
         isVisible: true,
       },
     ];
-  }, [userData, isNickNameSameAsFullName]);
+  }, [userData]);
 
   if (!userData) return null;
 

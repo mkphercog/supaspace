@@ -20,12 +20,12 @@ export const ProfileDetails: FC<Props> = ({ profileId }) => {
 
   if (!profileDetails || profileDetailsError) return <NotFoundPage />;
 
-  const { avatarUrl, createdAt, nickname, userPosts } = profileDetails;
+  const { avatarUrl, createdAt, displayName, userPosts } = profileDetails;
 
   return (
     <Card className="max-w-4xl mx-auto">
       <div className="flex flex-col gap-10 items-center">
-        <Typography.Header>{nickname}</Typography.Header>
+        <Typography.Header>{displayName}</Typography.Header>
         <UserAvatar size="5xl" avatarUrl={avatarUrl} isPhotoView />
 
         <Typography.Text>

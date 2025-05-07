@@ -61,7 +61,7 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
               <div className="flex flex-col">
                 <Typography.Text size="xs">
                   Created by{" "}
-                  <span className="font-semibold">{author.nickname}</span>
+                  <span className="font-semibold">{author.displayName}</span>
                 </Typography.Text>
                 <Typography.Text size="xs">
                   on{" "}

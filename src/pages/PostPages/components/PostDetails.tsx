@@ -60,11 +60,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
               to={ROUTES.profiles.details(postDetails.author.id)}
               className="self-start text-base md:text-lg font-bold hover:underline"
             >
-              {postDetails.author.nickname}
+              {postDetails.author.displayName}
             </Typography.Link>
           ) : (
             <Typography.Text size="lg" className="font-bold">
-              {postDetails.author.nickname}
+              {postDetails.author.displayName}
             </Typography.Text>
           )}
           <Typography.Text size="sm">

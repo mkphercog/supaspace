@@ -116,11 +116,11 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
               to={ROUTES.profiles.details(comment.author.id)}
               className="self-start font-bold text-blue-400! hover:underline"
             >
-              {comment.author.nickname}
+              {comment.author.displayName}
             </Typography.Link>
           ) : (
             <Typography.Text size="sm" className="font-bold text-blue-400!">
-              {comment.author.nickname}
+              {comment.author.displayName}
             </Typography.Text>
           )}
 

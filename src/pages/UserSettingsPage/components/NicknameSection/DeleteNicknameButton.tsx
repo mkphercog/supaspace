@@ -11,7 +11,6 @@ type DeleteNicknameButtonProps = {
     Error,
     {
       userId: string;
-      nickname: string;
     },
     unknown
   >;
@@ -28,22 +27,18 @@ export const DeleteNicknameButton: FC<DeleteNicknameButtonProps> = ({
 
       await deleteUserNickname({
         userId: userData.id,
-        nickname: userData.fullNameFromAuthProvider,
       });
     },
   });
 
   if (!userData) return null;
 
-  const isNicknameSameAsFullName =
-    userData.nickname === userData.fullNameFromAuthProvider;
-
   return (
     <Button
       type="button"
       variant="destructive"
       onClick={startDeletingProcess}
-      disabled={isNicknameSameAsFullName}
+      disabled={!userData.nickname}
     >
       Delete nickname
     </Button>

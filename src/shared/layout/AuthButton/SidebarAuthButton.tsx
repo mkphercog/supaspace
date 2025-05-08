@@ -57,15 +57,15 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
         className={`
           absolute left-3 px-3 py-2
           flex flex-col gap-2
-          bg-[rgba(12,13,15,0.95)] backdrop-blur-sm rounded-md 
+          bg-[rgba(12,13,15,0.95)] rounded-md 
           border-1 border-white/10
           ${
             isAvatarMenuOpen
               ? "opacity-100 bottom-[65px]"
-              : "opacity-0 bottom-[-130px]"
+              : "opacity-0 bottom-[-130px] pointer-events-none"
           }
           ${sidebarStatus === "hidden" ? "hidden" : ""}
-          transition-all duration-500
+          transition-all duration-[400ms]
         `}
       >
         <SidebarItem

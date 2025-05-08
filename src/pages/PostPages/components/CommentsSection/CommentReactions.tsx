@@ -32,13 +32,13 @@ export const CommentReactions: FC<Props> = ({
       <div
         className={`
           absolute right-0 px-3 py-2
-          bg-[rgba(12,13,15,0.95)] backdrop-blur-sm rounded-md 
+          bg-[rgba(12,13,15,0.7)] backdrop-blur-sm rounded-md 
           ${
             showReactions
               ? "opacity-100 bottom-[38px]"
               : "opacity-0 bottom-[0px] pointer-events-none"
           }
-          transition-all duration-500
+          transition-all duration-300
         `}
       >
         <ul className="flex gap-1">

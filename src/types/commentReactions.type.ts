@@ -1,5 +1,5 @@
 import { Comment } from "./comment.type";
-import { UserData } from "./users.type";
+import { Author, DbAuthor, UserData } from "./users.type";
 
 export type Reaction =
   | "LIKE"
@@ -35,3 +35,10 @@ export type CreateCommentReaction = Pick<
   CommentReaction,
   "reaction" | "userId"
 >;
+
+export type DbCommentReactionAuthor = DbCommentReaction & {
+  author: Omit<DbAuthor, "avatar_url">;
+};
+export type CommentReactionAuthor = CommentReaction & {
+  author: Omit<Author, "avatarUrl">;
+};

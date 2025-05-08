@@ -69,9 +69,12 @@ export const useCreateCommentReaction = (
         throw new Error(error.message);
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, { reaction }) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.comments, postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.commentReactions, postId, commentId, reaction],
       });
     },
   });

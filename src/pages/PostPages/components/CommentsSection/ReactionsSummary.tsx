@@ -1,15 +1,16 @@
 import { FC } from "react";
 
-import { Typography } from "src/shared/UI";
-import { CommentTreeType, Reaction } from "src/types";
+import { CommentTreeType, Post, Reaction } from "src/types";
 
+import { ReactionsSummaryItem } from "./ReactionsSummaryItem";
 import { REACTION_ICONS_MAP } from "../../constants";
 
 type Props = {
+  postId: Post["id"];
   comment: CommentTreeType;
 };
 
-export const ReactionsSummary: FC<Props> = ({ comment }) => {
+export const ReactionsSummary: FC<Props> = ({ postId, comment }) => {
   if (!comment.reactions.length) return null;
 
   const reactionCounts = comment.reactions.reduce<Record<Reaction, number>>(
@@ -30,24 +31,27 @@ export const ReactionsSummary: FC<Props> = ({ comment }) => {
   const REACTIONS_STATS = Object.keys(REACTION_ICONS_MAP).map((key) => {
     const reaction = key as Reaction;
     return {
-      icon: REACTION_ICONS_MAP[reaction],
+      reaction,
       count: reactionCounts[reaction],
+      icon: REACTION_ICONS_MAP[reaction],
       isVisible: reactionCounts[reaction] > 0,
     };
   });
 
   return (
-    <ul className={`flex gap-3 bg-purple-400/20 px-2 py-1 rounded-md`}>
-      {REACTIONS_STATS.map(({ icon, count, isVisible }, index) => {
+    <ul className={`flex bg-purple-400/20 px-2 py-1 rounded-md`}>
+      {REACTIONS_STATS.map(({ icon, count, isVisible, reaction }, index) => {
         if (!isVisible) return null;
 
         return (
-          <li key={index} className="flex gap-1 items-center list-none!">
-            <Typography.Text size="xs" className="font-bold">
-              {count}
-            </Typography.Text>
-            {icon}
-          </li>
+          <ReactionsSummaryItem
+            key={index}
+            postId={postId}
+            commentId={comment.id}
+            reaction={reaction}
+            count={count}
+            icon={icon}
+          />
         );
       })}
     </ul>

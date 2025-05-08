@@ -16,7 +16,7 @@ export const useFetchCommunityPosts = (
     DbPost[],
     Error
   >({
-    queryKey: [QUERY_KEYS.communityPost, id],
+    queryKey: [QUERY_KEYS.communityPosts, id],
     queryFn: async () => {
       const { data, error } = await supabaseClient.rpc(
         "get_community_posts_with_counts",

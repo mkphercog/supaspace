@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   comments: "comments",
-  communityPost: "communityPost",
+  commentReactions: "commentReactions",
+  communityPosts: "communityPosts",
   communities: "communities",
   posts: "posts",
   post: "post",

@@ -107,9 +107,10 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
           className={`
             col-span-3 col-start-1 row-start-5 mt-1
             grid grid-cols-[auto_1fr_auto]
+            relative
           `}
         >
-          <ReactionsSummary comment={comment} />
+          <ReactionsSummary postId={postId} comment={comment} />
 
           <ReplyFormTrigger
             isReplyFormVisible={isReplyFormVisible}

@@ -39,27 +39,21 @@ export const SidebarItem: FC<SidebarItemProps> = ({
 
   if (as === "button") {
     return (
-      <li
+      <Button
+        variant="ghost"
         onClick={onClick}
         className={`
-          flex items-center list-none!
-          ${isSidebarOpen ? "w-full" : "w-auto"}
+          flex items-center
+          p-0! font-semibold
+          ${isSidebarOpen ? "w-full hover:scale-105" : "w-auto hover:scale-125"}
+          hover:bg-transparent!
         `}
       >
-        <Button
-          variant="ghost"
-          className={`
-            p-0! font-semibold
-            ${isSidebarOpen ? "hover:scale-105" : "hover:scale-125"}
-            hover:bg-transparent!
-          `}
-        >
-          <div className="flex items-center gap-2">
-            {icon}
-            {isSidebarOpen && <Typography.Text>{text}</Typography.Text>}
-          </div>
-        </Button>
-      </li>
+        <div className="flex items-center gap-2">
+          {icon}
+          {isSidebarOpen && <Typography.Text>{text}</Typography.Text>}
+        </div>
+      </Button>
     );
   }
 

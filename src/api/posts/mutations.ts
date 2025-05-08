@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { ONE_DAY_IN_SEC } from "src/constants";
+import { ONE_DAY_IN_SEC, SB_STORAGE, SB_TABLE } from "src/constants";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbPost, CreatePost, Post } from "src/types";
@@ -27,7 +27,7 @@ export const useCreatePostMutation = () => {
       }-${Date.now()}.webp`;
 
       const { error: uploadError } = await supabaseClient.storage
-        .from("post-images")
+        .from(SB_STORAGE.postImages)
         .upload(filePath, imageFile, {
           contentType: imageFile.type,
           upsert: true,
@@ -38,10 +38,12 @@ export const useCreatePostMutation = () => {
 
       const {
         data: { publicUrl },
-      } = supabaseClient.storage.from("post-images").getPublicUrl(filePath);
+      } = supabaseClient.storage.from(SB_STORAGE.postImages).getPublicUrl(
+        filePath,
+      );
 
       const { error } = await supabaseClient
-        .from("posts")
+        .from(SB_TABLE.posts)
         .insert<CreateDbPost>({
           title,
           content,
@@ -81,7 +83,7 @@ export const useDeletePostMutation = () => {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ postId, postImagePathToDelete }: DeletePostProps) => {
       const { error: postsTableError } = await supabaseClient
-        .from("posts")
+        .from(SB_TABLE.posts)
         .delete()
         .eq("id", postId);
 
@@ -91,7 +93,7 @@ export const useDeletePostMutation = () => {
       }
 
       const { error: deletePostImageError } = await supabaseClient.storage
-        .from("post-images")
+        .from(SB_STORAGE.postImages)
         .remove([postImagePathToDelete]);
 
       if (deletePostImageError) {

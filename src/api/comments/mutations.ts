@@ -6,6 +6,7 @@ import {
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { Comment, CreateCommentInput, CreateDbCommentInput } from "src/types";
 
@@ -21,7 +22,7 @@ export const useCreateCommentMutation = (
     ) => {
       if (!userId) throw new Error("You must be logged in to add comment");
 
-      const { error } = await supabaseClient.from("comments").insert<
+      const { error } = await supabaseClient.from(SB_TABLE.comments).insert<
         CreateDbCommentInput
       >({
         post_id: postId,
@@ -50,7 +51,7 @@ export const useDeleteCommentsMutation = (postId: Comment["postId"]) => {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ id }: Pick<Comment, "id">) => {
       const { error } = await supabaseClient
-        .from("comments")
+        .from(SB_TABLE.comments)
         .delete()
         .eq("id", id);
 

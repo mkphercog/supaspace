@@ -14,6 +14,7 @@ export const mapDbCommentsToComments: Mapper = (
       user_id,
       author,
       post_id,
+      reactions,
     }): Comment => ({
       id,
       content,
@@ -26,6 +27,13 @@ export const mapDbCommentsToComments: Mapper = (
         avatarUrl: author.avatar_url,
       },
       postId: post_id,
+      reactions: reactions
+        ? reactions.map(({ id, reaction, user_id }) => ({
+          id,
+          reaction,
+          userId: user_id,
+        }))
+        : [],
     }),
   );
 

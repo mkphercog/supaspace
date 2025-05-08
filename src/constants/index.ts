@@ -12,3 +12,18 @@ export const COMMENT_MAX_LENGTH = 1024;
 export const ONE_MIN_IN_MS = 60_000;
 export const ONE_DAY_IN_MS = 86_400_000;
 export const ONE_DAY_IN_SEC = 86_400;
+
+//SUPABASE
+export const SB_TABLE = {
+  commentReactions: "commentReactions",
+  comments: "comments",
+  communities: "communities",
+  posts: "posts",
+  users: "users",
+  votes: "votes",
+};
+
+export const SB_STORAGE = {
+  postImages: "post-images",
+  avatars: "avatars",
+};

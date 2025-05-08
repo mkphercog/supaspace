@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { DbVote, Vote } from "src/types";
 
@@ -11,7 +12,7 @@ export const useFetchVotes = (postId: Vote["postId"]) => {
     queryKey: [QUERY_KEYS.votes, postId],
     queryFn: async () => {
       const { data, error } = await supabaseClient
-        .from("votes")
+        .from(SB_TABLE.votes)
         .select("*")
         .eq("post_id", postId);
 

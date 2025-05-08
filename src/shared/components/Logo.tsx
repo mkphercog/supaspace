@@ -15,6 +15,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
   if (isInSidebar) {
     return (
       <Typography.Link
+        aria-label="Supabase logo - redirect to home"
         to={ROUTES.root()}
         className={`self-start flex items-center gap-2
           ${
@@ -30,13 +31,16 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
     );
   }
 
+  if (sidebarStatus === "show") return null;
+
   return (
     <Typography.Link
+      aria-label="Supabase logo - redirect to home"
       to={ROUTES.root()}
       className="px-3 py-1 h-full flex items-center gap-2 hover:scale-105"
     >
-      {sidebarStatus === "hidden" && <Image />}
-      {sidebarStatus !== "show" && <Name />}
+      {!sidebarStatus.includes("icon") && <Image />}
+      <Name />
     </Typography.Link>
   );
 };

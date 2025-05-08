@@ -2,6 +2,7 @@ import { FC, lazy } from "react";
 
 import { useFetchPostById } from "src/api/posts";
 import { PostPlaceholderImage } from "src/assets/images";
+import { SB_STORAGE } from "src/constants";
 import { useAuth } from "src/context";
 import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
@@ -34,7 +35,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
   }
 
   const postImagePathToDelete = getFilePathToDeleteFromStorage({
-    storagePrefix: "post-images/",
+    storagePrefix: `${SB_STORAGE.postImages}/`,
     fullFileUrl: postDetails.imageUrl,
   });
 

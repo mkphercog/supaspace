@@ -29,6 +29,7 @@ export const AvatarCropper: FC<AvatarCropperProps> = ({
   return (
     <div className="fixed inset-0 w-full z-50 flex flex-col items-center justify-center gap-5 bg-[rgba(10,10,10,0.99)]">
       <Button
+        ariaLabel="Close avatar editor"
         variant="ghost"
         className=" absolute top-[10px] right-[20px]"
         onClick={clearAvatarSectionStates}

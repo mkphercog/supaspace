@@ -10,6 +10,7 @@ export const SidebarHeader = () => {
   return (
     <header className="w-full flex flex-col justify-between">
       <Button
+        ariaLabel="Toggle sidebar menu"
         onClick={toggleSidebarStatus}
         variant="ghost"
         className={`
@@ -43,6 +44,7 @@ export const SidebarHeader = () => {
 
       {sidebarStatus === "show" && (
         <Button
+          ariaLabel="Close sidebar menu"
           onClick={() => setStatusOfSidebar("hidden")}
           variant="ghost"
           className={`

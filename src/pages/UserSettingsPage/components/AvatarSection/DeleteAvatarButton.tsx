@@ -1,6 +1,7 @@
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { FC } from "react";
 
+import { SB_STORAGE } from "src/constants";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
 import { Button } from "src/shared/UI";
@@ -33,7 +34,7 @@ export const DeleteAvatarButton: FC<DeleteAvatarButtonProps> = ({
         userId: userData.id,
         userAvatarPathToDelete: getFilePathToDeleteFromStorage({
           fullFileUrl: userData.avatarUrl || "",
-          storagePrefix: "avatars/",
+          storagePrefix: `${SB_STORAGE.avatars}/`,
         }),
       });
     },

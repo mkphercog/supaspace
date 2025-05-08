@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import {
   DbUserData,
@@ -39,7 +40,7 @@ export const useFetchUserData = (userId: UserData["id"] | undefined) => {
       }
 
       const { data, error } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .select("*")
         .eq("id", userId)
         .single();
@@ -70,7 +71,7 @@ export const useFetchProfilesList = () => {
   const { data, isFetching } = useQuery<DbUserProfile[]>({
     queryFn: async () => {
       const { data, error } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .select(
           "id, avatar_url, nickname, full_name_from_auth_provider, created_at, postCount:posts(count)",
         ).order("nickname", { ascending: true });
@@ -95,7 +96,7 @@ export const useFetchProfileDetails = (profileId: DbUserProfile["id"]) => {
   const { data, error, isFetching } = useQuery<DbUserProfileDetails>({
     queryFn: async () => {
       const { data, error } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .select(
           "id, avatar_url, nickname, full_name_from_auth_provider, created_at, userPosts:posts(id, title)",
         )

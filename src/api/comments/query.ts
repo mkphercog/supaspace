@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { Comment, DbComment } from "src/types";
 
@@ -13,9 +14,9 @@ export const useFetchComments = (postId: Comment["postId"]) => {
       if (!postId) throw new Error("There is no post ID.");
 
       const { data, error } = await supabaseClient
-        .from("comments")
+        .from(SB_TABLE.comments)
         .select(
-          "*, author:users(id, nickname, full_name_from_auth_provider, avatar_url)",
+          "*, author:users(id, nickname, full_name_from_auth_provider, avatar_url), reactions:commentReactions(id, reaction, user_id)",
         )
         .eq("post_id", postId)
         .order("created_at", { ascending: true });

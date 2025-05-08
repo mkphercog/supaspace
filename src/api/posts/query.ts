@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { DbPost, Post } from "src/types";
 
@@ -11,7 +12,7 @@ export const useFetchPostById = (postId: Post["id"]) => {
     queryKey: [QUERY_KEYS.post, postId],
     queryFn: async () => {
       const { data, error } = await supabaseClient
-        .from("posts")
+        .from(SB_TABLE.posts)
         .select(`
           *,
           community:communities(id, name),

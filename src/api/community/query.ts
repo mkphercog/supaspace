@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { Community, DbCommunity, DbPost } from "src/types";
 
@@ -43,7 +44,7 @@ export const useFetchCommunities = () => {
     queryKey: [QUERY_KEYS.communities],
     queryFn: async () => {
       const { data, error } = await supabaseClient
-        .from("communities")
+        .from(SB_TABLE.communities)
         .select(`
           *, 
           author:users(id, nickname, full_name_from_auth_provider, avatar_url),

@@ -7,7 +7,12 @@ import {
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { NICKNAME_MAX_LENGTH, ONE_DAY_IN_SEC } from "src/constants";
+import {
+  NICKNAME_MAX_LENGTH,
+  ONE_DAY_IN_SEC,
+  SB_STORAGE,
+  SB_TABLE,
+} from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbUserData, DbUserData, UserData } from "src/types";
 
@@ -29,7 +34,7 @@ export const insertUserDataToDb = async (
   const avatarBlob = await fetchedUserAvatar.blob();
 
   const { error: uploadError } = await supabaseClient.storage
-    .from("avatars")
+    .from(SB_STORAGE.avatars)
     .upload(filePath, avatarBlob, {
       contentType: avatarBlob.type,
       upsert: true,
@@ -41,7 +46,7 @@ export const insertUserDataToDb = async (
 
   const {
     data: { publicUrl },
-  } = supabaseClient.storage.from("avatars").getPublicUrl(filePath);
+  } = supabaseClient.storage.from(SB_STORAGE.avatars).getPublicUrl(filePath);
 
   const dbUserData: DbUserData = {
     id: userData.id,
@@ -54,7 +59,9 @@ export const insertUserDataToDb = async (
     created_at: userData.created_at,
   };
 
-  const { error } = await supabaseClient.from("users").insert<CreateDbUserData>(
+  const { error } = await supabaseClient.from(SB_TABLE.users).insert<
+    CreateDbUserData
+  >(
     dbUserData,
   );
 
@@ -100,7 +107,7 @@ export const useSetNicknameMutation = () => {
       { userId, nickname }: { userId: string; nickname: string },
     ) => {
       const { error } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .update<Pick<DbUserData, "nickname">>({ nickname })
         .eq("id", userId);
 
@@ -133,7 +140,7 @@ export const useDeleteNicknameMutation = () => {
       { userId }: { userId: string },
     ) => {
       const { error } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .update<Pick<DbUserData, "nickname">>({ nickname: null })
         .eq("id", userId);
 
@@ -158,7 +165,7 @@ export const useEditUserAvatarMutation = () => {
     mutationFn: async ({ userId, file }: { userId: string; file: File }) => {
       const filePath = `${userId}/userAvatar-${Date.now()}.webp`;
       const { data: avatarsList } = await supabaseClient.storage
-        .from("avatars")
+        .from(SB_STORAGE.avatars)
         .list(userId);
 
       const avatarsImagesPathsToDelete = avatarsList?.map((file) =>
@@ -167,7 +174,7 @@ export const useEditUserAvatarMutation = () => {
 
       if (avatarsImagesPathsToDelete.length) {
         const { error: removeError } = await supabaseClient.storage
-          .from("avatars")
+          .from(SB_STORAGE.avatars)
           .remove(avatarsImagesPathsToDelete);
 
         if (removeError) {
@@ -177,7 +184,7 @@ export const useEditUserAvatarMutation = () => {
       }
 
       const { error } = await supabaseClient.storage
-        .from("avatars")
+        .from(SB_STORAGE.avatars)
         .upload(filePath, file, {
           contentType: file.type,
           upsert: true,
@@ -191,10 +198,12 @@ export const useEditUserAvatarMutation = () => {
 
       const {
         data: { publicUrl },
-      } = supabaseClient.storage.from("avatars").getPublicUrl(filePath);
+      } = supabaseClient.storage.from(SB_STORAGE.avatars).getPublicUrl(
+        filePath,
+      );
 
       const { error: updateAvatarUrlError } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .update<Pick<DbUserData, "avatar_url">>({
           avatar_url: publicUrl,
         })
@@ -206,7 +215,7 @@ export const useEditUserAvatarMutation = () => {
       }
 
       const { error: avatarUrlUpdatedAtError } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .update<Pick<DbUserData, "avatar_url_updated_at">>({
           avatar_url_updated_at: new Date().toISOString(),
         })
@@ -239,11 +248,11 @@ export const useDeleteAvatarMutation = () => {
       { userId, userAvatarPathToDelete }: DeleteAvatarProps,
     ) => {
       const { error: deleteAvatarError } = await supabaseClient.storage
-        .from("avatars")
+        .from(SB_STORAGE.avatars)
         .remove([userAvatarPathToDelete]);
 
       const { error: avatarErrorTable } = await supabaseClient
-        .from("users")
+        .from(SB_TABLE.users)
         .update<Pick<DbUserData, "avatar_url">>({ avatar_url: null })
         .eq("id", userId);
 

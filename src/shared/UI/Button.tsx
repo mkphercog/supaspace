@@ -6,7 +6,8 @@ type ButtonVariants =
   | "ghost"
   | "destructive"
   | "success"
-  | "dark";
+  | "dark"
+  | "outline";
 
 const BUTTON_VARIANT: Record<ButtonVariants, string> = {
   primary: `
@@ -39,6 +40,11 @@ const BUTTON_VARIANT: Record<ButtonVariants, string> = {
     border-purple-950 hover:border-purple-900
     disabled:bg-purple-500/20 disabled:text-gray-700 disabled:border-purple-800/10
   `,
+  outline: `
+    bg-transparent hover:bg-purple-400/10
+    border-purple-400/50 hover:border-purple-400/30
+    disabled:bg-gray-500/20 disabled:text-gray-300/40 disabled:border-gray-800/50
+  `,
 };
 
 type ButtonProps = {
@@ -47,6 +53,7 @@ type ButtonProps = {
   className?: string;
   disabled?: boolean;
   type?: HTMLButtonElement["type"];
+  ariaLabel?: string;
 };
 
 export const Button: FC<PropsWithChildren<ButtonProps>> = ({
@@ -56,9 +63,11 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
   children,
   disabled,
   type,
+  ariaLabel,
 }) => {
   return (
     <button
+      aria-label={ariaLabel}
       className={`
         px-3 py-1
         cursor-pointer 

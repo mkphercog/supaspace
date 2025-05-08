@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import {
@@ -18,7 +19,7 @@ export const useCreateCommunityMutation = () => {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ description, name, userId }: CreateCommunityInput) => {
       const { error } = await supabaseClient
-        .from("communities")
+        .from(SB_TABLE.communities)
         .insert<CreateDbCommunityInput>({
           description,
           name,
@@ -47,7 +48,7 @@ export const useDeleteCommunityMutation = () => {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ id }: Pick<Community, "id">) => {
       const { error } = await supabaseClient
-        .from("communities")
+        .from(SB_TABLE.communities)
         .delete()
         .eq("id", id);
 

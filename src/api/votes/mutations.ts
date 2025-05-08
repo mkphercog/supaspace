@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "src/api";
+import { SB_TABLE } from "src/constants";
 import { supabaseClient } from "src/supabase-client";
 import { CreateDbVote, CreateVote, DbVote, Vote } from "src/types";
 
@@ -12,7 +13,7 @@ export const useCreateVote = (postId: Vote["postId"]) => {
       if (!userId) throw new Error("Not logged in user");
 
       const { data: existingVote } = await supabaseClient
-        .from("votes")
+        .from(SB_TABLE.votes)
         .select("*")
         .eq("post_id", postId)
         .eq("user_id", userId)
@@ -20,7 +21,7 @@ export const useCreateVote = (postId: Vote["postId"]) => {
 
       if (!existingVote) {
         const { error } = await supabaseClient
-          .from("votes")
+          .from(SB_TABLE.votes)
           .insert<CreateDbVote>({
             post_id: postId,
             user_id: userId,
@@ -36,7 +37,7 @@ export const useCreateVote = (postId: Vote["postId"]) => {
 
       if (existingVote.vote !== vote) {
         const { error } = await supabaseClient
-          .from("votes")
+          .from(SB_TABLE.votes)
           .update<Pick<DbVote, "vote">>({ vote })
           .eq("id", existingVote.id);
 
@@ -48,7 +49,7 @@ export const useCreateVote = (postId: Vote["postId"]) => {
       }
 
       const { error } = await supabaseClient
-        .from("votes")
+        .from(SB_TABLE.votes)
         .delete()
         .eq("id", existingVote.id);
 

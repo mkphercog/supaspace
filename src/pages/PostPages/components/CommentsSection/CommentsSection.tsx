@@ -18,12 +18,8 @@ import {
 import { Comment } from "src/types";
 
 import { CommentItem } from "./CommentItem";
-import { buildFlatCommentsTree } from "./comments.utils";
-import {
-  CommentFormType,
-  INITIAL_FORM_STATE,
-  validationSchema,
-} from "./validationSchema";
+import { CommentFormType, getCommentFormConfig } from "./validationSchema";
+import { buildFlatCommentsTree } from "../../utils/comments.utils";
 
 type Props = Pick<Comment, "postId">;
 
@@ -40,18 +36,20 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
       formParams.reset();
     },
   });
+  const { validationSchema, defaultValues, fullFieldName } =
+    getCommentFormConfig(`main-${postId}`);
   const formParams = useBaseForm({
     validationSchema,
-    defaultValues: INITIAL_FORM_STATE,
+    defaultValues,
   });
 
-  const handleSubmit = ({ commentContent }: CommentFormType) => {
+  const handleSubmit = (formData: CommentFormType["defaultValues"]) => {
     if (!userData) return;
 
     toast.promise(
       async () => {
         await createComment({
-          content: commentContent,
+          content: formData[fullFieldName],
           parentCommentId: null,
           userId: userData.id,
           postId,
@@ -72,7 +70,7 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
     return <div>Error: {commentsError.message}</div>;
   }
 
-  const commentValue = formParams.watch("commentContent");
+  const commentValue = formParams.watch(fullFieldName);
   const commentTree = comments ? buildFlatCommentsTree(comments) : [];
 
   return (
@@ -89,7 +87,7 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
         >
           <FormTextarea
             labelText="New comment"
-            name={"commentContent"}
+            name={fullFieldName}
             placeholder="Write a comment..."
             maxLength={COMMENT_MAX_LENGTH}
             showCounter

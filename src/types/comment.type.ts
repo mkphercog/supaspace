@@ -1,3 +1,4 @@
+import { CommentReaction, DbCommentReaction } from "./commentReactions.type";
 import { Post } from "./post.type";
 import { Author, DbAuthor, UserData } from "./users.type";
 
@@ -12,6 +13,7 @@ export type DbComment = CommentCommon & {
   post_id: Post["id"];
   user_id: UserData["id"];
   author: DbAuthor;
+  reactions: Pick<DbCommentReaction, "id" | "reaction" | "user_id">[];
 };
 
 export type Comment = CommentCommon & {
@@ -20,6 +22,7 @@ export type Comment = CommentCommon & {
   postId: Post["id"];
   userId: UserData["id"];
   author: Author;
+  reactions: Pick<CommentReaction, "id" | "reaction" | "userId">[];
 };
 
 export type CommentTreeType = Comment & {

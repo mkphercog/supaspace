@@ -1,28 +1,29 @@
 import { FC, useState } from "react";
 
-import { useCreateCommentReaction } from "src/api/commentReactions";
 import { useAuth } from "src/context";
 import { useClickOutside } from "src/hooks";
 import { Button, Typography } from "src/shared/UI";
-import { Comment, Post, Reaction } from "src/types";
+import { Comment, Reaction, UserData } from "src/types";
 
 import { REACTION_ICONS_MAP } from "../../constants";
 
 type Props = {
-  postId: Post["id"];
-  commentId: Comment["id"];
   reactions: Comment["reactions"];
+  handleCreateReaction: (
+    userId: UserData["id"],
+    reaction: Reaction
+  ) => Promise<void>;
+  isCreateCommentReactionLoading: boolean;
 };
 
 export const CommentReactions: FC<Props> = ({
-  postId,
-  commentId,
   reactions,
+  handleCreateReaction,
+  isCreateCommentReactionLoading,
 }) => {
   const { userData } = useAuth();
   const [showReactions, setShowReactions] = useState(false);
   const ref = useClickOutside<HTMLDivElement>(() => setShowReactions(false));
-  const { createCommentReaction } = useCreateCommentReaction(postId, commentId);
 
   const userReaction = reactions.find(({ userId }) => userId === userData?.id);
 
@@ -48,11 +49,10 @@ export const CommentReactions: FC<Props> = ({
                   ariaLabel={`Reaction-${reactionName}`}
                   variant="ghost"
                   onClick={async () => {
-                    await createCommentReaction({
-                      userId: userData?.id || "",
-                      reaction: reactionName as Reaction,
-                    });
-
+                    await handleCreateReaction(
+                      userData?.id || "",
+                      reactionName as Reaction
+                    );
                     setShowReactions(false);
                   }}
                   className={`${
@@ -60,6 +60,7 @@ export const CommentReactions: FC<Props> = ({
                       ? "bg-purple-700/30!"
                       : ""
                   }`}
+                  disabled={isCreateCommentReactionLoading}
                 >
                   {icon}
                 </Button>

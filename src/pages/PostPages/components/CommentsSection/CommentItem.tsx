@@ -1,10 +1,11 @@
 import { FC, lazy, useState } from "react";
 
+import { useCreateCommentReaction } from "src/api/commentReactions";
 import { useAuth } from "src/context";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
-import { Typography } from "src/shared/UI";
-import { Comment, CommentTreeType } from "src/types";
+import { Loader, Typography } from "src/shared/UI";
+import { Comment, CommentTreeType, Reaction, UserData } from "src/types";
 
 import { CommentReactions } from "./CommentReactions";
 import { CommentReplies } from "./CommentReplies";
@@ -21,6 +22,8 @@ type Props = Pick<Comment, "postId"> & {
 export const CommentItem: FC<Props> = ({ postId, comment }) => {
   const [isReplyFormVisible, setIsReplyFormVisible] = useState(false);
   const { userData, currentSession } = useAuth();
+  const { createCommentReaction, isCreateCommentReactionLoading } =
+    useCreateCommentReaction(postId, comment.id);
 
   const toggleReplyFormVisibility = () => {
     setIsReplyFormVisible((prev) => !prev);
@@ -29,13 +32,27 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
   const isParentComment = comment.parentCommentId === null;
   const authorDisplayName = comment.author.displayName;
 
+  const handleCreateReaction = async (
+    userId: UserData["id"],
+    reaction: Reaction
+  ) => {
+    await createCommentReaction({
+      userId,
+      reaction,
+    });
+  };
+
   return (
     <section
       className={`
-        p-2 rounded-xl 
+        relative p-2 rounded-xl 
         ${isParentComment ? "bg-gray-700/20" : "bg-transparent"} 
       `}
     >
+      {isCreateCommentReactionLoading && (
+        <Loader className="absolute top-0 bottom-0 left-0 right-0 bg-[rgba(12,13,15,0.88)] rounded-xl z-50" />
+      )}
+
       <main
         className={`
           grid grid-cols-[auto_1fr_auto] grid-rows-[repeat(5,auto)] 
@@ -100,9 +117,9 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
           />
 
           <CommentReactions
-            postId={postId}
-            commentId={comment.id}
             reactions={comment.reactions}
+            handleCreateReaction={handleCreateReaction}
+            isCreateCommentReactionLoading={isCreateCommentReactionLoading}
           />
         </div>
       </main>

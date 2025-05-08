@@ -66,7 +66,7 @@
 
 ### ![versionIcon](/icons/versionIcon.svg) Version
 
-Current version: `v1.1.1`
+Current version: `v1.2.0`
 
 ---
 

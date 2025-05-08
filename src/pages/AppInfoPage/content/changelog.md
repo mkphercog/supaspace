@@ -2,6 +2,16 @@
 
 </br>
 
+## `v1.2.0`
+
+### Changes:
+
+- Added the ability to react to comments 🎉
+- Improved accessibility
+- Fixed an issue with comment form IDs that caused unexpected behavior
+
+</br>
+
 ## `v1.1.1`
 
 ### Changes:

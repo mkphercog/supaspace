@@ -52,6 +52,7 @@
 
 - Add **comments** to posts
 - You can **delete your own comments** at any time
+- React to comments with emojis
 
 ---
 

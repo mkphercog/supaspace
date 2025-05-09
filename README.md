@@ -52,6 +52,7 @@
 
 - Add **comments** to posts
 - You can **delete your own comments** at any time
+- React to comments with emojis
 
 ---
 
@@ -66,7 +67,7 @@
 
 ### ![versionIcon](./public/icons/versionIcon.svg) Version
 
-Current version: `v1.2.0`
+Current version: `v1.2.1`
 
 ---
 

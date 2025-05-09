@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC } from "react";
 
 import { LogoIcon } from "src/assets/icons";
@@ -12,18 +13,17 @@ type LogoProps = {
 export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
   const { sidebarStatus } = useSidebar();
 
+  const isSidebarStatusWithIcon = sidebarStatus.includes("icon");
+
   if (isInSidebar) {
     return (
       <Typography.Link
         aria-label="Supabase logo - redirect to home"
         to={ROUTES.root()}
-        className={`self-start flex items-center gap-2
-          ${
-            sidebarStatus.includes("icon")
-              ? "h-auto hover:scale-110"
-              : "h-[40px] hover:scale-105"
-          }
-        `}
+        className={cn("self-start flex items-center gap-2", {
+          "h-auto hover:scale-110": isSidebarStatusWithIcon,
+          "h-[40px] hover:scale-105": !isSidebarStatusWithIcon,
+        })}
       >
         {sidebarStatus !== "hidden" && <Image />}
         {sidebarStatus === "show" && <Name />}
@@ -39,7 +39,7 @@ export const Logo: FC<LogoProps> = ({ isInSidebar = false }) => {
       to={ROUTES.root()}
       className="px-3 py-1 h-full flex items-center gap-2 hover:scale-105"
     >
-      {!sidebarStatus.includes("icon") && <Image />}
+      {!isSidebarStatusWithIcon && <Image />}
       <Name />
     </Typography.Link>
   );

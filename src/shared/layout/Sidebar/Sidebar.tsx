@@ -1,3 +1,5 @@
+import cn from "classnames";
+
 import { SidebarStatusType, useSidebar } from "src/context";
 
 import { SidebarHeader } from "./SidebarHeader";
@@ -14,6 +16,7 @@ const SIDEBRAR_VISIBILITY_CLASSES: Record<SidebarStatusType, string> = {
 export const Sidebar = () => {
   const { sidebarStatus } = useSidebar();
 
+  const isSidebarStatusShow = sidebarStatus === "show";
   return (
     <aside
       className={`
@@ -31,9 +34,10 @@ export const Sidebar = () => {
       </main>
 
       <footer
-        className={`
-          flex ${sidebarStatus === "show" ? "justify-start" : "justify-end"} 
-        `}
+        className={cn("flex", {
+          "justify-start": isSidebarStatusShow,
+          "justify-end": !isSidebarStatusShow,
+        })}
       >
         <AuthButton isInSidebar />
       </footer>

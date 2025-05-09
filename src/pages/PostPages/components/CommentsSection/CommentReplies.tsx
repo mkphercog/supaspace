@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, useState } from "react";
 
 import { ChevronUpIcon } from "src/assets/icons";
@@ -28,6 +29,10 @@ export const CommentReplies: FC<Props> = ({ postId, comment }) => {
     }, {} as Record<number, CommentTreeType[]>)
   );
 
+  const showRepliesBtnText = `${isExpanded ? "Hide" : "Show"} replies (${
+    comment.children.length
+  })`;
+
   return (
     <div className="mt-1">
       <Button
@@ -35,12 +40,13 @@ export const CommentReplies: FC<Props> = ({ postId, comment }) => {
         variant="ghost"
         onClick={toggleOpenState}
       >
-        <ChevronUpIcon className={`${isExpanded ? "" : "rotate-180"}`} />
+        <ChevronUpIcon
+          className={cn("transition duration-300", {
+            "rotate-180": !isExpanded,
+          })}
+        />
         <Typography.Text size="xs" className="text-inherit">
-          {`
-            ${isExpanded ? "Hide replies" : "Show replies"} 
-            (${comment.children.length})
-          `}
+          {showRepliesBtnText}
         </Typography.Text>
       </Button>
 

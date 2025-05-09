@@ -50,7 +50,8 @@ export const ProfileDetails: FC<Props> = ({ profileId }) => {
                     color="lightPurple"
                     to={ROUTES.post.details(post.id)}
                     className={`
-                      p-4 transition duration-300 bg-purple-500/5 hover:bg-purple-800/30 rounded-2xl
+                      p-4 transition duration-300
+                      bg-purple-500/5 hover:bg-purple-800/30 rounded-2xl
                     `}
                   >
                     {post.title}

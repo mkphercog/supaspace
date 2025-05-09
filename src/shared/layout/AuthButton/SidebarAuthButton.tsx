@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC } from "react";
 import { useNavigate } from "react-router";
 
@@ -54,19 +55,16 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
       </div>
 
       <div
-        className={`
-          absolute left-3 px-3 py-2
-          flex flex-col gap-2
-          bg-[rgba(12,13,15,0.95)] rounded-md 
-          border-1 border-white/10
-          ${
-            isAvatarMenuOpen
-              ? "opacity-100 bottom-[65px]"
-              : "opacity-0 bottom-[-130px] pointer-events-none"
+        className={cn(
+          "absolute left-3 px-3 py-2 flex flex-col gap-2",
+          "bg-[rgba(12,13,15,0.95)] rounded-md border-1 border-white/10",
+          "transition-all duration-[400ms]",
+          {
+            "opacity-100 bottom-[65px]": isAvatarMenuOpen,
+            "opacity-0 bottom-[-130px] pointer-events-none": !isAvatarMenuOpen,
+            hidden: sidebarStatus === "hidden",
           }
-          ${sidebarStatus === "hidden" ? "hidden" : ""}
-          transition-all duration-[400ms]
-        `}
+        )}
       >
         <SidebarItem
           as="button"

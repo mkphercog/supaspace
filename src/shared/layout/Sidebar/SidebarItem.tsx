@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, ReactNode } from "react";
 
 import { useSidebar } from "src/context";
@@ -42,12 +43,13 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       <Button
         variant="ghost"
         onClick={onClick}
-        className={`
-          flex items-center
-          p-0! font-semibold
-          ${isSidebarOpen ? "w-full hover:scale-105" : "w-auto hover:scale-125"}
-          hover:bg-transparent!
-        `}
+        className={cn(
+          "flex items-center p-0! font-semibold hover:bg-transparent!",
+          {
+            "w-full hover:scale-105": isSidebarOpen,
+            "w-auto hover:scale-125": !isSidebarOpen,
+          }
+        )}
       >
         <div className="flex items-center gap-2">
           {icon}
@@ -60,7 +62,10 @@ export const SidebarItem: FC<SidebarItemProps> = ({
   return (
     <li
       onClick={onClick}
-      className={`${isSidebarOpen ? "w-full" : "w-auto"} list-none!`}
+      className={cn("list-none!", {
+        "w-full": isSidebarOpen,
+        "w-auto": !isSidebarOpen,
+      })}
     >
       <Typography.Link
         to={restProps.path || ROUTES.root()}
@@ -68,13 +73,15 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       >
         {({ isActive }) => (
           <div
-            className={`
-              flex items-center gap-2 
-              ${isSidebarOpen ? "hover:scale-105" : "hover:scale-125"}
-              ${isActive ? "text-purple-600 " : "text-gray-300 "}
-              hover:text-purple-600 
-              transition duration-300
-            `}
+            className={cn(
+              "flex items-center gap-2 hover:text-purple-600 transition duration-300",
+              {
+                "hover:scale-105": isSidebarOpen,
+                "hover:scale-125": !isSidebarOpen,
+                "text-purple-600": isActive,
+                "text-gray-300": !isActive,
+              }
+            )}
           >
             {icon}
             {isSidebarOpen && text}

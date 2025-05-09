@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, MouseEventHandler, PropsWithChildren } from "react";
 
 type ButtonVariants =
@@ -68,15 +69,12 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
   return (
     <button
       aria-label={ariaLabel}
-      className={`
-        px-3 py-1
-        cursor-pointer 
-      text-gray-200
-        rounded-md transition duration-300 border
-        disabled:cursor-not-allowed
-        ${BUTTON_VARIANT[variant]}
-        ${className}
-      `}
+      className={cn(
+        "px-2 md:px-3 py-1 cursor-pointer text-gray-200 rounded-md",
+        "transition duration-300 border disabled:cursor-not-allowed",
+        BUTTON_VARIANT[variant],
+        className
+      )}
       onClick={onClick}
       disabled={disabled}
       type={type}

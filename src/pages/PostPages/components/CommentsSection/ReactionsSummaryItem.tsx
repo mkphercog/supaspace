@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, ReactNode, useState } from "react";
 
 import { useFetchCommentReactionAuthors } from "src/api/commentReactions/query";
@@ -42,11 +43,13 @@ export const ReactionsSummaryItem: FC<Props> = ({
     <>
       <li
         ref={ref}
-        className={`
-          flex items-center gap-1 py-0 px-1 list-none! 
-          hover:cursor-pointer transition-transform duration-300 
-          ${isReactionAuthorsVisible ? "" : "hover:scale-[117%]"} 
-        `}
+        className={cn(
+          "flex items-center gap-1 list-none!",
+          "hover:cursor-pointer transition-transform duration-300",
+          {
+            "hover:scale-[117%]": !isReactionAuthorsVisible,
+          }
+        )}
         onClick={() => {
           setIsReactionAuthorsVisible((prev) => !prev);
 
@@ -59,29 +62,27 @@ export const ReactionsSummaryItem: FC<Props> = ({
           {count}
         </Typography.Text>
         <span
-          className={`${
-            isReactionAuthorsVisible &&
-            reactionAuthors.some((item) => item.reaction === reaction)
-              ? "animate-bounce"
-              : ""
-          }`}
+          className={cn({
+            "animate-bounce":
+              isReactionAuthorsVisible &&
+              reactionAuthors.some((item) => item.reaction === reaction),
+          })}
         >
           {icon}
         </span>
       </li>
 
       <aside
-        className={`
-          absolute left-0
-          flex flex-col gap-1 px-3 py-2
-          bg-[rgba(12,13,15,0.7)] backdrop-blur-sm rounded-md 
-          ${
-            isReactionAuthorsVisible
-              ? "opacity-100 bottom-[38px]"
-              : "opacity-0 bottom-[0px] pointer-events-none"
+        className={cn(
+          "absolute left-0 flex flex-col gap-1 px-3 py-2",
+          "bg-[rgba(12,13,15,0.7)] backdrop-blur-sm rounded-md",
+          "transition-all duration-300",
+          {
+            "opacity-100 bottom-[38px]": isReactionAuthorsVisible,
+            "opacity-0 bottom-[0px] pointer-events-none":
+              !isReactionAuthorsVisible,
           }
-          transition-all duration-300
-        `}
+        )}
       >
         {areReactionAuthorsLoading ? (
           <Typography.Text size="xs">Loading...</Typography.Text>

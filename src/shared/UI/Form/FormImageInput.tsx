@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { ChangeEventHandler, FC } from "react";
 import { useController } from "react-hook-form";
 
@@ -37,18 +38,15 @@ export const FormImageInput: FC<FormImageInputProps> = ({
           id={name}
           type="file"
           accept="image/*"
-          className={`
-            w-full text-sm rounded-md p-2 block         
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-transparent focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-pointer file:hidden
-            ${
-              fieldState.error
-                ? "border-red-400 focus:border-red-400 hover:border-red-400"
-                : ""
+          className={cn(
+            "w-full p-2 block text-sm rounded-md",
+            "border border-gray-500 hover:border-purple-600 focus:border-purple-600 ",
+            "bg-transparent focus:outline-none transition-colors duration-300 hover:cursor-pointer file:hidden",
+            {
+              "border-red-400 focus:border-red-400 hover:border-red-400":
+                fieldState.error,
             }
-          `}
+          )}
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) {

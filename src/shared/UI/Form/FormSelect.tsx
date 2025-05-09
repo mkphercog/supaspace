@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, SelectHTMLAttributes } from "react";
 import { useController } from "react-hook-form";
 
@@ -48,18 +49,16 @@ export const FormSelect: FC<FromSelectProps> = ({
         </label>
         <select
           id={name}
-          className={`
-            w-full text-sm rounded-md p-2 block
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-[rgba(10,10,10,0.8)] text-gray-200 focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-pointer
-            ${
-              fieldState.error
-                ? "border-red-400 focus:border-red-400 hover:border-red-400"
-                : ""
+          className={cn(
+            "w-full p-2 block text-sm rounded-md",
+            "border border-gray-500 hover:border-purple-600 focus:border-purple-600",
+            "bg-[rgba(10,10,10,0.8)] text-gray-200 focus:outline-none",
+            "transition-colors duration-300 hover:cursor-pointer",
+            {
+              "border-red-400 focus:border-red-400 hover:border-red-400":
+                fieldState.error,
             }
-          `}
+          )}
           {...field}
           onChange={(event) => {
             field.onChange(event);

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC } from "react";
 import { NavLink, NavLinkProps } from "react-router";
 
@@ -17,13 +18,12 @@ export const Link: FC<LinkProps> = ({
     <NavLink
       {...restProps}
       className={({ isActive }) => {
-        return `
-          font-medium text-gray-300 hover:text-white 
-          transition duration-300
-          ${isActive && "text-purple-500"}
-          ${TYPOGRAPHY_COLOR[color]}
-          ${className}
-        `;
+        return cn(
+          "font-medium text-gray-300 hover:text-white transition duration-300",
+          { "text-purple-500": isActive },
+          TYPOGRAPHY_COLOR[color],
+          className
+        );
       }}
     >
       {children}

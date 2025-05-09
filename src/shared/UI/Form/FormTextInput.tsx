@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, InputHTMLAttributes } from "react";
 import { useController } from "react-hook-form";
 
@@ -44,18 +45,16 @@ export const FormTextInput: FC<FromTextInputProps> = ({
         <input
           id={name}
           type="text"
-          className={`
-            w-full text-sm rounded-md p-2 block         
-            border border-gray-500 hover:border-purple-600 focus:outline-none
-            bg-transparent focus:border-purple-600
-            transition-colors duration-300
-            hover:cursor-text
-            ${
-              fieldState.error
-                ? "border-red-400 focus:border-red-400 hover:border-red-400"
-                : ""
+          className={cn(
+            "w-full p-2 block text-sm rounded-md",
+            "border border-gray-500 hover:border-purple-600 focus:border-purple-600",
+            "bg-transparent focus:outline-none",
+            "transition-colors duration-300 hover:cursor-text",
+            {
+              "border-red-400 focus:border-red-400 hover:border-red-400":
+                fieldState.error,
             }
-          `}
+          )}
           {...field}
           onChange={(event) => {
             field.onChange(event);

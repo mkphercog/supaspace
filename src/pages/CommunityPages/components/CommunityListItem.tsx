@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, useState } from "react";
 
 import { useDeleteCommunityMutation } from "src/api/community";
@@ -46,7 +47,11 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
         variant="ghost"
         onClick={() => setIsDetailsOpen((prev) => !prev)}
       >
-        <ChevronUpIcon className={!isDetailsOpen ? "rotate-180" : ""} />
+        <ChevronUpIcon
+          className={cn("transition duration-300", {
+            "rotate-180": !isDetailsOpen,
+          })}
+        />
         <Typography.Text size="xs" className="text-inherit">
           {!isDetailsOpen ? "Show details" : "Hide details"}
         </Typography.Text>

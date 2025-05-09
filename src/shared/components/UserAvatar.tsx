@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, useEffect, useState } from "react";
 import { PhotoView } from "react-photo-view";
 
@@ -42,17 +43,18 @@ export const UserAvatar: FC<UserAvatarProps> = ({
   if (!avatarSrc) {
     return (
       <DefaultAvatarIcon
-        className={`${AVATAR_SIZE[size]} rounded-full bg-purple-800`}
+        className={cn(AVATAR_SIZE[size], "rounded-full bg-purple-800")}
       />
     );
   }
 
   const imgProps = {
-    className: `
-      ${AVATAR_SIZE[size]} rounded-full object-cover 
-      ${isPhotoView ? "cursor-pointer" : ""} 
-      ${className}
-    `,
+    className: cn(
+      "rounded-full object-cover",
+      { "cursor-pointer": isPhotoView },
+      AVATAR_SIZE[size],
+      className
+    ),
     src: avatarSrc,
     alt: "User Avatar",
     loading: "lazy" as const,

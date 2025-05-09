@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, lazy, useState } from "react";
 
 import { useCreateCommentReaction } from "src/api/commentReactions";
@@ -44,20 +45,25 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
 
   return (
     <section
-      className={`
-        relative p-2 rounded-xl 
-        ${isParentComment ? "bg-gray-700/20" : "bg-transparent"} 
-      `}
+      className={cn("relative p-2 rounded-xl", {
+        "bg-gray-700/20": isParentComment,
+        "bg-transparent": !isParentComment,
+      })}
     >
       {isCreateCommentReactionLoading && (
-        <Loader className="absolute top-0 bottom-0 left-0 right-0 bg-[rgba(12,13,15,0.88)] rounded-xl z-50" />
+        <Loader
+          className={cn(
+            "absolute top-0 bottom-0 left-0 right-0",
+            "bg-[rgba(12,13,15,0.88)] rounded-xl z-50"
+          )}
+        />
       )}
 
       <main
-        className={`
-          grid grid-cols-[auto_1fr_auto] grid-rows-[repeat(5,auto)] 
-          bg-gray-500/20 p-2 rounded-2xl
-        `}
+        className={cn(
+          "grid grid-cols-[auto_1fr_auto] grid-rows-[repeat(5,auto)]",
+          "p-2 bg-gray-500/20 rounded-2xl"
+        )}
       >
         <UserAvatar
           className="row-span-3 row-start-1 mr-2"
@@ -104,11 +110,10 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
         )}
 
         <div
-          className={`
-            col-span-3 col-start-1 row-start-5 mt-1
-            grid grid-cols-[auto_1fr_auto]
-            relative
-          `}
+          className={cn(
+            "col-span-3 col-start-1 row-start-5 mt-1",
+            "relative grid grid-cols-[auto_1fr_auto]"
+          )}
         >
           <ReactionsSummary postId={postId} comment={comment} />
 

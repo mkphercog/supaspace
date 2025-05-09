@@ -1,3 +1,5 @@
+import cn from "classnames";
+
 import {
   CommunityIcon,
   CreateCommunityIcon,
@@ -25,8 +27,10 @@ export const SidebarNavItemsList = () => {
   const { isMdUp } = useScreenSize();
   const { currentSession } = useAuth();
 
+  const isSidebarStatusShow = sidebarStatus === "show";
+
   const setIconsToShowStatus = () => {
-    if (sidebarStatus === "show" && !isMdUp) {
+    if (isSidebarStatusShow && !isMdUp) {
       setStatusOfSidebar("iconsToShow");
     }
   };
@@ -79,9 +83,10 @@ export const SidebarNavItemsList = () => {
   return (
     <nav>
       <ul
-        className={`flex flex-col gap-5 
-          ${sidebarStatus === "show" ? "items-start" : "items-end"} 
-        `}
+        className={cn("flex flex-col gap-5", {
+          "items-start": isSidebarStatusShow,
+          "items-end": !isSidebarStatusShow,
+        })}
       >
         {SIDEBAR_ITEMS.map((item) => (
           <SidebarItem

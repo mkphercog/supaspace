@@ -14,7 +14,10 @@ export const ProfilesList = () => {
             return (
               <Typography.Link
                 key={id}
-                className={`p-4 transition duration-300 bg-purple-500/5 hover:bg-purple-800/30 rounded-2xl`}
+                className={`
+                  p-4 transition duration-300
+                  bg-purple-500/5 hover:bg-purple-800/30 rounded-2xl
+                `}
                 to={ROUTES.profiles.details(id)}
               >
                 <div className="flex flex-col md:flex-row md:justify-between gap-3">

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, PropsWithChildren } from "react";
 
 import { TYPOGRAPHY_COLOR, TypographyColors } from ".";
@@ -30,11 +31,12 @@ export const Text: FC<PropsWithChildren<TextProps>> = ({
 }) => {
   return (
     <p
-      className={`
-        ${TEXT_SIZE[size]} ${TYPOGRAPHY_COLOR[color]}
-        ${isTruncate ? "truncate" : ""} 
-        ${className}
-      `}
+      className={cn(
+        TEXT_SIZE[size],
+        TYPOGRAPHY_COLOR[color],
+        { truncate: isTruncate },
+        className
+      )}
       title={title}
     >
       {children}

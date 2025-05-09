@@ -1,4 +1,5 @@
 import { RefMDEditor } from "@uiw/react-md-editor";
+import cn from "classnames";
 import { ChangeEventHandler, FC, lazy, useRef } from "react";
 import { useController } from "react-hook-form";
 
@@ -59,15 +60,14 @@ export const FormMDEditor: FC<FromMDEditorProps> = ({
           </div>
         </label>
         <MDEditor
-          className={`
-            transition-colors duration-300
-            border border-gray-500 hover:border hover:border-purple-600
-            ${
-              fieldState.error
-                ? "border-red-400 focus:border-red-400 hover:border-red-400"
-                : ""
+          className={cn(
+            "border border-gray-500 hover:border hover:border-purple-600",
+            "transition-colors duration-300",
+            {
+              "border-red-400 focus:border-red-400 hover:border-red-400":
+                fieldState.error,
             }
-          `}
+          )}
           textareaProps={{
             id: name,
             name,

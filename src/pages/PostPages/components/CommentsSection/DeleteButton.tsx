@@ -36,7 +36,7 @@ export const DeleteButton: FC<Props> = ({ postId, commentId, ownerId }) => {
       variant="ghost"
       onClick={startDeletingProcess}
     >
-      <TrashIcon className=" text-red-500 w-5 h-5" />
+      <TrashIcon className="text-red-500 w-5 h-5" />
     </Button>
   );
 };

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, useState } from "react";
 import { PhotoView } from "react-photo-view";
 
@@ -30,25 +31,28 @@ export const ImageSkeleton: FC<Props> = ({
       src={placeholderSrc || src}
       alt={alt}
       onLoad={() => setIsLoaded(true)}
-      className={`
-        w-full h-full object-cover object-center
-        transition-opacity duration-500 
-        ${isLoaded ? "opacity-100" : "opacity-0"}
-      `}
+      className={cn(
+        "w-full h-full object-cover object-center",
+        "transition-opacity duration-500",
+        {
+          "opacity-100": isLoaded,
+          "opacity-0": !isLoaded,
+        }
+      )}
       onError={handleImgError}
     />
   );
 
   return (
     <div
-      className={`
-        w-full rounded-2xl relative overflow-hidden
-        ${withPhotoView ? "cursor-pointer" : ""} 
-        ${className}
-      `}
+      className={cn(
+        "w-full rounded-2xl relative overflow-hidden",
+        { "cursor-pointer": withPhotoView },
+        className
+      )}
     >
       {!isLoaded && (
-        <div className="absolute inset-0 bg-purple-900/60 animate-pulse rounded" />
+        <div className="absolute inset-0 bg-purple-700/30 animate-pulse rounded" />
       )}
 
       <div className="w-full h-full flex items-center justify-center">

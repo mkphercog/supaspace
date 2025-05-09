@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { FC, useState } from "react";
 
 import { useAuth } from "src/context";
@@ -28,20 +29,24 @@ export const CommentReactions: FC<Props> = ({
   const userReaction = reactions.find(({ userId }) => userId === userData?.id);
 
   return (
-    <div ref={ref} className="col-start-3 inline-flex items-center relative">
+    <div ref={ref} className="col-start-3 inline-flex items-center">
       <div
-        className={`
-          absolute right-0 px-3 py-2
-          bg-[rgba(12,13,15,0.7)] backdrop-blur-sm rounded-md 
-          ${
-            showReactions
-              ? "opacity-100 bottom-[38px]"
-              : "opacity-0 bottom-[0px] pointer-events-none"
+        className={cn(
+          "absolute right-0 left-0",
+          "transition-all duration-300",
+          "flex justify-end",
+          {
+            "opacity-100 bottom-[38px]": showReactions,
+            "opacity-0 bottom-[0px] pointer-events-none": !showReactions,
           }
-          transition-all duration-300
-        `}
+        )}
       >
-        <ul className="flex gap-1">
+        <ul
+          className={cn(
+            "flex gap-1 md:gap-2 justify-end flex-wrap px-3 py-2",
+            "bg-[rgba(12,13,15,0.6)] backdrop-blur-sm rounded-md"
+          )}
+        >
           {Object.entries(REACTION_ICONS_MAP).map(([reactionName, icon]) => {
             return (
               <li key={reactionName} className="list-none!">
@@ -55,11 +60,10 @@ export const CommentReactions: FC<Props> = ({
                     );
                     setShowReactions(false);
                   }}
-                  className={`${
-                    userReaction?.reaction === reactionName
-                      ? "bg-purple-700/30!"
-                      : ""
-                  }`}
+                  className={cn("p-1! rounded-full!", {
+                    "bg-purple-700/30!":
+                      userReaction?.reaction === reactionName,
+                  })}
                   disabled={isCreateCommentReactionLoading}
                 >
                   {icon}

@@ -31,7 +31,7 @@ export const AvatarCropper: FC<AvatarCropperProps> = ({
       <Button
         ariaLabel="Close avatar editor"
         variant="ghost"
-        className=" absolute top-[10px] right-[20px]"
+        className="absolute top-[10px] right-[20px]"
         onClick={clearAvatarSectionStates}
       >
         <CloseIcon className="h-10 w-10 md:h-8 md:w-8" />

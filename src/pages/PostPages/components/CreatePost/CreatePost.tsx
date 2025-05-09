@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -159,7 +160,7 @@ export const CreatePost = () => {
         </Button>
       </BaseForm>
 
-      <div className={`${imageValue ? "" : "hidden"}`}>
+      <div className={cn({ hidden: !imageValue })}>
         <Typography.Text className="font-semibold mb-2">
           Image preview
         </Typography.Text>

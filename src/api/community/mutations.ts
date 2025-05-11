@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { SB_TABLE } from "src/constants";
+import { COMMUNITY_TITLE_MAX_LENGTH, SB_TABLE } from "src/constants";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import {
@@ -26,7 +26,15 @@ export const useCreateCommunityMutation = () => {
           user_id: userId,
         });
 
-      if (error) {
+      if (error?.code === "23505") {
+        toast.error("This community name is already taken.");
+        throw new Error(error.message);
+      } else if (error?.code === "23514") {
+        toast.error(
+          `Community name is too long, max length: ${COMMUNITY_TITLE_MAX_LENGTH}`,
+        );
+        throw new Error();
+      } else if (error) {
         toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(error.message);
       }

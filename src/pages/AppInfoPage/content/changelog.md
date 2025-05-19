@@ -1,5 +1,12 @@
 # Changelog
 
+### Version `1.2.2` changes:
+
+- Unified styles in the post detail view — consistent button appearance (e.g. delete button) and added breadcrumbs for improved navigation
+- Added basic user roles support (admin, standard) — groundwork for future permission handling
+
+---
+
 ### Version `1.2.1` changes:
 
 - Added author information for reactions

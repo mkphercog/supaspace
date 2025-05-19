@@ -1,3 +1,4 @@
+import { USER_ROLES_MAP } from "src/constants";
 import { CommentReactionAuthor, DbCommentReactionAuthor } from "src/types";
 
 type Mapper = (comments: DbCommentReactionAuthor[]) => CommentReactionAuthor[];
@@ -20,6 +21,7 @@ export const mapDbReactionAuthorsToReactionAuthors: Mapper = (
       author: {
         id: author.id,
         displayName: author.nickname || author.full_name_from_auth_provider,
+        role: USER_ROLES_MAP[author.role],
       },
       commentId: comment_id,
       reaction,

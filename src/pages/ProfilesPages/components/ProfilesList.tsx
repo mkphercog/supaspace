@@ -1,7 +1,13 @@
+import TimeAgo from "react-timeago";
+import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
+import enStrings from "react-timeago/lib/language-strings/en";
+
 import { useFetchProfilesList } from "src/api/user";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
 import { Card, Typography } from "src/shared/UI";
+
+const formatter = buildFormatter(enStrings);
 
 export const ProfilesList = () => {
   const { mappedProfilesList, isProfilesListFetching } = useFetchProfilesList();
@@ -10,7 +16,7 @@ export const ProfilesList = () => {
     <Card className="max-w-2xl mx-auto" isLoading={isProfilesListFetching}>
       <div className="flex flex-col gap-3">
         {mappedProfilesList.map(
-          ({ id, avatarUrl, displayName, createdAt, postCount }) => {
+          ({ id, avatarUrl, displayName, createdAt, postCount, role }) => {
             return (
               <Typography.Link
                 key={id}
@@ -29,8 +35,8 @@ export const ProfilesList = () => {
                         {displayName}
                       </Typography.Text>
 
-                      <Typography.Text size="sm" className="font-light">
-                        since {new Date(createdAt).toLocaleDateString()}
+                      <Typography.Text size="sm" color="blue">
+                        {role}
                       </Typography.Text>
                     </div>
                   </div>
@@ -39,6 +45,15 @@ export const ProfilesList = () => {
                     Posts: <span className="text-lime-600">{postCount}</span>
                   </Typography.Text>
                 </div>
+
+                <Typography.Text size="sm" className="mt-2 font-light">
+                  Joined{" "}
+                  <TimeAgo
+                    title={`Since ${new Date(createdAt).toLocaleString()}`}
+                    date={createdAt}
+                    formatter={formatter}
+                  />
+                </Typography.Text>
               </Typography.Link>
             );
           }

@@ -1,6 +1,8 @@
 import { FC } from "react";
+import { useLocation } from "react-router";
 
 import { useFetchProfileDetails } from "src/api/user";
+import { ArrowUpIcon } from "src/assets/icons";
 import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
@@ -13,6 +15,7 @@ type Props = {
 };
 
 export const ProfileDetails: FC<Props> = ({ profileId }) => {
+  const location = useLocation();
   const { profileDetails, profileDetailsError, isProfileDetailsFetching } =
     useFetchProfileDetails(profileId || "");
 
@@ -20,12 +23,26 @@ export const ProfileDetails: FC<Props> = ({ profileId }) => {
 
   if (!profileDetails || profileDetailsError) return <NotFoundPage />;
 
-  const { avatarUrl, createdAt, displayName, userPosts } = profileDetails;
+  const { avatarUrl, createdAt, displayName, userPosts, role } = profileDetails;
 
   return (
-    <Card className="max-w-4xl mx-auto">
+    <Card className="relative max-w-4xl mx-auto">
       <div className="flex flex-col gap-10 items-center">
-        <Typography.Header>{displayName}</Typography.Header>
+        <Typography.Link
+          to={location.state?.from}
+          className="absolute top-3 left-3 md:top-4 md:left-4"
+        >
+          <ArrowUpIcon className="-rotate-90 w-6 h-6 md:w-8 md:h-8" />
+        </Typography.Link>
+
+        <div className="flex flex-col gap-1 items-center">
+          <Typography.Header className="mb-0!">{displayName}</Typography.Header>
+
+          <Typography.Text size="lg" className="font-semibold" color="blue">
+            {role}
+          </Typography.Text>
+        </div>
+
         <UserAvatar size="5xl" avatarUrl={avatarUrl} isPhotoView />
 
         <Typography.Text>

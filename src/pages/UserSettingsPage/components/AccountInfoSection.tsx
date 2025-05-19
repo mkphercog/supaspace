@@ -21,6 +21,11 @@ export const AccountInfoSection = () => {
         isVisible: userData.nickname,
       },
       {
+        title: "Role:",
+        value: userData.role,
+        isVisible: true,
+      },
+      {
         title: "E-mail:",
         value: userData.email,
         isVisible: true,

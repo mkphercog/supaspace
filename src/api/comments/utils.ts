@@ -1,3 +1,4 @@
+import { USER_ROLES_MAP } from "src/constants";
 import { Comment, DbComment } from "src/types";
 
 type Mapper = (comments: DbComment[]) => Comment[];
@@ -25,6 +26,7 @@ export const mapDbCommentsToComments: Mapper = (
         id: author.id,
         displayName: author.nickname || author.full_name_from_auth_provider,
         avatarUrl: author.avatar_url,
+        role: USER_ROLES_MAP[author.role],
       },
       postId: post_id,
       reactions: reactions

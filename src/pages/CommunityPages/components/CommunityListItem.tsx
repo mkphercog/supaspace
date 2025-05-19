@@ -66,10 +66,13 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
       {isDetailsOpen && (
         <>
           <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3">
-            <div className="flex items-center gap-3">
+            <Typography.Link
+              to={ROUTES.profiles.details(author.id)}
+              className="flex items-center gap-3 rounded-xl p-2 hover:bg-gray-600/10"
+            >
               <UserAvatar avatarUrl={author.avatarUrl} size="md" />
 
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-1 items-start">
                 <Typography.Text size="xs">
                   Created by{" "}
                   <span className="font-semibold">{author.displayName}</span>
@@ -81,7 +84,7 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
                   </span>
                 </Typography.Text>
               </div>
-            </div>
+            </Typography.Link>
 
             <Typography.Text size="sm">
               Posts:{" "}

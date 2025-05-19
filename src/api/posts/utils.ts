@@ -1,3 +1,4 @@
+import { USER_ROLES_MAP } from "src/constants";
 import { DbPost, Post } from "src/types";
 
 type Mapper = (posts: DbPost[]) => Post[];
@@ -23,7 +24,9 @@ export const mapDbPostsToPosts: Mapper = (
       title,
       content,
       imageUrl: image_url,
-      likeCount: like_count,
+      likeCount: typeof like_count === "number"
+        ? like_count
+        : like_count[0].count,
       commentCount: typeof comment_count === "number"
         ? comment_count
         : comment_count[0].count,
@@ -35,6 +38,7 @@ export const mapDbPostsToPosts: Mapper = (
         id: author.id,
         displayName: author.nickname || author.full_name_from_auth_provider,
         avatarUrl: author.avatar_url,
+        role: USER_ROLES_MAP[author.role],
       },
     }),
   );

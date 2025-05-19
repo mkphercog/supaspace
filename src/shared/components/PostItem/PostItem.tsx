@@ -44,6 +44,7 @@ export const PostItem: FC<PostItemProps> = ({
             </Typography.Text>
             <Typography.Text size="xs">
               {`by ${author.displayName}`}
+              <span className="text-sky-500">{` (${author.role})`}</span>
             </Typography.Text>
           </div>
 

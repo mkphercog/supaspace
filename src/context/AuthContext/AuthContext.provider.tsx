@@ -15,13 +15,10 @@ import { UserData } from "src/types";
 
 import { AuthContext, AuthContextType } from "./AuthContext";
 
-const ADMIN_ID = import.meta.env.VITE_SUPABASE_ADMIN_ID;
-
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [userData, setUserData] = useState<AuthContextType["userData"]>(null);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { mappedUserData, isUserDataFetching } = useFetchUserData(
@@ -94,7 +91,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }
 
         setCurrentSession(newSession);
-        setIsAdmin(newSession.user.id === ADMIN_ID);
         console.info("---- ✅ Refreshed session - correct. ----");
       } else {
         setIsAuthLoading(false);
@@ -125,13 +121,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
     setCurrentSession(null);
     navigate(ROUTES.root());
-    setIsAdmin(false);
   };
 
   const value: AuthContextType = {
     userData,
     currentSession,
-    isAdmin,
     isDeleteUserWithDataLoading,
     isUserDataFetching,
     isAuthLoading,

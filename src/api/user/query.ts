@@ -73,7 +73,7 @@ export const useFetchProfilesList = () => {
       const { data, error } = await supabaseClient
         .from(SB_TABLE.users)
         .select(
-          "id, avatar_url, nickname, full_name_from_auth_provider, created_at, postCount:posts(count)",
+          "id, avatar_url, nickname, full_name_from_auth_provider, created_at, role, postCount:posts(count)",
         ).order("nickname", { ascending: true });
 
       if (error) {
@@ -98,7 +98,7 @@ export const useFetchProfileDetails = (profileId: DbUserProfile["id"]) => {
       const { data, error } = await supabaseClient
         .from(SB_TABLE.users)
         .select(
-          "id, avatar_url, nickname, full_name_from_auth_provider, created_at, userPosts:posts(id, title)",
+          "id, avatar_url, nickname, full_name_from_auth_provider, created_at, role, userPosts:posts(id, title)",
         )
         .eq("id", profileId)
         .single();

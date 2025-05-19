@@ -16,7 +16,8 @@ export const useFetchPostById = (postId: Post["id"]) => {
         .select(`
           *,
           community:communities(id, name),
-          author:users(id, nickname, full_name_from_auth_provider, avatar_url),
+          author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
+          like_count:votes(count),
           comment_count:comments(count)
         `)
         .eq("id", postId)
@@ -41,7 +42,15 @@ export const useFetchPosts = () => {
   const { data, isLoading, error } = useQuery<DbPost[], Error>({
     queryKey: [QUERY_KEYS.posts],
     queryFn: async () => {
-      const { data, error } = await supabaseClient.rpc("get_posts_with_counts");
+      const { data, error } = await supabaseClient
+        .from(SB_TABLE.posts).select(`
+          *,
+          community:communities(id, name),
+          author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
+          like_count:votes(count),
+          comment_count:comments(count)
+        `)
+        .order("created_at", { ascending: false });
 
       if (error) {
         throw new Error(error.message);

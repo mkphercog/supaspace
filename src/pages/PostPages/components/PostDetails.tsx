@@ -128,18 +128,21 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
               </Typography.Text>
             )}
 
-            <Typography.Text size="sm">
-              posted{" "}
-              <TimeAgo
-                title={`Posted: ${new Date(
-                  postDetails.createdAt
-                ).toLocaleString()}`}
-                date={postDetails.createdAt}
-                formatter={formatter}
-              />
+            <Typography.Text size="sm" color="blue">
+              {postDetails.author.role}
             </Typography.Text>
           </div>
         </div>
+        <Typography.Text size="sm" color="amber">
+          Posted{" "}
+          <TimeAgo
+            title={`Posted: ${new Date(
+              postDetails.createdAt
+            ).toLocaleString()}`}
+            date={postDetails.createdAt}
+            formatter={formatter}
+          />
+        </Typography.Text>
       </Card>
 
       <PostVoteButtons postId={postId} />

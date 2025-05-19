@@ -33,6 +33,7 @@ export const Link: FC<LinkProps> = ({
           className
         );
       }}
+      state={{ from: location.pathname }}
     >
       {children}
     </NavLink>

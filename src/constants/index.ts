@@ -1,3 +1,5 @@
+import { DbUserRole, UserRole } from "src/types";
+
 // FORM INPUTS LENGTH
 export const NICKNAME_MAX_LENGTH = 24;
 export const COMMUNITY_TITLE_MAX_LENGTH = 24;
@@ -13,7 +15,7 @@ export const ONE_MIN_IN_MS = 60_000;
 export const ONE_DAY_IN_MS = 86_400_000;
 export const ONE_DAY_IN_SEC = 86_400;
 
-//SUPABASE
+// SUPABASE
 export const SB_TABLE = {
   commentReactions: "commentReactions",
   comments: "comments",
@@ -26,4 +28,10 @@ export const SB_TABLE = {
 export const SB_STORAGE = {
   postImages: "post-images",
   avatars: "avatars",
+};
+
+// USERS
+export const USER_ROLES_MAP: Record<DbUserRole, UserRole> = {
+  ADMIN: "Chief Astronaut",
+  STANDARD: "Junior Astronaut",
 };

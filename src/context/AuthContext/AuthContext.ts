@@ -7,7 +7,6 @@ import { UserData } from "src/types";
 export type AuthContextType = {
   userData: UserData | null;
   currentSession: Session | null;
-  isAdmin: boolean | null;
   isDeleteUserWithDataLoading: boolean;
   isUserDataFetching: boolean;
   isAuthLoading: boolean;

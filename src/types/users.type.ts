@@ -1,5 +1,8 @@
 import { PostCommon } from "./post.type";
 
+export type DbUserRole = "ADMIN" | "STANDARD";
+export type UserRole = "Chief Astronaut" | "Junior Astronaut";
+
 type UserDataCommon = {
   id: string;
   nickname: string | null;
@@ -12,6 +15,7 @@ export type DbUserData = UserDataCommon & {
   avatar_url: string | null;
   avatar_url_updated_at: string | null;
   full_name_from_auth_provider: string;
+  role: DbUserRole;
 };
 
 export type UserData = UserDataCommon & {
@@ -21,13 +25,17 @@ export type UserData = UserDataCommon & {
   avatarUrl: string | null;
   avatarUrlUpdatedAt: string | null;
   fullNameFromAuthProvider: string;
+  role: UserRole;
 };
 
 export type DbAuthor = Pick<
   DbUserData,
-  "id" | "nickname" | "full_name_from_auth_provider" | "avatar_url"
+  "id" | "nickname" | "full_name_from_auth_provider" | "avatar_url" | "role"
 >;
-export type Author = Pick<UserData, "id" | "displayName" | "avatarUrl">;
+export type Author = Pick<
+  UserData,
+  "id" | "displayName" | "avatarUrl" | "role"
+>;
 
 export type DbUserProfile =
   & Pick<
@@ -37,6 +45,7 @@ export type DbUserProfile =
     | "full_name_from_auth_provider"
     | "avatar_url"
     | "created_at"
+    | "role"
   >
   & {
     postCount: { count: number }[];
@@ -44,7 +53,7 @@ export type DbUserProfile =
 export type UserProfile =
   & Pick<
     UserData,
-    "id" | "displayName" | "avatarUrl" | "createdAt"
+    "id" | "displayName" | "avatarUrl" | "createdAt" | "role"
   >
   & {
     postCount: number;

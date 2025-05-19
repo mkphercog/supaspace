@@ -1,3 +1,4 @@
+import { USER_ROLES_MAP } from "src/constants";
 import {
   DbUserData,
   DbUserProfile,
@@ -23,6 +24,7 @@ export const mapDbUserDataToUserData: Mapper = (
     nickname,
     nickname_updated_at,
     created_at,
+    role,
   },
 ) => ({
   id,
@@ -34,6 +36,7 @@ export const mapDbUserDataToUserData: Mapper = (
   avatarUrlUpdatedAt: avatar_url_updated_at,
   nicknameUpdatedAt: nickname_updated_at,
   createdAt: created_at,
+  role: USER_ROLES_MAP[role],
 });
 
 type MapperWithErrors = (
@@ -63,6 +66,7 @@ export const mapDbProfilesListToProfilesList: ProfileMapper = (
       nickname,
       full_name_from_auth_provider,
       postCount,
+      role,
     },
   ) => ({
     id,
@@ -70,6 +74,7 @@ export const mapDbProfilesListToProfilesList: ProfileMapper = (
     displayName: nickname || full_name_from_auth_provider,
     createdAt: created_at,
     postCount: postCount[0].count,
+    role: USER_ROLES_MAP[role],
   }));
 };
 
@@ -88,6 +93,7 @@ export const mapDbProfileDetailsToProfileDetails: ProfileDetailsMapper = (
       nickname,
       full_name_from_auth_provider,
       userPosts,
+      role,
     },
   ) => ({
     id,
@@ -95,4 +101,5 @@ export const mapDbProfileDetailsToProfileDetails: ProfileDetailsMapper = (
     displayName: nickname || full_name_from_auth_provider,
     createdAt: created_at,
     userPosts,
+    role: USER_ROLES_MAP[role],
   }));

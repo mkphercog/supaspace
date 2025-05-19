@@ -1,3 +1,4 @@
+import { USER_ROLES_MAP } from "src/constants";
 import { Community, DbCommunity } from "src/types";
 
 type Mapper = (communities: DbCommunity[]) => Community[];
@@ -25,6 +26,7 @@ export const mapDbCommunityToCommunity: Mapper = (
         id: author.id,
         displayName: author.nickname || author.full_name_from_auth_provider,
         avatarUrl: author.avatar_url,
+        role: USER_ROLES_MAP[author.role],
       },
     }),
   );

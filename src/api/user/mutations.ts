@@ -57,6 +57,7 @@ export const insertUserDataToDb = async (
     nickname: null,
     nickname_updated_at: null,
     created_at: userData.created_at,
+    role: "STANDARD",
   };
 
   const { error } = await supabaseClient.from(SB_TABLE.users).insert<

@@ -24,7 +24,9 @@ export const mapDbPostsToPosts: Mapper = (
       content,
       imageUrl: image_url,
       likeCount: like_count,
-      commentCount: comment_count,
+      commentCount: typeof comment_count === "number"
+        ? comment_count
+        : comment_count[0].count,
       communityId: community_id,
       community,
       createdAt: created_at,

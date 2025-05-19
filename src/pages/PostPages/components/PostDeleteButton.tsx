@@ -1,11 +1,11 @@
 import { FC } from "react";
 
 import { useDeletePostMutation } from "src/api/posts";
-import { InfoIcon } from "src/assets/icons";
+import { TrashIcon } from "src/assets/icons";
 import { useAuth } from "src/context";
 import { useDeleteWarnToast } from "src/hooks";
 import { FullPageLoader } from "src/shared/layout";
-import { Button, Typography } from "src/shared/UI";
+import { Button } from "src/shared/UI";
 import { PostDetails } from "src/types";
 
 type Props = {
@@ -34,25 +34,16 @@ export const PostDeleteButton: FC<Props> = ({
 
   return (
     <>
-      <div>
-        <Button
-          onClick={startDeletingProcess}
-          className="self-start"
-          variant="destructive"
-        >
-          Delete post
-        </Button>
-        <Typography.Text
-          className="flex items-center gap-2 mt-2"
-          size="sm"
-          color="blue"
-        >
-          <InfoIcon className="h-5 w-5" />
-          You can delete this post because you are its owner.
-        </Typography.Text>
-      </div>
+      <Button
+        ariaLabel="Delete post"
+        className="ml-auto p-0! bg-transparent! hover:scale-125"
+        variant="ghost"
+        onClick={startDeletingProcess}
+      >
+        <TrashIcon className="text-red-500 w-6 h-6" />
+      </Button>
 
-      {isDeletePostLoading && <FullPageLoader message="Deleting..." />}
+      {isDeletePostLoading && <FullPageLoader message="Deleting your post" />}
     </>
   );
 };

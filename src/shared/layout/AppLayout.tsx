@@ -37,7 +37,7 @@ const Layout = () => {
       </div>
 
       {isDeleteUserWithDataLoading && (
-        <FullPageLoader message="Deleting account, please wait..." />
+        <FullPageLoader message="Deleting your account" />
       )}
       <ToastContainer theme="dark" position="top-center" newestOnTop={true} />
       <AnimatedBackground />

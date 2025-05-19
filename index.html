@@ -28,27 +28,12 @@
           font-family: sans-serif;
           z-index: 9999;
         }
-        .boot-loader-container {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-items: center;
-          align-items: center;
-        }
         .boot-loader {
           animation: spin 1s linear infinite;
           fill: #9810fa;
           color: #4a5565;
           width: 80px;
           height: 80px;
-        }
-        .boot-loader-text {
-          margin-bottom: 32px;
-          font-size: 60px;
-          font-family: sans-serif;
-          line-height: 80px;
-          color: #9810fa;
-          font-weight: 700;
         }
         @keyframes spin {
           to {
@@ -57,7 +42,6 @@
         }
       </style>
 
-      <h1 class="boot-loader-text">Loading...</h1>
       <svg
         aria-hidden="true"
         class="boot-loader"

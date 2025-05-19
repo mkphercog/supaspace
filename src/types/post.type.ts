@@ -13,7 +13,7 @@ export type DbPost = PostCommon & {
   image_url: string;
   user_id: UserData["id"];
   like_count: number;
-  comment_count: number;
+  comment_count: number | [{ count: number }];
   community_id?: Community["id"] | null;
   author: DbAuthor;
 };

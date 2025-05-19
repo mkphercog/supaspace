@@ -15,15 +15,15 @@ import {
   Typography,
   useBaseForm,
 } from "src/shared/UI";
-import { Comment } from "src/types";
+import { Comment, Post } from "src/types";
 
 import { CommentItem } from "./CommentItem";
 import { CommentFormType, getCommentFormConfig } from "./validationSchema";
 import { buildFlatCommentsTree } from "../../utils/comments.utils";
 
-type Props = Pick<Comment, "postId">;
+type Props = Pick<Comment, "postId"> & Pick<Post, "commentCount">;
 
-export const CommentsSection: FC<Props> = ({ postId }) => {
+export const CommentsSection: FC<Props> = ({ postId, commentCount }) => {
   const queryClient = useQueryClient();
   const { userData } = useAuth();
   const { comments, areCommentsLoading, commentsError } =
@@ -76,7 +76,7 @@ export const CommentsSection: FC<Props> = ({ postId }) => {
   return (
     <div className="mt-6">
       <Typography.Header as="h4" color="gray">
-        Comments section
+        {`Comments (${commentCount})`}
       </Typography.Header>
 
       {userData ? (

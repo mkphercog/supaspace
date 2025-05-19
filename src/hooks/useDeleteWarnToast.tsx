@@ -45,7 +45,7 @@ export const useDeleteWarnToast = ({
               }}
               variant="ghost"
             >
-              Cancel
+              <Typography.Text>Cancel</Typography.Text>
             </Button>
             <Button
               onClick={() => {
@@ -53,7 +53,7 @@ export const useDeleteWarnToast = ({
               }}
               variant="destructive"
             >
-              Delete
+              <Typography.Text>Delete</Typography.Text>
             </Button>
           </div>
         </div>

@@ -74,7 +74,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
         {currentSession ? (
           <Typography.Link
             to={ROUTES.profiles.details(comment.author.id)}
-            className="col-start-2 justify-self-start font-bold text-blue-400! hover:underline"
+            className="col-start-2 justify-self-start font-bold text-blue-400! hover:text-blue-500!"
           >
             {authorDisplayName}
           </Typography.Link>

@@ -1,3 +1,4 @@
+export * from "./ArrowUpIcon";
 export * from "./BicepsIcon";
 export * from "./ChartIcon";
 export * from "./ChevronUpIcon";

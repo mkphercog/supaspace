@@ -51,7 +51,7 @@ export const CreatePost = () => {
     postTitle,
     postContent,
     postImage,
-    postCommunity,
+    postCommunityId,
   }: PostFormType) => {
     if (!userData || !postImage) return;
 
@@ -62,7 +62,7 @@ export const CreatePost = () => {
             title: postTitle.trim(),
             content: postContent,
             userId: userData.id,
-            communityId: postCommunity === -1 ? null : postCommunity,
+            communityId: postCommunityId,
           },
           imageFile: postImage,
         }),
@@ -139,11 +139,13 @@ export const CreatePost = () => {
 
         <FormSelect
           labelText="Choose community"
-          name="postCommunity"
-          optionList={communityList.map((community) => ({
-            id: community.id,
-            value: community.name,
-          }))}
+          name="postCommunityId"
+          optionList={communityList
+            .filter((community) => community.id !== -1)
+            .map((community) => ({
+              id: community.id,
+              value: community.name,
+            }))}
         />
 
         <FormImageInput

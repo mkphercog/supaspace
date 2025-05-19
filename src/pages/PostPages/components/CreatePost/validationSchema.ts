@@ -10,7 +10,7 @@ export const INITIAL_FORM_STATE: PostFormType = {
   postTitle: "",
   postContent: "",
   postImage: null,
-  postCommunity: -1,
+  postCommunityId: -1,
 };
 
 export const validationSchema = yup.object({
@@ -37,7 +37,11 @@ export const validationSchema = yup.object({
         return file && Number(file.size) / 1024 <= POST_MAX_FILE_SIZE_IN_kB;
       },
     ),
-  postCommunity: yup.number(),
+  postCommunityId: yup
+    .number()
+    .required(
+      "This field is required and cannot be empty.",
+    ),
 });
 
 export type PostFormType = yup.InferType<typeof validationSchema>;

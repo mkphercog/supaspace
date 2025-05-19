@@ -6,12 +6,10 @@ type FullPageLoaderProps = {
   message?: string;
 };
 
-export const FullPageLoader: FC<FullPageLoaderProps> = ({
-  message = "Loading...",
-}) => {
+export const FullPageLoader: FC<FullPageLoaderProps> = ({ message }) => {
   return (
     <Overlay>
-      <Typography.Header as="h1">{message}</Typography.Header>
+      {message && <Typography.Header as="h1">{message}</Typography.Header>}
       <Loader />
     </Overlay>
   );

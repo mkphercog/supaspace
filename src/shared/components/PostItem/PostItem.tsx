@@ -26,7 +26,7 @@ export const PostItem: FC<PostItemProps> = ({
 }) => {
   return (
     <Typography.Link to={ROUTES.post.details(id)}>
-      <Card withHover>
+      <Card shadowVariant="withHover">
         <div className="flex flex-col gap-3 w-64 sm:w-72 md:w-80">
           <Typography.Text size="xs" className="text-right font-normal">
             {new Date(createdAt).toLocaleString()}

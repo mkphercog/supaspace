@@ -2,11 +2,12 @@ import cn from "classnames";
 import { FC, useState } from "react";
 
 import { useDeleteCommunityMutation } from "src/api/community";
-import { ChevronUpIcon, InfoIcon } from "src/assets/icons";
+import { ChevronUpIcon, InfoIcon, TrashIcon } from "src/assets/icons";
 import { useAuth } from "src/context";
-import { useDeleteWarnToast } from "src/hooks";
+import { useDeleteWarnToast, useScreenSize } from "src/hooks";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
+import { FullPageLoader } from "src/shared/layout";
 import { Button, Card, Typography } from "src/shared/UI";
 import { Community } from "src/types";
 
@@ -20,9 +21,11 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
   author,
   postCount,
 }) => {
-  const { userData } = useAuth();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const { deleteCommunity } = useDeleteCommunityMutation();
+  const { userData } = useAuth();
+  const { isMdUp } = useScreenSize();
+  const { deleteCommunity, isDeleteCommunityLoading } =
+    useDeleteCommunityMutation();
   const { startDeletingProcess } = useDeleteWarnToast({
     subjectName: "Community",
     realDeleteFn: async () => {
@@ -33,8 +36,11 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
   });
 
   return (
-    <Card withHover>
-      <Typography.Link to={ROUTES.community.details(id)}>
+    <Card shadowVariant="withHover">
+      <Typography.Link
+        to={ROUTES.community.details(id)}
+        className="rounded-xl pb-2 px-2 hover:bg-gray-600/10"
+      >
         <Typography.Header as="h4" color="lime" className="mb-0!">
           #{name}
         </Typography.Header>
@@ -78,15 +84,18 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
             </div>
 
             <Typography.Text size="sm">
-              Community posts:{" "}
+              Posts:{" "}
               <span className="font-semibold text-lime-500">{postCount}</span>
             </Typography.Text>
           </div>
 
           {userData?.id === author.id && (
-            <div className="flex justify-between items-center gap-10">
+            <div className="flex justify-between items-center gap-4">
               <Typography.Text
-                className="flex items-start gap-1 text-justify"
+                className={cn("flex gap-1 text-justify", {
+                  "items-start": !isMdUp,
+                  "items-center": isMdUp,
+                })}
                 size="xs"
                 color="blue"
               >
@@ -96,12 +105,17 @@ export const CommunityListItem: FC<CommunityListItemProps> = ({
               </Typography.Text>
 
               <Button
-                className="self-end"
+                ariaLabel="Delete post"
+                className="ml-auto p-0! bg-transparent! hover:scale-125"
+                variant="ghost"
                 onClick={startDeletingProcess}
-                variant="destructive"
               >
-                <Typography.Text size="sm">Delete</Typography.Text>
+                <TrashIcon className="text-red-500 w-6 h-6" />
               </Button>
+
+              {isDeleteCommunityLoading && (
+                <FullPageLoader message="Deleting your community" />
+              )}
             </div>
           )}
         </>

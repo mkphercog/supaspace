@@ -1,5 +1,11 @@
 # Changelog
 
+### Version `1.2.3` changes:
+
+- Replaced post voting system with expanded reaction types, consistent with comment reactions
+
+---
+
 ### Version `1.2.2` changes:
 
 - Unified styles in the post detail view — consistent button appearance (e.g. delete button) and added breadcrumbs for improved navigation

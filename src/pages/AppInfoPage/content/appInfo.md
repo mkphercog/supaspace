@@ -43,8 +43,8 @@
 
 ### ![chartIcon](/icons/chartIcon.svg) Voting
 
-- Posts can be **upvoted** or **downvoted**
-- Voting helps surface the most relevant content
+- **React** to post with emojis
+- Reacting helps surface the most relevant content
 
 ---
 
@@ -67,7 +67,7 @@
 
 ### ![versionIcon](/icons/versionIcon.svg) Version
 
-Current version: `v1.2.2`
+Current version: `v1.2.3`
 
 ---
 

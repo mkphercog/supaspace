@@ -5,7 +5,6 @@ export const QUERY_KEYS = {
   communities: "communities",
   posts: "posts",
   post: "post",
-  votes: "votes",
   me: "me",
   profilesList: "profilesList",
   profileDetails: "profileDetails",

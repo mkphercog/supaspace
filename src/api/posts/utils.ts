@@ -19,6 +19,7 @@ export const mapDbPostsToPosts: Mapper = (
       created_at,
       user_id,
       author,
+      reactions,
     }): Post => ({
       id,
       title,
@@ -40,6 +41,13 @@ export const mapDbPostsToPosts: Mapper = (
         avatarUrl: author.avatar_url,
         role: USER_ROLES_MAP[author.role],
       },
+      reactions: reactions
+        ? reactions.map(({ id, reaction, user_id }) => ({
+          id,
+          reaction,
+          userId: user_id,
+        }))
+        : [],
     }),
   );
 

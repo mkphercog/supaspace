@@ -1,4 +1,15 @@
+import { ReactNode } from "react";
+
+import {
+  BicepsIcon,
+  DislikeIcon,
+  HeartIcon,
+  LaughingIcon,
+  LikeIcon,
+  ShockIcon,
+} from "src/assets/icons";
 import { DbUserRole, UserRole } from "src/types";
+import { Reaction } from "src/types";
 
 // FORM INPUTS LENGTH
 export const NICKNAME_MAX_LENGTH = 24;
@@ -20,9 +31,9 @@ export const SB_TABLE = {
   commentReactions: "commentReactions",
   comments: "comments",
   communities: "communities",
+  postReactions: "postReactions",
   posts: "posts",
   users: "users",
-  votes: "votes",
 };
 
 export const SB_STORAGE = {
@@ -34,4 +45,14 @@ export const SB_STORAGE = {
 export const USER_ROLES_MAP: Record<DbUserRole, UserRole> = {
   ADMIN: "Chief Astronaut",
   STANDARD: "Junior Astronaut",
+};
+
+//REACTIONS
+export const REACTION_ICONS_MAP: Record<Reaction, ReactNode> = {
+  LIKE: <LikeIcon className="text-gray-200 w-4 h-4 md:w-5 md:h-5" />,
+  DISLIKE: <DislikeIcon className="text-gray-200 w-4 h-4 md:w-5 md:h-5" />,
+  HEART: <HeartIcon className="text-red-500 w-4 h-4 md:w-5 md:h-5" />,
+  STRONG: <BicepsIcon className="text-orange-200 w-4 h-4 md:w-5 md:h-5" />,
+  FUNNY: <LaughingIcon className="text-yellow-500 w-4 h-4 md:w-5 md:h-5" />,
+  WOW: <ShockIcon className="text-yellow-500 w-4 h-4 md:w-5 md:h-5" />,
 };

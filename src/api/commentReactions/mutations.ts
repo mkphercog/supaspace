@@ -21,7 +21,7 @@ export const useCreateCommentReaction = (
     mutationFn: async (
       { userId, reaction }: CreateCommentReaction,
     ) => {
-      if (!userId) throw new Error("You must be logged in to add comment");
+      if (!userId) throw new Error("You must be logged in to add reaction");
 
       const { data: existingReaction } = await supabaseClient
         .from(SB_TABLE.commentReactions)

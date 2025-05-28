@@ -74,7 +74,9 @@ export const CommentsSection: FC<Props> = ({ postId, commentCount }) => {
   const commentTree = comments ? buildFlatCommentsTree(comments) : [];
 
   return (
-    <div className="mt-6">
+    <div>
+      <hr className="my-2 text-gray-400" />
+
       <Typography.Header as="h4" color="gray">
         {`Comments (${commentCount})`}
       </Typography.Header>

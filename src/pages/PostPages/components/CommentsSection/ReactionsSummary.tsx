@@ -1,9 +1,9 @@
 import { FC } from "react";
 
+import { REACTION_ICONS_MAP } from "src/constants";
 import { CommentTreeType, Post, Reaction } from "src/types";
 
 import { ReactionsSummaryItem } from "./ReactionsSummaryItem";
-import { REACTION_ICONS_MAP } from "../../constants";
 
 type Props = {
   postId: Post["id"];

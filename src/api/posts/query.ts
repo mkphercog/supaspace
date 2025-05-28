@@ -17,7 +17,8 @@ export const useFetchPostById = (postId: Post["id"]) => {
           *,
           community:communities(id, name),
           author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
-          like_count:votes(count),
+          reactions:postReactions(id, user_id, reaction),
+          like_count:postReactions(count),
           comment_count:comments(count)
         `)
         .eq("id", postId)
@@ -47,7 +48,7 @@ export const useFetchPosts = () => {
           *,
           community:communities(id, name),
           author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
-          like_count:votes(count),
+          like_count:postReactions(count),
           comment_count:comments(count)
         `)
         .order("created_at", { ascending: false });

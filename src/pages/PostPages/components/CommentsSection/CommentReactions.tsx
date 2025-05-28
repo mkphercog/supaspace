@@ -1,12 +1,11 @@
 import cn from "classnames";
 import { FC, useState } from "react";
 
+import { REACTION_ICONS_MAP } from "src/constants";
 import { useAuth } from "src/context";
 import { useClickOutside } from "src/hooks";
 import { Button, Typography } from "src/shared/UI";
 import { Comment, Reaction, UserData } from "src/types";
-
-import { REACTION_ICONS_MAP } from "../../constants";
 
 type Props = {
   reactions: Comment["reactions"];

@@ -1,3 +1,4 @@
+import { DbPostReaction, PostReaction } from "./reactions.type";
 import { Community } from "./community.type";
 import { Author, DbAuthor, UserData } from "./users.type";
 
@@ -16,6 +17,7 @@ export type DbPost = PostCommon & {
   comment_count: number | [{ count: number }];
   community_id?: Community["id"] | null;
   author: DbAuthor;
+  reactions: Pick<DbPostReaction, "id" | "reaction" | "user_id">[];
 };
 
 export type Post = PostCommon & {
@@ -26,6 +28,7 @@ export type Post = PostCommon & {
   commentCount: number;
   communityId?: Community["id"] | null;
   author: Author;
+  reactions: Pick<PostReaction, "id" | "reaction" | "userId">[];
 };
 
 export type CreatePost = Pick<

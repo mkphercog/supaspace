@@ -6,7 +6,14 @@ import { QUERY_KEYS } from "src/api";
 import { ONE_DAY_IN_SEC, SB_STORAGE, SB_TABLE } from "src/constants";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
-import { CreateDbPost, CreatePost, Post } from "src/types";
+import {
+  CreateDbPost,
+  CreateDbPostReaction,
+  CreatePost,
+  CreatePostReaction,
+  DbPostReaction,
+  Post,
+} from "src/types";
 import { sanitizeFilename } from "src/utils";
 
 export const useCreatePostMutation = () => {
@@ -112,5 +119,79 @@ export const useDeletePostMutation = () => {
   return {
     deletePost: mutateAsync,
     isDeletePostLoading: isPending,
+  };
+};
+
+export const useCreatePostReaction = (
+  postId: Post["id"],
+) => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, error, isPending } = useMutation({
+    mutationFn: async (
+      { userId, reaction }: CreatePostReaction,
+    ) => {
+      if (!userId) throw new Error("You must be logged in to add reaction");
+
+      const { data: existingReaction } = await supabaseClient
+        .from(SB_TABLE.postReactions)
+        .select("*")
+        .eq("post_id", postId)
+        .eq("user_id", userId)
+        .maybeSingle<DbPostReaction>();
+
+      if (!existingReaction) {
+        const { error } = await supabaseClient
+          .from(SB_TABLE.postReactions)
+          .insert<CreateDbPostReaction>({
+            post_id: postId,
+            user_id: userId,
+            reaction,
+          });
+
+        if (error) {
+          supabaseClient.auth.signOut();
+          throw new Error(error.message);
+        }
+        return;
+      }
+
+      if (existingReaction.reaction !== reaction) {
+        const { error } = await supabaseClient
+          .from(SB_TABLE.postReactions)
+          .update<Pick<DbPostReaction, "reaction">>({ reaction })
+          .eq("id", existingReaction.id);
+
+        if (error) {
+          supabaseClient.auth.signOut();
+          throw new Error(error.message);
+        }
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from(SB_TABLE.postReactions)
+        .delete()
+        .eq("id", existingReaction.id);
+
+      if (error) {
+        supabaseClient.auth.signOut();
+        throw new Error(error.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.posts],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.post, postId],
+      });
+    },
+  });
+
+  return {
+    createPostReaction: mutateAsync,
+    isCreatePostReactionLoading: isPending,
+    createPostReactionError: error,
   };
 };

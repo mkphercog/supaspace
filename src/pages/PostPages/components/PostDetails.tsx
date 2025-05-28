@@ -4,7 +4,7 @@ import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import enStrings from "react-timeago/lib/language-strings/en";
 import { toast } from "react-toastify";
 
-import { useFetchPostById } from "src/api/posts";
+import { useCreatePostReaction, useFetchPostById } from "src/api/posts";
 import { SB_STORAGE } from "src/constants";
 import { useAuth } from "src/context";
 import { useScreenSize } from "src/hooks";
@@ -12,13 +12,13 @@ import { NotFoundPage } from "src/pages/NotFoundPage";
 import { ROUTES } from "src/routes";
 import { ImageSkeleton, UserAvatar } from "src/shared/components";
 import { Card, Typography, Loader, Button } from "src/shared/UI";
-import { Post } from "src/types";
+import { Post, Reaction, UserData } from "src/types";
 import { getFilePathToDeleteFromStorage } from "src/utils";
 
 import { CommentsSection } from "./CommentsSection";
 import { PostBreadcrumbs } from "./PostBreadcrumbs";
 import { PostDeleteButton } from "./PostDeleteButton";
-import { PostVoteButtons } from "./PostVoteButtons";
+import { PostReactions } from "./PostReactions";
 const MDPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 const formatter = buildFormatter(enStrings);
@@ -32,6 +32,8 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
   const { currentSession } = useAuth();
   const { postDetails, isPostDetailsLoading, postDetailsError } =
     useFetchPostById(postId);
+  const { createPostReaction, isCreatePostReactionLoading } =
+    useCreatePostReaction(postId);
 
   if (isPostDetailsLoading) {
     return <Loader />;
@@ -40,6 +42,16 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
   if (postDetailsError) {
     return <NotFoundPage />;
   }
+
+  const handleCreateReaction = async (
+    userId: UserData["id"],
+    reaction: Reaction
+  ) => {
+    await createPostReaction({
+      userId,
+      reaction,
+    });
+  };
 
   const postImagePathToDelete = getFilePathToDeleteFromStorage({
     storagePrefix: `${SB_STORAGE.postImages}/`,
@@ -145,7 +157,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
         </Typography.Text>
       </Card>
 
-      <PostVoteButtons postId={postId} />
+      <PostReactions
+        reactions={postDetails.reactions}
+        handleCreateReaction={handleCreateReaction}
+        isCreatePostReactionLoading={isCreatePostReactionLoading}
+      />
 
       <CommentsSection
         postId={postId}

@@ -1,5 +1,5 @@
-import { CommentReaction, DbCommentReaction } from "./reactions.type";
 import { Post } from "./post.type";
+import { CommentReaction, DbCommentReaction } from "./reactions.type";
 import { Author, DbAuthor, UserData } from "./users.type";
 
 type CommentCommon = {

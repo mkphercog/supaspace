@@ -27,7 +27,10 @@ const Layout = () => {
     <div className="flex overflow-hidden">
       <Sidebar />
 
-      <div className="h-dvh overflow-y-auto w-full grow text-gray-100 relative">
+      <div
+        id="scrollable-container"
+        className="h-dvh overflow-y-auto w-full grow text-gray-100 relative"
+      >
         <Topbar />
 
         <div className="max-w-7xl mx-auto px-3 py-16">

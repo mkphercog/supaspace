@@ -26,6 +26,7 @@ export const ROUTES = {
     detailsRoot: () => "/profiles/:id",
     details: (id: string) => `/profiles/${id}`,
   },
+  notifications: () => "/notifications",
   settings: () => "/settings",
   appInfo: () => "/app-info",
   notFound: () => "*",
@@ -172,6 +173,22 @@ export const BROWSER_ROUTER = createBrowserRouter([
           const Component = () => (
             <ProtectedRoute>
               <UserSettingsPage />
+            </ProtectedRoute>
+          );
+
+          return { Component };
+        },
+      },
+      {
+        path: ROUTES.notifications(),
+        lazy: async () => {
+          const { NotificationsPage } = await import(
+            "../pages/NotificationsPage/NotificationsPage"
+          );
+
+          const Component = () => (
+            <ProtectedRoute>
+              <NotificationsPage />
             </ProtectedRoute>
           );
 

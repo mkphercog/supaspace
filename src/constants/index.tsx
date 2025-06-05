@@ -34,6 +34,7 @@ export const SB_TABLE = {
   postReactions: "postReactions",
   posts: "posts",
   users: "users",
+  notifications: "notifications",
 };
 
 export const SB_STORAGE = {
@@ -55,4 +56,13 @@ export const REACTION_ICONS_MAP: Record<Reaction, ReactNode> = {
   STRONG: <BicepsIcon className="text-orange-200 w-4 h-4 md:w-5 md:h-5" />,
   FUNNY: <LaughingIcon className="text-yellow-500 w-4 h-4 md:w-5 md:h-5" />,
   WOW: <ShockIcon className="text-yellow-500 w-4 h-4 md:w-5 md:h-5" />,
+};
+
+export const REACTION_EMOJI_MAP: Record<Reaction, string> = {
+  LIKE: "👍🏼",
+  DISLIKE: "👎🏼",
+  HEART: "❤️",
+  STRONG: "💪🏼",
+  FUNNY: "😆",
+  WOW: "😱",
 };

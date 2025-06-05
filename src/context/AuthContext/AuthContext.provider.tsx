@@ -4,6 +4,7 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { QUERY_KEYS } from "src/api";
+import { useFetchNotifications } from "src/api/notifications";
 import {
   insertUserDataToDb,
   useDeleteUserWithDataMutation,
@@ -23,6 +24,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
   const { mappedUserData, isUserDataFetching } = useFetchUserData(
     currentSession?.user.id
+  );
+  const { notifications, areNotificationsLoading } = useFetchNotifications(
+    currentSession?.user.id || undefined
   );
   const { deleteUserWithData, isDeleteUserWithDataLoading } =
     useDeleteUserWithDataMutation({
@@ -125,6 +129,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value: AuthContextType = {
     userData,
+    notifications: {
+      areUnread: !!notifications.filter(({ isRead }) => !isRead).length,
+      list: notifications,
+      loading: areNotificationsLoading,
+    },
     currentSession,
     isDeleteUserWithDataLoading,
     isUserDataFetching,

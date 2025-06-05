@@ -9,6 +9,7 @@ type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "5xl";
 
 type UserAvatarProps = {
   avatarUrl: UserData["avatarUrl"];
+  showNotification?: boolean;
   size?: AvatarSize;
   isPhotoView?: boolean;
   className?: string;
@@ -26,6 +27,7 @@ const AVATAR_SIZE: Record<AvatarSize, string> = {
 
 export const UserAvatar: FC<UserAvatarProps> = ({
   avatarUrl,
+  showNotification,
   size = "sm",
   isPhotoView = false,
   className,
@@ -62,7 +64,14 @@ export const UserAvatar: FC<UserAvatarProps> = ({
   };
 
   if (!isPhotoView) {
-    return <img {...imgProps} />;
+    return (
+      <div className="relative">
+        <img {...imgProps} />
+        {showNotification && (
+          <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-purple-500 animate-bounce" />
+        )}
+      </div>
+    );
   }
 
   return (

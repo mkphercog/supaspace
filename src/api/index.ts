@@ -8,4 +8,5 @@ export const QUERY_KEYS = {
   me: "me",
   profilesList: "profilesList",
   profileDetails: "profileDetails",
+  notifications: "notifications",
 };

@@ -2,7 +2,13 @@ import cn from "classnames";
 import { FC } from "react";
 import { useNavigate } from "react-router";
 
-import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
+import {
+  SignInIcon,
+  SignOutIcon,
+  SettingsIcon,
+  BellWithDotIcon,
+  BellIcon,
+} from "src/assets/icons";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
@@ -12,11 +18,13 @@ import { SidebarItem } from "../Sidebar/SidebarItem";
 
 export const SidebarAuthButton: FC<AuthButtonsProps> = ({
   userData,
+  areNotificationsUnread,
   sidebarStatus,
   isAvatarMenuOpen,
   toggleAvatarMenu,
   closeAvatarMenu,
   goToSettings,
+  goToNotifications,
   signOut,
 }) => {
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
@@ -47,6 +55,7 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
             <UserAvatar
               size={sidebarStatus === "show" ? "md" : "xs"}
               avatarUrl={userData.avatarUrl}
+              showNotification={areNotificationsUnread}
             />
           }
           isVisible={!!userData}
@@ -66,6 +75,20 @@ export const SidebarAuthButton: FC<AuthButtonsProps> = ({
           }
         )}
       >
+        <SidebarItem
+          as="button"
+          text="Notifications"
+          icon={
+            areNotificationsUnread ? (
+              <BellWithDotIcon dotClassNames="text-purple-500" />
+            ) : (
+              <BellIcon />
+            )
+          }
+          isVisible={!!userData}
+          onClick={goToNotifications}
+        />
+
         <SidebarItem
           as="button"
           text="Settings"

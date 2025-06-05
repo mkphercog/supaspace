@@ -1,5 +1,5 @@
-import { DbPostReaction, PostReaction } from "./reactions.type";
 import { Community } from "./community.type";
+import { DbPostReaction, PostReaction } from "./reactions.type";
 import { Author, DbAuthor, UserData } from "./users.type";
 
 export type PostCommon = {

@@ -2,10 +2,15 @@ import { Session } from "@supabase/supabase-js";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { createContext } from "react";
 
-import { UserData } from "src/types";
+import { Notification, UserData } from "src/types";
 
 export type AuthContextType = {
   userData: UserData | null;
+  notifications: {
+    areUnread: boolean;
+    list: Notification[];
+    loading: boolean;
+  };
   currentSession: Session | null;
   isDeleteUserWithDataLoading: boolean;
   isUserDataFetching: boolean;

@@ -15,7 +15,12 @@ type AuthButtonProps = {
 
 export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
-  const { userData, signInWithGoogle, signOut } = useAuth();
+  const {
+    userData,
+    notifications: { areUnread: areNotificationsUnread },
+    signInWithGoogle,
+    signOut,
+  } = useAuth();
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
   const { isMdUp } = useScreenSize();
   const navigate = useNavigate();
@@ -36,13 +41,23 @@ export const AuthButton: FC<AuthButtonProps> = ({ isInSidebar = false }) => {
     navigate(ROUTES.settings());
   };
 
+  const goToNotifications = () => {
+    if (sidebarStatus === "show" && !isMdUp) {
+      setStatusOfSidebar("iconsToShow");
+    }
+    closeAvatarMenu();
+    navigate(ROUTES.notifications());
+  };
+
   const props: AuthButtonsProps = {
     userData,
+    areNotificationsUnread,
     sidebarStatus,
     isAvatarMenuOpen,
     toggleAvatarMenu,
     closeAvatarMenu,
     goToSettings,
+    goToNotifications,
     signInWithGoogle,
     signOut,
   };

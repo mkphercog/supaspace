@@ -1,11 +1,13 @@
-import { FC, lazy } from "react";
+import { FC, lazy, useEffect } from "react";
+import { useSearchParams } from "react-router";
 import TimeAgo from "react-timeago";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import enStrings from "react-timeago/lib/language-strings/en";
 import { toast } from "react-toastify";
 
+import { useCreateNotificationMutation } from "src/api/notifications/mutations";
 import { useCreatePostReaction, useFetchPostById } from "src/api/posts";
-import { SB_STORAGE } from "src/constants";
+import { REACTION_EMOJI_MAP, SB_STORAGE } from "src/constants";
 import { useAuth } from "src/context";
 import { useScreenSize } from "src/hooks";
 import { NotFoundPage } from "src/pages/NotFoundPage";
@@ -28,12 +30,41 @@ type PostDetailsProps = {
 };
 
 export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
+  const [searchParams] = useSearchParams();
+  const goToElId = searchParams.get("goTo");
+
   const { isMdUp } = useScreenSize();
-  const { currentSession } = useAuth();
+  const { userData, currentSession } = useAuth();
   const { postDetails, isPostDetailsLoading, postDetailsError } =
     useFetchPostById(postId);
   const { createPostReaction, isCreatePostReactionLoading } =
     useCreatePostReaction(postId);
+  const { createNotification } = useCreateNotificationMutation();
+
+  useEffect(() => {
+    if (!goToElId) return;
+
+    const timeout = setTimeout(() => {
+      const scrollContainer = document.getElementById("scrollable-container");
+      const el = document.getElementById(`goTo-${goToElId}`);
+      if (scrollContainer && el) {
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+
+        const offsetTop =
+          elRect.top - containerRect.top + scrollContainer.scrollTop;
+        const targetScrollTop =
+          offsetTop - scrollContainer.clientHeight + el.offsetHeight + 24;
+
+        scrollContainer.scrollTo({
+          top: targetScrollTop,
+          behavior: "smooth",
+        });
+      }
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [goToElId]);
 
   if (isPostDetailsLoading) {
     return <Loader />;
@@ -51,6 +82,18 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
       userId,
       reaction,
     });
+
+    if (!postDetails.reactions.find(({ userId }) => userId === userData?.id)) {
+      await createNotification({
+        type: "REACTION",
+        authorId: currentSession?.user.id || "",
+        receiverId: postDetails.author.id,
+        postId: postDetails.id,
+        content: `### New reaction! 🎉
+User \`${userData?.displayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]} to your \`post\` - "${postDetails.title}"`,
+        isRead: false,
+      });
+    }
   };
 
   const postImagePathToDelete = getFilePathToDeleteFromStorage({

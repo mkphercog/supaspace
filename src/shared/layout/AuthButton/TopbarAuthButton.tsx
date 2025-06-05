@@ -2,7 +2,13 @@ import cn from "classnames";
 import { FC } from "react";
 import { useNavigate } from "react-router";
 
-import { SignInIcon, SignOutIcon, SettingsIcon } from "src/assets/icons";
+import {
+  SignInIcon,
+  SignOutIcon,
+  SettingsIcon,
+  BellWithDotIcon,
+  BellIcon,
+} from "src/assets/icons";
 import { useClickOutside } from "src/hooks";
 import { ROUTES } from "src/routes";
 import { UserAvatar } from "src/shared/components";
@@ -12,11 +18,13 @@ import { AuthButtonsProps } from "./AuthButton.types";
 
 export const TopbarAuthButton: FC<AuthButtonsProps> = ({
   userData,
+  areNotificationsUnread,
   sidebarStatus,
   isAvatarMenuOpen,
   toggleAvatarMenu,
   closeAvatarMenu,
   goToSettings,
+  goToNotifications,
   signOut,
 }) => {
   const ref = useClickOutside<HTMLDivElement>(closeAvatarMenu);
@@ -52,10 +60,15 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
           onClick={toggleAvatarMenu}
           variant="ghost"
         >
-          <UserAvatar avatarUrl={userData.avatarUrl} />
-          <Typography.Text className="font-semibold text-inherit">
-            {userData.displayName}
-          </Typography.Text>
+          <UserAvatar
+            avatarUrl={userData.avatarUrl}
+            showNotification={areNotificationsUnread}
+          />
+          {sidebarStatus !== "show" && (
+            <Typography.Text className="font-semibold text-inherit">
+              {userData.displayName}
+            </Typography.Text>
+          )}
         </Button>
       </div>
 
@@ -70,6 +83,20 @@ export const TopbarAuthButton: FC<AuthButtonsProps> = ({
           }
         )}
       >
+        <Button
+          className="flex gap-2"
+          onClick={goToNotifications}
+          variant="ghost"
+        >
+          {areNotificationsUnread ? (
+            <BellWithDotIcon dotClassNames="text-purple-500" />
+          ) : (
+            <BellIcon />
+          )}
+
+          <Typography.Text>Notifications</Typography.Text>
+        </Button>
+
         <Button className="flex gap-2" onClick={goToSettings} variant="ghost">
           <SettingsIcon />
           <Typography.Text>Settings</Typography.Text>

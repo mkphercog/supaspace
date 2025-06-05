@@ -1,10 +1,13 @@
-import { DbNotification, Notification } from "src/types";
+import {
+  CreateDbNotificationInput,
+  CreateNotificationInput,
+  DbNotification,
+  Notification,
+} from "src/types";
 
 type Mapper = (notifications: DbNotification[]) => Notification[];
 
-export const mapDbNotificationsToNotifications: Mapper = (
-  notifications,
-) => {
+export const mapDbNotificationsToNotifications: Mapper = (notifications) => {
   const mappedList = notifications.map(
     ({
       id,
@@ -29,6 +32,34 @@ export const mapDbNotificationsToNotifications: Mapper = (
       type,
       isRead: is_read,
       postId: post_id,
+    }),
+  );
+
+  return mappedList;
+};
+
+type CreateMapper = (
+  notifications: CreateNotificationInput[],
+) => CreateDbNotificationInput[];
+
+export const mapCreateNotificationsToDbCreateNotifications: CreateMapper = (
+  notifications,
+) => {
+  const mappedList = notifications.map(
+    ({
+      receiverId,
+      authorId,
+      content,
+      type,
+      postId,
+      isRead,
+    }): CreateDbNotificationInput => ({
+      type,
+      content,
+      author_id: authorId,
+      receiver_id: receiverId,
+      post_id: postId,
+      is_read: isRead,
     }),
   );
 

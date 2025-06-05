@@ -12,7 +12,7 @@ type Props = Omit<Notification, "receiverId" | "authorId"> & {
 };
 
 const TYPE_COLORS_MAP: Record<NotificationType, TypographyColors> = {
-  POST: "lime",
+  POST: "lightPurple",
   COMMENT: "blue",
   REACTION: "amber",
 };
@@ -39,9 +39,10 @@ export const NotificationItem: FC<Props> = ({
   const markAsReadAndRedirect = async () => {
     await markAsRead();
 
-    navigate(
-      `${ROUTES.post.details(postId)}/?goTo=${type.toLocaleLowerCase()}`
-    );
+    navigate({
+      pathname: ROUTES.post.details(postId),
+      search: type === "POST" ? "" : `?goTo=${type.toLocaleLowerCase()}`,
+    });
   };
 
   const isLoading = isMarkNotificationAsReadLoading || isMarkAllAsReadLoading;
@@ -78,7 +79,7 @@ export const NotificationItem: FC<Props> = ({
         )}
 
         <Button onClick={markAsReadAndRedirect} variant="primary">
-          <Typography.Text size="xs">Go to post</Typography.Text>
+          <Typography.Text size="xs">Show</Typography.Text>
         </Button>
       </div>
     </Card>

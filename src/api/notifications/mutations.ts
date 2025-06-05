@@ -9,25 +9,20 @@ import {
 } from "src/types";
 
 import { QUERY_KEYS } from "..";
+import { mapCreateNotificationsToDbCreateNotifications } from "./utils";
 
 export const useCreateNotificationMutation = () => {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async (
-      { authorId, type, receiverId, isRead, content, postId }:
-        CreateNotificationInput,
-    ) => {
+    mutationFn: async (newNotifications: CreateNotificationInput[]) => {
+      const mapedNotifications = mapCreateNotificationsToDbCreateNotifications(
+        newNotifications,
+      );
+
       const { error } = await supabaseClient
         .from(SB_TABLE.notifications)
-        .insert<CreateDbNotificationInput>({
-          author_id: authorId,
-          receiver_id: receiverId,
-          content,
-          type,
-          post_id: postId,
-          is_read: isRead,
-        });
+        .insert<CreateDbNotificationInput>(mapedNotifications);
 
       if (error) {
         throw new Error(error.message);

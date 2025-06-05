@@ -11,14 +11,20 @@ import {
   CreateDbPostReaction,
   CreatePost,
   CreatePostReaction,
+  DbPost,
   DbPostReaction,
   Post,
 } from "src/types";
 import { sanitizeFilename } from "src/utils";
 
+import { useCreateNotificationMutation } from "../notifications/mutations";
+import { useFetchProfilesList } from "../user";
+
 export const useCreatePostMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { createNotification } = useCreateNotificationMutation();
+  const { mappedProfilesList } = useFetchProfilesList();
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async (
@@ -49,7 +55,7 @@ export const useCreatePostMutation = () => {
         filePath,
       );
 
-      const { error } = await supabaseClient
+      const { data, error } = await supabaseClient
         .from(SB_TABLE.posts)
         .insert<CreateDbPost>({
           title,
@@ -57,14 +63,30 @@ export const useCreatePostMutation = () => {
           image_url: publicUrl,
           user_id: userId,
           community_id: communityId,
-        });
+        })
+        .select("*, author:users(id, nickname, full_name_from_auth_provider)");
 
       if (error) {
         toast.error("Oops! Something went wrong. Please try again later.");
         throw new Error(error.message);
       }
-    },
 
+      const newPostData = data[0] as DbPost;
+      const authorDisplayName = newPostData.author.nickname ||
+        newPostData.author.full_name_from_auth_provider;
+
+      await createNotification(mappedProfilesList.map(({ id: receiverId }) => {
+        return ({
+          type: "POST",
+          authorId: userId,
+          receiverId,
+          postId: newPostData.id,
+          content: `### New post! 📝
+User \`${authorDisplayName}\` added new post - "${newPostData.title}"`,
+          isRead: false,
+        });
+      }));
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
       navigate(ROUTES.root());
@@ -109,9 +131,8 @@ export const useDeletePostMutation = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.posts],
-      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.notifications] });
       navigate(ROUTES.root());
     },
   });

@@ -84,15 +84,17 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
     });
 
     if (!postDetails.reactions.find(({ userId }) => userId === userData?.id)) {
-      await createNotification({
-        type: "REACTION",
-        authorId: currentSession?.user.id || "",
-        receiverId: postDetails.author.id,
-        postId: postDetails.id,
-        content: `### New reaction! 🎉
+      await createNotification([
+        {
+          type: "REACTION",
+          authorId: currentSession?.user.id || "",
+          receiverId: postDetails.author.id,
+          postId: postDetails.id,
+          content: `### New reaction! 🎉
 User \`${userData?.displayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]} to your \`post\` - "${postDetails.title}"`,
-        isRead: false,
-      });
+          isRead: false,
+        },
+      ]);
     }
   };
 

@@ -212,7 +212,7 @@ export const useCreatePostReaction = (
         .select(`
           *, 
           author:users(id, nickname, full_name_from_auth_provider),
-          postDetails:posts(id, title)
+          postDetails:posts(id, title, user_id)
         `);
 
       if (error) {
@@ -224,22 +224,22 @@ export const useCreatePostReaction = (
       const authorDisplayName = reactionData.author.nickname ||
         reactionData.author.full_name_from_auth_provider;
 
-      if (reactionData.author.id === currentSession?.user.id) return;
+      if (reactionData.postDetails.author_id === currentSession?.user.id) {
+        return;
+      }
 
-      await createNotification([
-        {
-          type: "REACTION",
-          authorId: userId || "",
-          receiverId: reactionData.author.id,
-          postId: postId,
-          commentId: null,
-          postReactionId: reactionData.id,
-          content: `### New reaction! 🎉
+      await createNotification([{
+        type: "REACTION",
+        authorId: userId || "",
+        receiverId: reactionData.postDetails.user_id,
+        postId: postId,
+        commentId: null,
+        postReactionId: reactionData.id,
+        content: `### New reaction! 🎉
 User \`${authorDisplayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]}
 to your \`post\` - "${reactionData.postDetails.title}"`,
-          isRead: false,
-        },
-      ]);
+        isRead: false,
+      }]);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

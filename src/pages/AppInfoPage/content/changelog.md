@@ -1,10 +1,28 @@
 # Changelog
 
+<sup><time datetime="2025-06-07">07.06.2025</time></sup>
+
+### Version `1.3.0` changes:
+
+- Added notifications for:
+  - New post published on the platform
+  - New comment on a post
+  - Reply to your comment
+  - Reaction to a post
+  - Reaction to a comment
+- Update indicator: Showed `Update!` badge next to the Info button in the sidebar when a new version is available
+
+---
+
+<sup><time datetime="2025-05-28">28.05.2025</time></sup>
+
 ### Version `1.2.3` changes:
 
 - Replaced post voting system with expanded reaction types, consistent with comment reactions
 
 ---
+
+<sup><time datetime="2025-05-19">19.05.2025</time></sup>
 
 ### Version `1.2.2` changes:
 
@@ -13,12 +31,16 @@
 
 ---
 
+<sup><time datetime="2025-05-09">09.05.2025</time></sup>
+
 ### Version `1.2.1` changes:
 
 - Added author information for reactions
 - Fixed issue where multiple reactions could be sent on slow internet connections
 
 ---
+
+<sup><time datetime="2025-05-08">08.05.2025</time></sup>
 
 ### Version `1.2.0` changes:
 
@@ -27,6 +49,8 @@
 - Fixed an issue with comment form IDs that caused unexpected behavior
 
 ---
+
+<sup><time datetime="2025-05-07">07.05.2025</time></sup>
 
 ### Version `1.1.1` changes:
 
@@ -37,6 +61,8 @@
 
 ---
 
+<sup><time datetime="2025-05-05">05.05.2025</time></sup>
+
 ### Version `1.1.0` changes:
 
 - Added a profiles list showing current users in the app — visible only to logged-in users
@@ -44,6 +70,8 @@
 - Added an `ImageSkeleton` component to improve image loading performance
 
 ---
+
+<sup><time datetime="2025-04-16">16.04.2025</time></sup>
 
 ### Version `1.0.0` — MVP (Minimum Viable Product)
 

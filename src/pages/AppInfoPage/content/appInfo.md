@@ -56,6 +56,18 @@
 
 ---
 
+### ![importantIcon](/icons/importantIcon.svg) Notifications
+
+- Get notified about (since 1.3.0):
+  - New post
+  - Reaction to your post
+  - New comment on your post
+  - Reply to your comment
+  - Reaction to your comment
+- Click **"Show"** to jump directly to where the event happened
+
+---
+
 ### ![privacyIcon](/icons/privacyIcon.svg) Privacy
 
 - **No third-party tracking** or analytics are used
@@ -67,7 +79,7 @@
 
 ### ![versionIcon](/icons/versionIcon.svg) Version
 
-Current version: `v1.2.3`
+Current version: `v1.3.0`
 
 ---
 

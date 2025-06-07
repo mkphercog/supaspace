@@ -9,7 +9,7 @@ import {
   ProfilesIcon,
 } from "src/assets/icons";
 import { useAuth, useSidebar } from "src/context";
-import { useScreenSize } from "src/hooks";
+import { useGetAppVersion, useScreenSize } from "src/hooks";
 import { ROUTES } from "src/routes";
 
 import {
@@ -24,6 +24,7 @@ type SidebarItemType = Omit<SidebarItemBaseProps, "isSidebarOpen"> & {
 
 export const SidebarNavItemsList = () => {
   const { sidebarStatus, setStatusOfSidebar } = useSidebar();
+  const { isAppUpdate, saveAppVersionToStorage } = useGetAppVersion();
   const { isMdUp } = useScreenSize();
   const { currentSession } = useAuth();
 
@@ -72,11 +73,21 @@ export const SidebarNavItemsList = () => {
       onClick: setIconsToShowStatus,
     },
     {
-      text: "Info",
+      text: (
+        <>
+          Info{" "}
+          {isAppUpdate && (
+            <span className="text-lime-400 animate-pulse">Update!</span>
+          )}
+        </>
+      ),
       path: ROUTES.appInfo(),
       icon: <InfoIcon />,
       isVisible: true,
-      onClick: setIconsToShowStatus,
+      onClick: () => {
+        setIconsToShowStatus();
+        saveAppVersionToStorage();
+      },
     },
   ];
 

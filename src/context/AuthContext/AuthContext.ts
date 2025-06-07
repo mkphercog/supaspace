@@ -8,6 +8,7 @@ export type AuthContextType = {
   userData: UserData | null;
   notifications: {
     areUnread: boolean;
+    unreadCount: number;
     list: Notification[];
     loading: boolean;
   };

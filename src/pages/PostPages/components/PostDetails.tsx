@@ -44,8 +44,8 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
 
     const timeout = setTimeout(() => {
       const scrollContainer = document.getElementById("scrollable-container");
-      const el = document.getElementById(`goTo-${goToElId}`);
-      if (scrollContainer && el) {
+      const el = document.querySelector(`[data-go-to="${goToElId}"]`);
+      if (scrollContainer && el instanceof HTMLElement) {
         const containerRect = scrollContainer.getBoundingClientRect();
         const elRect = el.getBoundingClientRect();
 
@@ -59,7 +59,7 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
           behavior: "smooth",
         });
       }
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, [goToElId]);

@@ -10,6 +10,7 @@ import {
   SB_TABLE,
 } from "src/constants";
 import { useAuth } from "src/context";
+import { useInvalidateMultipleQueries } from "src/hooks";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import {
@@ -93,6 +94,7 @@ export const useCreatePostMutation = () => {
             postId: newPostData.id,
             commentId: null,
             postReactionId: null,
+            commentReactionId: null,
             content: `### New post! 📝
 User \`${authorDisplayName}\` added new post - "${newPostData.title}"`,
             isRead: false,
@@ -119,7 +121,7 @@ type DeletePostProps = {
 };
 
 export const useDeletePostMutation = () => {
-  const queryClient = useQueryClient();
+  const { invalidateMultipleQueries } = useInvalidateMultipleQueries();
   const navigate = useNavigate();
 
   const { mutateAsync, isPending } = useMutation({
@@ -144,8 +146,10 @@ export const useDeletePostMutation = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.notifications] });
+      invalidateMultipleQueries([
+        [QUERY_KEYS.posts],
+        [QUERY_KEYS.notifications],
+      ]);
       navigate(ROUTES.root());
     },
   });
@@ -160,7 +164,7 @@ export const useCreatePostReaction = (
   postId: Post["id"],
 ) => {
   const { currentSession } = useAuth();
-  const queryClient = useQueryClient();
+  const { invalidateMultipleQueries } = useInvalidateMultipleQueries();
   const { createNotification } = useCreateNotificationMutation();
 
   const { mutateAsync, error, isPending } = useMutation({
@@ -229,28 +233,25 @@ export const useCreatePostReaction = (
       }
 
       await createNotification([{
-        type: "REACTION",
+        type: "REACTION_TO_POST",
         authorId: userId || "",
         receiverId: reactionData.postDetails.user_id,
         postId: postId,
         commentId: null,
         postReactionId: reactionData.id,
-        content: `### New reaction! 🎉
+        commentReactionId: null,
+        content: `### New reaction to post! 🎉
 User \`${authorDisplayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]}
 to your \`post\` - "${reactionData.postDetails.title}"`,
         isRead: false,
       }]);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.posts],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.post, postId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.notifications],
-      });
+      invalidateMultipleQueries([
+        [QUERY_KEYS.posts],
+        [QUERY_KEYS.post, postId],
+        [QUERY_KEYS.notifications],
+      ]);
     },
   });
 

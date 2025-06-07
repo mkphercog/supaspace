@@ -29,7 +29,7 @@ export const PostReactions: FC<Props> = ({
   const userReaction = reactions.find(({ userId }) => userId === userData?.id);
 
   useEffect(() => {
-    if (goToParam !== "reaction") return;
+    if (goToParam !== "reaction-to-post") return;
 
     const timeout = clearSearchParamsTimeout(setGoToParam);
     return () => clearTimeout(timeout);
@@ -37,7 +37,7 @@ export const PostReactions: FC<Props> = ({
   }, []);
 
   return (
-    <div id="goTo-reaction">
+    <div data-go-to="reaction-to-post">
       <Typography.Text color="lightPurple" size="sm" className="mb-2">
         React to post
       </Typography.Text>
@@ -46,7 +46,7 @@ export const PostReactions: FC<Props> = ({
         className={cn(
           "flex gap-1 md:gap-2 justify-start flex-wrap ",
           "bg-[rgba(12,13,15,0.6)] backdrop-blur-sm rounded-md",
-          { "animate-pulse": goToParam === "reaction" }
+          { "animate-pulse": goToParam === "reaction-to-post" }
         )}
       >
         {Object.entries(REACTION_ICONS_MAP).map(([reactionName, icon]) => {

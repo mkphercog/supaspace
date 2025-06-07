@@ -34,11 +34,12 @@ export const CommentItem: FC<Props> = ({ postId, comment, goToParam }) => {
   const isParentComment = comment.parentCommentId === null;
   const authorDisplayName = comment.author.displayName;
   const goToId = !isParentComment
-    ? `goTo-comment-reply-${comment.id}`
-    : `goTo-comment-${comment.id}`;
+    ? `comment-reply-${comment.id}`
+    : `comment-${comment.id}`;
   const isHighlight =
     goToParam?.replace(!isParentComment ? "comment-reply-" : "comment-", "") ===
-    comment.id.toString();
+      comment.id.toString() ||
+    goToParam === `reaction-to-comment-${comment.id}`;
 
   const handleCreateReaction = async (
     userId: UserData["id"],
@@ -52,7 +53,7 @@ export const CommentItem: FC<Props> = ({ postId, comment, goToParam }) => {
 
   return (
     <section
-      id={goToId}
+      data-go-to={goToId}
       className={cn("relative p-2 rounded-xl", {
         "bg-gray-700/20": isParentComment,
         "bg-transparent": !isParentComment,
@@ -152,7 +153,9 @@ export const CommentItem: FC<Props> = ({ postId, comment, goToParam }) => {
         goToParam={goToParam}
         forceExpanded={
           !!comment.children.find(
-            (comment) => goToParam === `comment-reply-${comment.id}`
+            (comment) =>
+              goToParam === `comment-reply-${comment.id}` ||
+              goToParam === `reaction-to-comment-${comment.id}`
           )
         }
       />

@@ -127,10 +127,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     navigate(ROUTES.root());
   };
 
+  const unreadNotifications = notifications.filter(({ isRead }) => !isRead);
+
   const value: AuthContextType = {
     userData,
     notifications: {
-      areUnread: !!notifications.filter(({ isRead }) => !isRead).length,
+      areUnread: !!unreadNotifications.length,
+      unreadCount: unreadNotifications.length,
       list: notifications,
       loading: areNotificationsLoading,
     },

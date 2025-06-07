@@ -17,8 +17,9 @@ const TYPE_COLORS_MAP: Record<NotificationType, TypographyColors> = {
   POST: "lightPurple",
   COMMENT: "blue",
   COMMENT_REPLY: "blue",
-  REACTION: "amber",
+  REACTION_TO_POST: "amber",
   REACTION_TO_COMMENT: "amber",
+  GENERAL: "purple",
 };
 
 export const NotificationItem: FC<Props> = ({

@@ -4,8 +4,9 @@ export type NotificationType =
   | "POST"
   | "COMMENT"
   | "COMMENT_REPLY"
-  | "REACTION"
-  | "REACTION_TO_COMMENT";
+  | "REACTION_TO_POST"
+  | "REACTION_TO_COMMENT"
+  | "GENERAL";
 
 type NotificationCommon = {
   id: number;
@@ -21,6 +22,7 @@ export type DbNotification = NotificationCommon & {
   post_id: number;
   comment_id: number | null;
   post_reaction_id: number | null;
+  comment_reaction_id: number | null;
   is_read: boolean;
 };
 
@@ -36,6 +38,7 @@ export type Notification = NotificationCommon & {
   postId: number;
   commentId: number | null;
   postReactionId: number | null;
+  commentReactionId: number | null;
   isRead: boolean;
 };
 
@@ -48,6 +51,7 @@ export type CreateDbNotificationInput = Pick<
   | "post_id"
   | "comment_id"
   | "post_reaction_id"
+  | "comment_reaction_id"
   | "is_read"
 >;
 
@@ -60,5 +64,6 @@ export type CreateNotificationInput = Pick<
   | "postId"
   | "commentId"
   | "postReactionId"
+  | "commentReactionId"
   | "isRead"
 >;

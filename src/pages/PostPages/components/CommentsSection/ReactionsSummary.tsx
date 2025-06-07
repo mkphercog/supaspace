@@ -39,7 +39,10 @@ export const ReactionsSummary: FC<Props> = ({ postId, comment }) => {
   });
 
   return (
-    <ul className="flex gap-2 px-2 py-1 bg-purple-400/20 rounded-md">
+    <ul
+      data-go-to={`reaction-to-comment-${comment.id}`}
+      className="flex gap-2 px-2 py-1 bg-purple-400/20 rounded-md"
+    >
       {REACTIONS_STATS.map(({ icon, count, isVisible, reaction }, index) => {
         if (!isVisible) return null;
 

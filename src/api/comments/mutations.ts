@@ -1,13 +1,10 @@
-import {
-  MutateOptions,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { MutateOptions, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
 import { SB_TABLE } from "src/constants";
 import { useAuth } from "src/context";
+import { useInvalidateMultipleQueries } from "src/hooks";
 import { supabaseClient } from "src/supabase-client";
 import { Comment, CreateCommentInput, CreateDbCommentInput } from "src/types";
 
@@ -51,8 +48,10 @@ export const useCreateCommentMutation = (
       const newCommentData = data[0];
 
       if (
-        parentCommentAuthorId === currentSession?.user.id ||
-        newCommentData.postDetails.user_id === currentSession?.user.id
+        (parentCommentId &&
+          parentCommentAuthorId === currentSession?.user.id) ||
+        (!parentCommentId &&
+          newCommentData.postDetails.user_id === currentSession?.user.id)
       ) return;
 
       const authorDisplayName = newCommentData.author.nickname ||
@@ -70,6 +69,7 @@ export const useCreateCommentMutation = (
         postId: newCommentData.post_id,
         commentId: newCommentData.id,
         postReactionId: null,
+        commentReactionId: null,
         content: `### New comment! 💬
 User \`${authorDisplayName}\` ${commentContent} - "${newCommentData.postDetails.title}"`,
         isRead: false,
@@ -86,7 +86,8 @@ User \`${authorDisplayName}\` ${commentContent} - "${newCommentData.postDetails.
 };
 
 export const useDeleteCommentsMutation = (postId: Comment["postId"]) => {
-  const queryClient = useQueryClient();
+  const { invalidateMultipleQueries } = useInvalidateMultipleQueries();
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ id }: Pick<Comment, "id">) => {
       const { error } = await supabaseClient
@@ -97,9 +98,10 @@ export const useDeleteCommentsMutation = (postId: Comment["postId"]) => {
       if (error) throw new Error();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.comments, postId],
-      });
+      invalidateMultipleQueries([
+        [QUERY_KEYS.comments, postId],
+        [QUERY_KEYS.notifications],
+      ]);
     },
   });
 

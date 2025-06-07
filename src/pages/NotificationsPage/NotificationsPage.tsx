@@ -5,7 +5,7 @@ import { Notifications } from "./components/Notifications";
 export const NotificationsPage = () => {
   return (
     <div>
-      <Typography.Header>Notifications</Typography.Header>
+      <Typography.Header className="mb-2">Notifications</Typography.Header>
       <Notifications />
     </div>
   );

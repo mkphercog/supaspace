@@ -39,20 +39,25 @@ export const Notifications = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center jus gap-2 max-w-2xl mx-auto">
       {notifications.areUnread && (
-        <Button
-          onClick={async () =>
-            await markAllNotificationsAsRead(userData?.id || "")
-          }
-          className="mx-auto mb-4"
-          variant="secondary"
-        >
-          <Typography.Text size="sm">Mark all as read</Typography.Text>
-        </Button>
+        <div className="w-full flex items-center justify-between">
+          <Typography.Text size="md">
+            Unread: {notifications.unreadCount}
+          </Typography.Text>
+          <Button
+            onClick={async () =>
+              await markAllNotificationsAsRead(userData?.id || "")
+            }
+            variant="secondary"
+            disabled={!notifications.areUnread}
+          >
+            <Typography.Text size="sm">Mark all as read</Typography.Text>
+          </Button>
+        </div>
       )}
 
-      <ul className="flex flex-col gap-4 max-w-2xl mx-auto">
+      <ul className="w-full flex flex-col gap-4">
         {notifications.list.map((notification) => (
           <NotificationItem
             key={notification.id}

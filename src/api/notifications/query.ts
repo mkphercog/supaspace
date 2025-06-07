@@ -15,9 +15,10 @@ export const useFetchNotifications = (userId: UserData["id"] | undefined) => {
 
       const { data, error } = await supabaseClient
         .from(SB_TABLE.notifications)
-        .select(
-          "*, author:users(id, nickname, full_name_from_auth_provider)",
-        )
+        .select(`
+          *,
+          author:users!notifications_author_id_fkey(id, nickname, full_name_from_auth_provider)
+        `)
         .eq("receiver_id", userId)
         .order("created_at", { ascending: false });
 

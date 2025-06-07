@@ -72,7 +72,10 @@ export const useCreatePostMutation = () => {
           user_id: userId,
           community_id: communityId,
         })
-        .select("*, author:users(id, nickname, full_name_from_auth_provider)");
+        .select(`
+          *, 
+          author:users!posts_user_id_fkey(id, nickname, full_name_from_auth_provider)
+        `);
 
       if (error) {
         toast.error("Oops! Something went wrong. Please try again later.");
@@ -215,8 +218,8 @@ export const useCreatePostReaction = (
         })
         .select(`
           *, 
-          author:users(id, nickname, full_name_from_auth_provider),
-          postDetails:posts(id, title, user_id)
+          author:users!postReactions_user_id_fkey(id, nickname, full_name_from_auth_provider),
+          postDetails:posts!postReactions_post_id_fkey(id, title, user_id)
         `);
 
       if (error) {

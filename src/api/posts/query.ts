@@ -15,9 +15,9 @@ export const useFetchPostById = (postId: Post["id"]) => {
         .from(SB_TABLE.posts)
         .select(`
           *,
-          community:communities(id, name),
-          author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
-          reactions:postReactions(id, user_id, reaction),
+          community:communities!posts_community_id_fkey(id, name),
+          author:users!posts_user_id_fkey(id, nickname, full_name_from_auth_provider, avatar_url, role),
+          reactions:postReactions!postReactions_post_id_fkey(id, user_id, reaction),
           like_count:postReactions(count),
           comment_count:comments(count)
         `)
@@ -46,8 +46,8 @@ export const useFetchPosts = () => {
       const { data, error } = await supabaseClient
         .from(SB_TABLE.posts).select(`
           *,
-          community:communities(id, name),
-          author:users(id, nickname, full_name_from_auth_provider, avatar_url, role),
+          community:communities!posts_community_id_fkey(id, name),
+          author:users!posts_user_id_fkey(id, nickname, full_name_from_auth_provider, avatar_url, role),
           like_count:postReactions(count),
           comment_count:comments(count)
         `)

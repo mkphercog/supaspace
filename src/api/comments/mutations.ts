@@ -36,8 +36,8 @@ export const useCreateCommentMutation = (
         })
         .select(`
           *, 
-          author:users(id, nickname, full_name_from_auth_provider),
-          postDetails:posts(id, title, user_id)
+          author:users!comments_user_id_fkey(id, nickname, full_name_from_auth_provider),
+          postDetails:posts!comments_post_id_fkey(id, title, user_id)
         `);
 
       if (error) {

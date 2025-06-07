@@ -71,8 +71,8 @@ export const useCreateCommentReaction = (
         })
         .select(`
           *, 
-          author:users(id, nickname, full_name_from_auth_provider),
-          commentDetails:comments(id, content, user_id)
+          author:users!commentReactions_user_id_fkey(id, nickname, full_name_from_auth_provider),
+          commentDetails:comments!commentReactions_comment_id_fkey(id, content, user_id)
         `);
 
       if (error) {

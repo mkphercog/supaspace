@@ -29,7 +29,10 @@ export const useFetchCommentReactionAuthors = (
     queryFn: async () => {
       const { data, error } = await supabaseClient
         .from(SB_TABLE.commentReactions)
-        .select("*, author:users(id, nickname, full_name_from_auth_provider)")
+        .select(`
+          *,
+          author:users!commentReactions_user_id_fkey(id, nickname, full_name_from_auth_provider)
+        `)
         .eq("comment_id", commentId)
         .eq("reaction", reaction)
         .order("created_at", { ascending: true });

@@ -47,7 +47,7 @@ export const useFetchCommunities = () => {
         .from(SB_TABLE.communities)
         .select(`
           *, 
-          author:users(id, nickname, full_name_from_auth_provider, avatar_url),
+          author:users!communities_user_id_fkey(id, nickname, full_name_from_auth_provider, avatar_url),
           post_count:posts(count)
         `)
         .order("created_at", { ascending: false });

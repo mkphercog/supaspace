@@ -15,9 +15,11 @@ export const useFetchComments = (postId: Comment["postId"]) => {
 
       const { data, error } = await supabaseClient
         .from(SB_TABLE.comments)
-        .select(
-          "*, author:users(id, nickname, full_name_from_auth_provider, avatar_url), reactions:commentReactions(id, reaction, user_id)",
-        )
+        .select(`
+          *,
+          author:users!comments_user_id_fkey(id, nickname, full_name_from_auth_provider, avatar_url),
+          reactions:commentReactions!commentReactions_comment_id_fkey(id, reaction, user_id)
+        `)
         .eq("post_id", postId)
         .order("created_at", { ascending: true });
 

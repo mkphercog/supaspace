@@ -224,7 +224,7 @@ export const useCreatePostReaction = (
       const authorDisplayName = reactionData.author.nickname ||
         reactionData.author.full_name_from_auth_provider;
 
-      if (userId === currentSession?.user.id) return;
+      if (reactionData.author.id === currentSession?.user.id) return;
 
       await createNotification([
         {

@@ -48,9 +48,13 @@ export const useCreateCommentMutation = (
         throw new Error(error.message);
       }
 
-      if (userId === currentSession?.user.id) return;
-
       const newCommentData = data[0];
+
+      if (
+        parentCommentAuthorId === currentSession?.user.id ||
+        newCommentData.postDetails.user_id === currentSession?.user.id
+      ) return;
+
       const authorDisplayName = newCommentData.author.nickname ||
         newCommentData.author.full_name_from_auth_provider;
       const commentContent = parentCommentId

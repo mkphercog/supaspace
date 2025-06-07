@@ -18,6 +18,8 @@ export const mapDbNotificationsToNotifications: Mapper = (notifications) => {
       content,
       type,
       post_id,
+      comment_id,
+      post_reaction_id,
       is_read,
     }): Notification => ({
       id,
@@ -30,8 +32,10 @@ export const mapDbNotificationsToNotifications: Mapper = (notifications) => {
       },
       content,
       type,
-      isRead: is_read,
       postId: post_id,
+      commentId: comment_id,
+      postReactionId: post_reaction_id,
+      isRead: is_read,
     }),
   );
 
@@ -52,6 +56,8 @@ export const mapCreateNotificationsToDbCreateNotifications: CreateMapper = (
       content,
       type,
       postId,
+      commentId,
+      postReactionId,
       isRead,
     }): CreateDbNotificationInput => ({
       type,
@@ -59,6 +65,8 @@ export const mapCreateNotificationsToDbCreateNotifications: CreateMapper = (
       author_id: authorId,
       receiver_id: receiverId,
       post_id: postId,
+      comment_id: commentId,
+      post_reaction_id: postReactionId,
       is_read: isRead,
     }),
   );

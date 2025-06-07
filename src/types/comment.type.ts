@@ -30,10 +30,14 @@ export type CommentTreeType = Comment & {
   replyStyle: number;
 };
 
-export type CreateCommentInput = Pick<
-  Comment,
-  "content" | "parentCommentId" | "postId" | "userId"
->;
+export type CreateCommentInput =
+  & Pick<
+    Comment,
+    "content" | "parentCommentId" | "postId" | "userId"
+  >
+  & {
+    parentCommentAuthorId?: UserData["id"];
+  };
 
 export type CreateDbCommentInput = Pick<
   DbComment,

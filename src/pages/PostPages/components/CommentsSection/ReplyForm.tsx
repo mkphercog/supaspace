@@ -13,7 +13,7 @@ import {
   RequiredHint,
   useBaseForm,
 } from "src/shared/UI";
-import { Comment, Post } from "src/types";
+import { Comment, Post, UserData } from "src/types";
 
 import { CommentFormType, getCommentFormConfig } from "./validationSchema";
 
@@ -21,12 +21,14 @@ type Props = {
   postId: Post["id"];
   commentId: Comment["id"];
   isReplyFormVisible: boolean;
+  parentCommentAuthorId: UserData["id"];
 };
 
 export const ReplyForm: FC<Props> = ({
   postId,
   commentId,
   isReplyFormVisible,
+  parentCommentAuthorId,
 }) => {
   const { userData } = useAuth();
   const queryClient = useQueryClient();
@@ -55,6 +57,7 @@ export const ReplyForm: FC<Props> = ({
           parentCommentId: commentId,
           userId: userData.id,
           postId,
+          parentCommentAuthorId,
         });
       },
       {

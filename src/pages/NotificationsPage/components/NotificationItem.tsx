@@ -5,6 +5,8 @@ import { useMarkNotificationAsReadMutation } from "src/api/notifications/mutatio
 import { ROUTES } from "src/routes";
 import { Button, Card, Typography, TypographyColors } from "src/shared/UI";
 import { Notification, NotificationType } from "src/types";
+
+import { getSearchParam } from "../utils";
 const MDPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 type Props = Omit<Notification, "receiverId" | "authorId"> & {
@@ -14,7 +16,9 @@ type Props = Omit<Notification, "receiverId" | "authorId"> & {
 const TYPE_COLORS_MAP: Record<NotificationType, TypographyColors> = {
   POST: "lightPurple",
   COMMENT: "blue",
+  COMMENT_REPLY: "blue",
   REACTION: "amber",
+  REACTION_TO_COMMENT: "amber",
 };
 
 export const NotificationItem: FC<Props> = ({
@@ -22,6 +26,7 @@ export const NotificationItem: FC<Props> = ({
   type,
   isRead,
   postId,
+  commentId,
   content,
   createdAt,
   isMarkAllAsReadLoading,
@@ -41,7 +46,7 @@ export const NotificationItem: FC<Props> = ({
 
     navigate({
       pathname: ROUTES.post.details(postId),
-      search: type === "POST" ? "" : `?goTo=${type.toLocaleLowerCase()}`,
+      search: getSearchParam(type, commentId),
     });
   };
 
@@ -59,7 +64,7 @@ export const NotificationItem: FC<Props> = ({
           color={TYPE_COLORS_MAP[type]}
           size="xxs"
         >
-          {type}
+          {type.replace(/_/g, " ")}
         </Typography.Text>
 
         {!isRead && (

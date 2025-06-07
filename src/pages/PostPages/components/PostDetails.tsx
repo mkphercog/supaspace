@@ -5,9 +5,8 @@ import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import enStrings from "react-timeago/lib/language-strings/en";
 import { toast } from "react-toastify";
 
-import { useCreateNotificationMutation } from "src/api/notifications/mutations";
 import { useCreatePostReaction, useFetchPostById } from "src/api/posts";
-import { REACTION_EMOJI_MAP, SB_STORAGE } from "src/constants";
+import { SB_STORAGE } from "src/constants";
 import { useAuth } from "src/context";
 import { useScreenSize } from "src/hooks";
 import { NotFoundPage } from "src/pages/NotFoundPage";
@@ -34,12 +33,11 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
   const goToElId = searchParams.get("goTo");
 
   const { isMdUp } = useScreenSize();
-  const { userData, currentSession } = useAuth();
+  const { currentSession } = useAuth();
   const { postDetails, isPostDetailsLoading, postDetailsError } =
     useFetchPostById(postId);
   const { createPostReaction, isCreatePostReactionLoading } =
     useCreatePostReaction(postId);
-  const { createNotification } = useCreateNotificationMutation();
 
   useEffect(() => {
     if (!goToElId) return;
@@ -82,20 +80,6 @@ export const PostDetails: FC<PostDetailsProps> = ({ postId }) => {
       userId,
       reaction,
     });
-
-    if (!postDetails.reactions.find(({ userId }) => userId === userData?.id)) {
-      await createNotification([
-        {
-          type: "REACTION",
-          authorId: currentSession?.user.id || "",
-          receiverId: postDetails.author.id,
-          postId: postDetails.id,
-          content: `### New reaction! 🎉
-User \`${userData?.displayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]} to your \`post\` - "${postDetails.title}"`,
-          isRead: false,
-        },
-      ]);
-    }
   };
 
   const postImagePathToDelete = getFilePathToDeleteFromStorage({

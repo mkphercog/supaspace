@@ -1,6 +1,11 @@
 import { Author, DbAuthor } from "./users.type";
 
-export type NotificationType = "POST" | "COMMENT" | "REACTION";
+export type NotificationType =
+  | "POST"
+  | "COMMENT"
+  | "COMMENT_REPLY"
+  | "REACTION"
+  | "REACTION_TO_COMMENT";
 
 type NotificationCommon = {
   id: number;
@@ -14,6 +19,8 @@ export type DbNotification = NotificationCommon & {
   author_id: string;
   author: Omit<DbAuthor, "avatar_url" | "role">;
   post_id: number;
+  comment_id: number | null;
+  post_reaction_id: number | null;
   is_read: boolean;
 };
 
@@ -27,6 +34,8 @@ export type Notification = NotificationCommon & {
     | "role"
   >;
   postId: number;
+  commentId: number | null;
+  postReactionId: number | null;
   isRead: boolean;
 };
 
@@ -37,6 +46,8 @@ export type CreateDbNotificationInput = Pick<
   | "content"
   | "type"
   | "post_id"
+  | "comment_id"
+  | "post_reaction_id"
   | "is_read"
 >;
 
@@ -47,5 +58,7 @@ export type CreateNotificationInput = Pick<
   | "content"
   | "type"
   | "postId"
+  | "commentId"
+  | "postReactionId"
   | "isRead"
 >;

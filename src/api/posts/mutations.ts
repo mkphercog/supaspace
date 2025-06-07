@@ -3,7 +3,13 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
-import { ONE_DAY_IN_SEC, SB_STORAGE, SB_TABLE } from "src/constants";
+import {
+  ONE_DAY_IN_SEC,
+  REACTION_EMOJI_MAP,
+  SB_STORAGE,
+  SB_TABLE,
+} from "src/constants";
+import { useAuth } from "src/context";
 import { ROUTES } from "src/routes";
 import { supabaseClient } from "src/supabase-client";
 import {
@@ -23,6 +29,7 @@ import { useFetchProfilesList } from "../user";
 export const useCreatePostMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { currentSession } = useAuth();
   const { createNotification } = useCreateNotificationMutation();
   const { mappedProfilesList } = useFetchProfilesList();
 
@@ -75,17 +82,23 @@ export const useCreatePostMutation = () => {
       const authorDisplayName = newPostData.author.nickname ||
         newPostData.author.full_name_from_auth_provider;
 
-      await createNotification(mappedProfilesList.map(({ id: receiverId }) => {
-        return ({
-          type: "POST",
-          authorId: userId,
-          receiverId,
-          postId: newPostData.id,
-          content: `### New post! 📝
+      await createNotification(
+        mappedProfilesList.filter((profile) =>
+          profile.id !== currentSession?.user.id
+        ).map(({ id: receiverId }) => {
+          return ({
+            type: "POST",
+            authorId: userId,
+            receiverId,
+            postId: newPostData.id,
+            commentId: null,
+            postReactionId: null,
+            content: `### New post! 📝
 User \`${authorDisplayName}\` added new post - "${newPostData.title}"`,
-          isRead: false,
-        });
-      }));
+            isRead: false,
+          });
+        }),
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.posts] });
@@ -146,7 +159,9 @@ export const useDeletePostMutation = () => {
 export const useCreatePostReaction = (
   postId: Post["id"],
 ) => {
+  const { currentSession } = useAuth();
   const queryClient = useQueryClient();
+  const { createNotification } = useCreateNotificationMutation();
 
   const { mutateAsync, error, isPending } = useMutation({
     mutationFn: async (
@@ -161,14 +176,11 @@ export const useCreatePostReaction = (
         .eq("user_id", userId)
         .maybeSingle<DbPostReaction>();
 
-      if (!existingReaction) {
+      if (existingReaction?.reaction === reaction) {
         const { error } = await supabaseClient
           .from(SB_TABLE.postReactions)
-          .insert<CreateDbPostReaction>({
-            post_id: postId,
-            user_id: userId,
-            reaction,
-          });
+          .delete()
+          .eq("id", existingReaction.id);
 
         if (error) {
           supabaseClient.auth.signOut();
@@ -177,7 +189,7 @@ export const useCreatePostReaction = (
         return;
       }
 
-      if (existingReaction.reaction !== reaction) {
+      if (!!existingReaction && existingReaction.reaction !== reaction) {
         const { error } = await supabaseClient
           .from(SB_TABLE.postReactions)
           .update<Pick<DbPostReaction, "reaction">>({ reaction })
@@ -190,15 +202,44 @@ export const useCreatePostReaction = (
         return;
       }
 
-      const { error } = await supabaseClient
+      const { data, error } = await supabaseClient
         .from(SB_TABLE.postReactions)
-        .delete()
-        .eq("id", existingReaction.id);
+        .insert<CreateDbPostReaction>({
+          post_id: postId,
+          user_id: userId,
+          reaction,
+        })
+        .select(`
+          *, 
+          author:users(id, nickname, full_name_from_auth_provider),
+          postDetails:posts(id, title)
+        `);
 
       if (error) {
         supabaseClient.auth.signOut();
         throw new Error(error.message);
       }
+
+      const reactionData = data[0];
+      const authorDisplayName = reactionData.author.nickname ||
+        reactionData.author.full_name_from_auth_provider;
+
+      if (userId === currentSession?.user.id) return;
+
+      await createNotification([
+        {
+          type: "REACTION",
+          authorId: userId || "",
+          receiverId: reactionData.author.id,
+          postId: postId,
+          commentId: null,
+          postReactionId: reactionData.id,
+          content: `### New reaction! 🎉
+User \`${authorDisplayName}\` added **reaction** ${REACTION_EMOJI_MAP[reaction]}
+to your \`post\` - "${reactionData.postDetails.title}"`,
+          isRead: false,
+        },
+      ]);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -206,6 +247,9 @@ export const useCreatePostReaction = (
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.post, postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.notifications],
       });
     },
   });

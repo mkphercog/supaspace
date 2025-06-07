@@ -18,9 +18,10 @@ const MDPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 type Props = Pick<Comment, "postId"> & {
   comment: CommentTreeType;
+  goToParam: string | null;
 };
 
-export const CommentItem: FC<Props> = ({ postId, comment }) => {
+export const CommentItem: FC<Props> = ({ postId, comment, goToParam }) => {
   const [isReplyFormVisible, setIsReplyFormVisible] = useState(false);
   const { userData, currentSession } = useAuth();
   const { createCommentReaction, isCreateCommentReactionLoading } =
@@ -32,6 +33,12 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
 
   const isParentComment = comment.parentCommentId === null;
   const authorDisplayName = comment.author.displayName;
+  const goToId = !isParentComment
+    ? `goTo-comment-reply-${comment.id}`
+    : `goTo-comment-${comment.id}`;
+  const isHighlight =
+    goToParam?.replace(!isParentComment ? "comment-reply-" : "comment-", "") ===
+    comment.id.toString();
 
   const handleCreateReaction = async (
     userId: UserData["id"],
@@ -45,6 +52,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
 
   return (
     <section
+      id={goToId}
       className={cn("relative p-2 rounded-xl", {
         "bg-gray-700/20": isParentComment,
         "bg-transparent": !isParentComment,
@@ -62,7 +70,8 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
       <main
         className={cn(
           "grid grid-cols-[auto_1fr_auto] grid-rows-[repeat(5,auto)]",
-          "p-2 bg-gray-500/20 rounded-2xl"
+          "p-2 bg-gray-500/20 rounded-2xl",
+          { "animate-pulse": isHighlight }
         )}
       >
         <UserAvatar
@@ -112,7 +121,7 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
         <div
           className={cn(
             "col-span-3 col-start-1 row-start-5 mt-1",
-            "relative grid grid-cols-[auto_1fr_auto]"
+            "relative grid grid-cols-[auto_1fr_auto] gap-2"
           )}
         >
           <ReactionsSummary postId={postId} comment={comment} />
@@ -134,9 +143,19 @@ export const CommentItem: FC<Props> = ({ postId, comment }) => {
         commentId={comment.id}
         postId={postId}
         isReplyFormVisible={isReplyFormVisible}
+        parentCommentAuthorId={comment.author.id}
       />
 
-      <CommentReplies postId={postId} comment={comment} />
+      <CommentReplies
+        postId={postId}
+        comment={comment}
+        goToParam={goToParam}
+        forceExpanded={
+          !!comment.children.find(
+            (comment) => goToParam === `comment-reply-${comment.id}`
+          )
+        }
+      />
     </section>
   );
 };

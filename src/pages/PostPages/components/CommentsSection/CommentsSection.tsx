@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { QUERY_KEYS } from "src/api";
@@ -16,6 +17,7 @@ import {
   useBaseForm,
 } from "src/shared/UI";
 import { Comment, Post } from "src/types";
+import { clearSearchParamsTimeout } from "src/utils/clearSearchParamsTimeout";
 
 import { CommentItem } from "./CommentItem";
 import { CommentFormType, getCommentFormConfig } from "./validationSchema";
@@ -25,6 +27,8 @@ type Props = Pick<Comment, "postId"> & Pick<Post, "commentCount">;
 
 export const CommentsSection: FC<Props> = ({ postId, commentCount }) => {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const [goToParam, setGoToParam] = useState(searchParams.get("goTo"));
   const { userData } = useAuth();
   const { comments, areCommentsLoading, commentsError } =
     useFetchComments(postId);
@@ -42,6 +46,14 @@ export const CommentsSection: FC<Props> = ({ postId, commentCount }) => {
     validationSchema,
     defaultValues,
   });
+
+  useEffect(() => {
+    if (!goToParam?.includes("comment")) return;
+
+    const timeout = clearSearchParamsTimeout(setGoToParam);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (formData: CommentFormType["defaultValues"]) => {
     if (!userData) return;
@@ -116,7 +128,12 @@ export const CommentsSection: FC<Props> = ({ postId, commentCount }) => {
       {commentTree.length ? (
         <div className="space-y-8">
           {commentTree?.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} postId={postId} />
+            <CommentItem
+              key={comment.id}
+              goToParam={goToParam}
+              comment={comment}
+              postId={postId}
+            />
           ))}
         </div>
       ) : (

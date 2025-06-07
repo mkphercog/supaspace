@@ -11,10 +11,17 @@ import { getReplyStyleColor } from "../../utils/comments.utils";
 type Props = {
   postId: Post["id"];
   comment: CommentTreeType;
+  goToParam: string | null;
+  forceExpanded: boolean;
 };
 
-export const CommentReplies: FC<Props> = ({ postId, comment }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+export const CommentReplies: FC<Props> = ({
+  postId,
+  comment,
+  goToParam,
+  forceExpanded,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(forceExpanded || false);
 
   if (!comment.children.length) return null;
 
@@ -57,14 +64,18 @@ export const CommentReplies: FC<Props> = ({ postId, comment }) => {
             return (
               <div
                 key={key}
-                className={`
-                  w-full mt-5 first:mt-1
-                  rounded-xl border
-                  ${getReplyStyleColor(firstChildReplyStyle)}
-                `}
+                className={cn(
+                  "w-full mt-5 first:mt-1 rounded-xl border",
+                  getReplyStyleColor(firstChildReplyStyle)
+                )}
               >
                 {groupedChildrens.map((child) => (
-                  <CommentItem key={child.id} comment={child} postId={postId} />
+                  <CommentItem
+                    key={child.id}
+                    goToParam={goToParam}
+                    comment={child}
+                    postId={postId}
+                  />
                 ))}
               </div>
             );

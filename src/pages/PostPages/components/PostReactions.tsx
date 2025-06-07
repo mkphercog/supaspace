@@ -6,6 +6,7 @@ import { REACTION_ICONS_MAP } from "src/constants";
 import { useAuth } from "src/context";
 import { Button, Typography } from "src/shared/UI";
 import { Post, Reaction, UserData } from "src/types";
+import { clearSearchParamsTimeout } from "src/utils/clearSearchParamsTimeout";
 
 type Props = {
   reactions: Post["reactions"];
@@ -22,23 +23,15 @@ export const PostReactions: FC<Props> = ({
   isCreatePostReactionLoading,
 }) => {
   const [searchParams] = useSearchParams();
-  const [isGoToReaction, setIsGoToReaction] = useState(
-    searchParams.get("goTo") === "reaction"
-  );
+  const [goToParam, setGoToParam] = useState(searchParams.get("goTo"));
   const { userData } = useAuth();
 
   const userReaction = reactions.find(({ userId }) => userId === userData?.id);
 
   useEffect(() => {
-    if (!isGoToReaction) return;
+    if (goToParam !== "reaction") return;
 
-    const timeout = setTimeout(() => {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("goTo");
-      window.history.replaceState({}, "", url.toString());
-      setIsGoToReaction(false);
-    }, 5000);
-
+    const timeout = clearSearchParamsTimeout(setGoToParam);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -53,7 +46,7 @@ export const PostReactions: FC<Props> = ({
         className={cn(
           "flex gap-1 md:gap-2 justify-start flex-wrap ",
           "bg-[rgba(12,13,15,0.6)] backdrop-blur-sm rounded-md",
-          { "animate-pulse": isGoToReaction }
+          { "animate-pulse": goToParam === "reaction" }
         )}
       >
         {Object.entries(REACTION_ICONS_MAP).map(([reactionName, icon]) => {

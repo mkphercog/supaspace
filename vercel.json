@@ -1,17 +1,11 @@
 {
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "crons": [
     {
-      "path": "/api/clear-notifications.cjs",
+      "path": "/api/clear-notifications",
       "schedule": "0 0 */5 * *"
     }
   ]

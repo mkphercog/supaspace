@@ -2,7 +2,7 @@
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "crons": [
     {
-      "path": "/api/clear-notifications",
+      "path": "/api/clear-notifications.cjs",
       "schedule": "0 0 */5 * *"
     }
   ]

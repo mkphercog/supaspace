@@ -1,13 +1,13 @@
-const createClient = require("@supabase/supabase-js");
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.VITE_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   const dateThreshold = new Date(
-    Date.now() - 5 * 24 * 60 * 60 * 1000
+    Date.now() - 5 * 24 * 60 * 60 * 1000,
   ).toISOString();
 
   const { error } = await supabase
@@ -20,5 +20,8 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: "Failed to delete notifications" });
   }
 
-  return res.status(200).json({ success: true });
-};
+  return res.status(200).json({
+    message: "Notifications older than 5 days have been removed",
+    success: true,
+  });
+}

@@ -5,7 +5,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-export default async function handler(_, res) {
+module.exports = async function handler(req, res) {
   const dateThreshold = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
     .toISOString();
 
@@ -20,4 +20,4 @@ export default async function handler(_, res) {
   }
 
   return res.status(200).json({ success: true });
-}
+};

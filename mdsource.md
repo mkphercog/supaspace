@@ -66,6 +66,8 @@
   - Reaction to your comment
 - Click **"Show"** to jump directly to where the event happened
 
+<sup>Notifications older than 5 days are automatically removed from the database.</sup>
+
 ---
 
 ### ![privacyIcon](/icons/privacyIcon.svg) Privacy

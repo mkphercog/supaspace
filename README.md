@@ -66,6 +66,8 @@
   - Reaction to your comment
 - Click **"Show"** to jump directly to where the event happened
 
+<sup>Notifications older than 5 days are automatically removed from the database.</sup>
+
 ---
 
 ### ![privacyIcon](./public/icons/privacyIcon.svg) Privacy
@@ -79,7 +81,7 @@
 
 ### ![versionIcon](./public/icons/versionIcon.svg) Version
 
-Current version: `v1.3.1`
+Current version: `v1.3.2`
 
 ---
 

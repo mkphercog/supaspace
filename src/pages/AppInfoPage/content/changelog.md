@@ -1,6 +1,18 @@
 # Changelog
 
+<sup><time datetime="2025-06-09">09.06.2025</time></sup>
+
+### Version `1.3.2` changes:
+
+- Added note about automatic deletion of notifications older than 5 days
+
+---
+
 <sup><time datetime="2025-06-07">07.06.2025</time></sup>
+
+### Hotfix `1.3.1`:
+
+- Fixed issues with Supabase foreign key relationships in the notifications table
 
 ### Version `1.3.0` changes:
 

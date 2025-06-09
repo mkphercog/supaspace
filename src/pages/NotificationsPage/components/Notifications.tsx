@@ -1,5 +1,5 @@
 import { useMarkAllNotificationsAsReadMutation } from "src/api/notifications/mutations";
-import { CoffeeIcon } from "src/assets/icons";
+import { CoffeeIcon, InfoIcon } from "src/assets/icons";
 import { useAuth } from "src/context";
 import { ROUTES } from "src/routes";
 import { Button, Card, Loader, Typography } from "src/shared/UI";
@@ -40,9 +40,13 @@ export const Notifications = () => {
 
   return (
     <div className="flex flex-col items-center jus gap-2 max-w-2xl mx-auto">
-      {notifications.areUnread && (
+      <Card
+        containerVariant="basic"
+        shadowVariant="noColors"
+        className="w-full mb-4"
+      >
         <div className="w-full flex items-center justify-between">
-          <Typography.Text size="md">
+          <Typography.Text size="sm">
             Unread: {notifications.unreadCount}
           </Typography.Text>
           <Button
@@ -50,12 +54,24 @@ export const Notifications = () => {
               await markAllNotificationsAsRead(userData?.id || "")
             }
             variant="secondary"
-            disabled={!notifications.areUnread}
+            disabled={
+              !notifications.areUnread || isMarkAllNotificationsAsReadLoading
+            }
           >
             <Typography.Text size="sm">Mark all as read</Typography.Text>
           </Button>
         </div>
-      )}
+
+        <Typography.Text
+          size="xs"
+          color="blue"
+          className="flex gap-2 items-center"
+        >
+          <InfoIcon className="w-4" />
+          Notifications older than 5 days are automatically removed from the
+          database.
+        </Typography.Text>
+      </Card>
 
       <ul className="w-full flex flex-col gap-4">
         {notifications.list.map((notification) => (

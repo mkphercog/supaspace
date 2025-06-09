@@ -54,7 +54,7 @@ export const NotificationItem: FC<Props> = ({
   const isLoading = isMarkNotificationAsReadLoading || isMarkAllAsReadLoading;
 
   return (
-    <Card isLoading={isLoading}>
+    <Card containerVariant={isRead ? "basic" : "purple"} isLoading={isLoading}>
       <div className="flex gap-3 items-center">
         <Typography.Text size="xxs" className="mr-auto text-gray-500">
           {new Date(createdAt).toLocaleString()}

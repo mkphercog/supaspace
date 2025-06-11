@@ -21,17 +21,23 @@ export const Notifications = () => {
         className="max-w-2xl mx-auto"
         containerClassName="items-center justify-center gap-20"
       >
-        <Typography.Text
-          size="lg"
-          className="text-center font-semibold"
-          color="lime"
-        >
-          Peace and quiet for now
-        </Typography.Text>
+        <div className="flex flex-col gap-2 items-center">
+          <Typography.Text
+            size="2xl"
+            className="text-center font-semibold"
+            color="lime"
+          >
+            Peace and quiet for now
+          </Typography.Text>
+          <Typography.Text size="xs">
+            Notifications older than 5 days are automatically removed from the
+            database.
+          </Typography.Text>
+        </div>
 
         <CoffeeIcon className="w-20 h-20 text-amber-800" />
 
-        <Typography.Link to={ROUTES.root()} size="lg">
+        <Typography.Link to={ROUTES.root()} color="lightPurple" size="lg">
           Go to dashboard
         </Typography.Link>
       </Card>

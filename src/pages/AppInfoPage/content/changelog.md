@@ -1,5 +1,14 @@
 # Changelog
 
+<sup><time datetime="2025-06-11">11.06.2025</time></sup>
+
+### Version `1.4.0` changes:
+
+- Added email notifications for new posts in the app
+- Added option for logged-in users to subscribe/unsubscribe from email notifications in account settings
+
+---
+
 <sup><time datetime="2025-06-09">09.06.2025</time></sup>
 
 ### Version `1.3.2` changes:

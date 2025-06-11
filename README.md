@@ -68,20 +68,24 @@
 
 <sup>Notifications older than 5 days are automatically removed from the database.</sup>
 
+- Email notifications about new posts
+- You can subscribe/unsubscribe from email notifications in account settings
+
 ---
 
 ### ![privacyIcon](./public/icons/privacyIcon.svg) Privacy
 
 - **No third-party tracking** or analytics are used
-- Your data is **never shared** with external services
+- Your data is **never shared** with external services, except for sending email notifications via Resend (only your email address is used for this purpose)
 - When signing in, we store basic profile info (name, email, avatar) solely to personalize your experience
 - All data is stored securely and used only for essential app features — like posting, voting, and profile management
+- Email subscription is optional and can be managed in your account settings
 
 ---
 
 ### ![versionIcon](./public/icons/versionIcon.svg) Version
 
-Current version: `v1.3.2`
+Current version: `v1.4.0`
 
 ---
 

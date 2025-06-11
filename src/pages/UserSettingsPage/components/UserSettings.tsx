@@ -1,6 +1,7 @@
 import { AccountInfoSection } from "./AccountInfoSection";
 import { AvatarSection } from "./AvatarSection/AvatarSection";
 import { DeleteAccountSection } from "./DeleteAccountSection";
+import { EmailSubscribeSection } from "./EmailSubscribeSection";
 import { NicknameSection } from "./NicknameSection/NicknameSection";
 
 export const UserSettings = () => {
@@ -9,6 +10,7 @@ export const UserSettings = () => {
       <AvatarSection />
       <AccountInfoSection />
       <NicknameSection />
+      <EmailSubscribeSection />
       <DeleteAccountSection />
     </div>
   );

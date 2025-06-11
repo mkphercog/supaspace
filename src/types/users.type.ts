@@ -16,6 +16,7 @@ export type DbUserData = UserDataCommon & {
   avatar_url_updated_at: string | null;
   full_name_from_auth_provider: string;
   role: DbUserRole;
+  email_subscribe: boolean;
 };
 
 export type UserData = UserDataCommon & {
@@ -26,6 +27,7 @@ export type UserData = UserDataCommon & {
   avatarUrlUpdatedAt: string | null;
   fullNameFromAuthProvider: string;
   role: UserRole;
+  emailSubscribe: boolean;
 };
 
 export type DbAuthor = Pick<

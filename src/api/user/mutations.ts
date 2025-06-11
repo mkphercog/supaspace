@@ -58,6 +58,7 @@ export const insertUserDataToDb = async (
     nickname_updated_at: null,
     created_at: userData.created_at,
     role: "STANDARD",
+    email_subscribe: true,
   };
 
   const { error } = await supabaseClient.from(SB_TABLE.users).insert<
@@ -136,6 +137,7 @@ export const useSetNicknameMutation = () => {
 
 export const useDeleteNicknameMutation = () => {
   const queryClient = useQueryClient();
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async (
       { userId }: { userId: string },
@@ -162,6 +164,7 @@ export const useDeleteNicknameMutation = () => {
 // --------------------------------- BEGIN - AVATAR ---------------------------------
 export const useEditUserAvatarMutation = () => {
   const queryClient = useQueryClient();
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ userId, file }: { userId: string; file: File }) => {
       const filePath = `${userId}/userAvatar-${Date.now()}.webp`;
@@ -244,6 +247,7 @@ type DeleteAvatarProps = {
 
 export const useDeleteAvatarMutation = () => {
   const queryClient = useQueryClient();
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async (
       { userId, userAvatarPathToDelete }: DeleteAvatarProps,
@@ -270,3 +274,35 @@ export const useDeleteAvatarMutation = () => {
   };
 };
 // --------------------------------- END - AVATAR ---------------------------------
+
+type ChangeEmailSubscribeProps = {
+  userId: UserData["id"];
+  emailSubscribe: UserData["emailSubscribe"];
+};
+
+export const useChangeEmailSubscribeMutation = () => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (
+      { userId, emailSubscribe }: ChangeEmailSubscribeProps,
+    ) => {
+      const { error } = await supabaseClient
+        .from(SB_TABLE.users)
+        .update<Pick<DbUserData, "email_subscribe">>({
+          email_subscribe: emailSubscribe,
+        })
+        .eq("id", userId);
+
+      if (error) throw new Error();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.me] });
+    },
+  });
+
+  return {
+    changeEmailSubscribe: mutateAsync,
+    isChangeEmailSubscribeLoading: isPending,
+  };
+};

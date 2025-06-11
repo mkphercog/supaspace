@@ -21,6 +21,7 @@ export const DeleteAccountSection = () => {
         Deleting your account is a permanent action. This cannot be undone, and
         all your data will be lost forever.
       </Typography.Text>
+
       <Button
         className="self-end"
         variant="destructive"

@@ -25,6 +25,7 @@ export const mapDbUserDataToUserData: Mapper = (
     nickname_updated_at,
     created_at,
     role,
+    email_subscribe,
   },
 ) => ({
   id,
@@ -37,6 +38,7 @@ export const mapDbUserDataToUserData: Mapper = (
   nicknameUpdatedAt: nickname_updated_at,
   createdAt: created_at,
   role: USER_ROLES_MAP[role],
+  emailSubscribe: email_subscribe,
 });
 
 type MapperWithErrors = (

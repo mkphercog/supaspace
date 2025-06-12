@@ -18,7 +18,23 @@ serve(async (req) => {
     });
   }
 
-  const postUrl = `https://supaspace.vercel.app/post/${id}`;
+  const response = new Response(
+    JSON.stringify({
+      message: "Started sending emails ✅",
+    }),
+    {
+      status: 200,
+      headers: corsHeaders,
+    },
+  );
+
+  sendEmails(id, title);
+
+  return response;
+});
+
+async function sendEmails(id: string, title: string) {
+  const postUrl = `https://www.supaspace.website/post/${id}`;
 
   const { data: users, error } = await supabase
     .from("users")
@@ -27,37 +43,25 @@ serve(async (req) => {
 
   if (error) {
     console.error("Failed to fetch users:", error);
-    return new Response("Database error", {
-      status: 500,
-      headers: corsHeaders,
-    });
+    return;
   }
 
   if (!users || users.length === 0) {
-    return new Response("No subscribers to notify", {
-      status: 200,
-      headers: corsHeaders,
-    });
+    console.log("No subscribers to notify");
+    return;
   }
 
   const subject = `New post on Supa.space() 🚀 - "${
     title.length > 15 ? `${title.slice(0, 15)}...` : title
   }"`;
+
   const html = `
-    <div style="
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      max-width: 600px;
-      margin: auto;
-      padding: 24px;
-      background: #f3f4f6;
-      border-radius: 12px;
-      color: #374151;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    ">
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; max-width: 600px; margin: auto;
+      padding: 24px; background: #f3f4f6; border-radius: 12px; color: #374151; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
       <h2 style="color: #7c4dcc; margin-bottom: 0.6em; font-weight: 700;">"${title}"</h2>
       <p style="font-size: 16px; line-height: 1.6; margin-bottom: 1em;">
-        A new post was just published on <strong><a href="https://supaspace.vercel.app" style="color: #7c4dcc; text-decoration: none;">Supa.space</a></strong>!
+        A new post was just published on <strong><a href="https://www.supaspace.website" style="color: #7c4dcc; text-decoration: none;">Supa.space</a></strong>!
       </p>
       <p style="margin-bottom: 2em;">
         <a href="${postUrl}" style="
@@ -69,8 +73,7 @@ serve(async (req) => {
           text-decoration: none;
           font-weight: 600;
           box-shadow: 0 2px 8px rgba(124, 77, 204, 0.4);
-          transition: background-color 0.3s ease;
-        " onmouseover="this.style.backgroundColor='#633db3';" onmouseout="this.style.backgroundColor='#7c4dcc';">
+          transition: background-color 0.3s ease;">
           Click here to read more 🚀
         </a>
       </p>
@@ -91,13 +94,13 @@ serve(async (req) => {
         subject,
         html,
       });
+      console.log(`Email sent to ${user.email}`);
     } catch (err) {
       console.error(`Failed to send email to ${user.email}:`, err);
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  return new Response("Emails sent successfully ✅", {
-    status: 200,
-    headers: corsHeaders,
-  });
-});
+  console.log("Finished sending all emails");
+}
